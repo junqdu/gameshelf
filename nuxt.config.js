@@ -27,6 +27,7 @@ module.exports = {
     // Or if you have custom bootstrap CSS...
     ['@nuxtjs/bootstrap-vue', { css: false }],
   ],
+  // mode: 'spa',
   axios: {
     // proxyHeaders: false
   },
@@ -51,6 +52,11 @@ module.exports = {
     plugins: [
       new webpack.ProvidePlugin({
         '_': 'lodash'
+      }),
+      new webpack.DefinePlugin({
+        'process.env': {
+          NODE_ENV: '"production"'
+        }
       })
     ]
   }

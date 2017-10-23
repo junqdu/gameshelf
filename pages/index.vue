@@ -1,43 +1,49 @@
 <template>
   <section class="container">
     <div>
-      <table class="table table-striped" v-if="orderedGames">
-        <thead>
-          <tr>
-            <th scope="col" v-for="header in tableHeader" @click="sort(header.key)" :class="[header.key]">
-              <span>
-                {{header.value}}
-                <i class="fa" aria-hidden="true" v-if="sortBy === header.key" :class="{'fa-arrow-down': asc, 'fa-arrow-up': !asc}"></i>
-              </span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in orderedGames" :key="item.id">
-            <td>
-              <a :href="'https://boardgamegeek.com/boardgame/' + item.id">
-                <b-img width="75" :src="item.imageUrl"/>
-              </a>
-            </td>
-            <td>{{item.rank}}</td>
-            <td>
-              <span class="badge badge-primary">{{item.average | number}}</span>
-            </td>
-            <td>
-              <span class="badge" :class="['badge-' + item.rating]">{{item.rating}}</span>
-            </td>
-            <td class="name">
-              <a :href="'https://boardgamegeek.com/boardgame/' + item.id">{{item.name}}</a>
-            </td>
-            <td>{{item.minPlayer}}</td>
-            <td>{{item.maxPlayer}}</td>
-            <td>{{item.weight | number}}</td>
-            <td>{{item.playingtime}} mins</td>
-            <td class="best-player">{{item.bggbestplayers}}</td>
-            <td class="rec-player">{{item.bggrecplayers}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <b-container class="bv-example-row">
+        <b-row>
+          <b-col>
+            <table class="table table-striped" v-if="orderedGames">
+              <thead>
+                <tr>
+                  <th scope="col" v-for="header in tableHeader" @click="sort(header.key)" :class="[header.key]">
+                    <span>
+                      {{header.value}}
+                      <i class="fa" aria-hidden="true" v-if="sortBy === header.key" :class="{'fa-arrow-down': asc, 'fa-arrow-up': !asc}"></i>
+                    </span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in orderedGames" :key="item.id">
+                  <td>
+                    <a :href="'https://boardgamegeek.com/boardgame/' + item.id">
+                      <b-img width="75" :src="item.imageUrl"/>
+                    </a>
+                  </td>
+                  <td>{{item.rank}}</td>
+                  <td>
+                    <span class="badge badge-primary">{{item.average | number}}</span>
+                  </td>
+                  <td>
+                    <span class="badge" :class="['badge-' + item.rating]">{{item.rating}}</span>
+                  </td>
+                  <td class="name">
+                    <a :href="'https://boardgamegeek.com/boardgame/' + item.id">{{item.name}}</a>
+                  </td>
+                  <!-- <td>{{item.minPlayer}}</td>
+                  <td>{{item.maxPlayer}}</td> -->
+                  <td>{{item.weight | number}}</td>
+                  <td>{{item.playingtime}} mins</td>
+                  <td class="best-player">{{item.bggbestplayers}}</td>
+                  <!-- <td class="rec-player">{{item.bggrecplayers}}</td> -->
+                </tr>
+              </tbody>
+            </table>
+          </b-col>
+        </b-row>
+      </b-container>
     </div>
   </section>
 </template>
@@ -59,12 +65,13 @@ export default {
         {key: 'average', value: 'Avg. Rating'},
         {key: 'rating', value: 'My Rating'},
         {key: 'name', value: 'Name'},
-        {key: 'minPlayer', value: 'Min. Player'},
-        {key: 'maxPlayer', value: 'Max. Player'},
-        {key: 'weight', value: 'weight'},
+        // {key: 'minPlayer', value: 'Min. Player'},
+        // {key: 'maxPlayer', value: 'Max. Player'},
+        {key: 'weight', value: 'Weight'},
         {key: 'playingtime', value: 'Length'},
-        {key: 'bggbestplayers', value: 'Best #Player'},
-        {key: 'bggrecplayers', value: 'Rec. #Player'}],
+        {key: 'bggbestplayers', value: 'Best #Player'}
+        // {key: 'bggrecplayers', value: 'Rec. #Player'}
+      ],
       sortBy: 'rank'
     }
   },
@@ -117,27 +124,9 @@ export default {
 <style>
 .container {
   min-height: 100vh;
-  display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-}
-
-.title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
 }
 
 .links {
@@ -150,14 +139,14 @@ export default {
   text-overflow: ellipsis;
 }
 
-.rank, .average, .minPlayer, .maxPlayer,
+/* .rank, .average, .minPlayer, .maxPlayer,
 .playingtime, .bggrecplayers, .bggbestplayers {
   min-width: 6rem;
 }
 
 .rating, .playingtime {
   min-width: 7rem;
-}
+} */
 
 .table td, .table th {
   padding: .25rem;
