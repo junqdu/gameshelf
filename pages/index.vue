@@ -1,7 +1,7 @@
 <template>
   <section class="container">
     <div>
-      <table class="table" v-if="orderedGames">
+      <table class="table table-striped" v-if="orderedGames">
         <thead>
           <tr>
             <th scope="col" v-for="header in tableHeader" @click="sort(header.key)" :class="[header.key]">
@@ -15,16 +15,23 @@
         <tbody>
           <tr v-for="item in orderedGames" :key="item.id">
             <td>
-              <img :src="item.imageUrl" width="75px" />
+              <a :href="'https://boardgamegeek.com/boardgame/' + item.id">
+                <b-img width="75" :src="item.imageUrl"/>
+              </a>
             </td>
             <td>{{item.rank}}</td>
-            <td>{{item.average | number}}</td>
-            <td>{{item.rating}}</td>
+            <td>
+              <span class="badge badge-primary">{{item.average | number}}</span>
+            </td>
+            <td>
+              <span class="badge" :class="['badge-' + item.rating]">{{item.rating}}</span>
+            </td>
             <td class="name">
               <a :href="'https://boardgamegeek.com/boardgame/' + item.id">{{item.name}}</a>
             </td>
             <td>{{item.minPlayer}}</td>
             <td>{{item.maxPlayer}}</td>
+            <td>{{item.weight | number}}</td>
             <td>{{item.playingtime}} mins</td>
             <td class="best-player">{{item.bggbestplayers}}</td>
             <td class="rec-player">{{item.bggrecplayers}}</td>
@@ -54,6 +61,7 @@ export default {
         {key: 'name', value: 'Name'},
         {key: 'minPlayer', value: 'Min. Player'},
         {key: 'maxPlayer', value: 'Max. Player'},
+        {key: 'weight', value: 'weight'},
         {key: 'playingtime', value: 'Length'},
         {key: 'bggbestplayers', value: 'Best #Player'},
         {key: 'bggrecplayers', value: 'Rec. #Player'}],
@@ -165,5 +173,53 @@ export default {
 
 .name a:hover {
   text-decoration: none;
+}
+
+.badge {
+  font-size: 100%;
+}
+
+.badge-10 {
+  background: #00cc00;
+}
+
+.badge-9 {
+  background: #33cc99;
+}
+
+.badge-8 {
+  background: #66ff99;
+}
+
+.badge-7 {
+  background: #99ffff;
+}
+
+.badge-6 {
+  background: #9999ff;
+}
+
+.badge-5 {
+  background: #cc99ff;
+}
+
+.badge-4 {
+  background: #ff66cc;
+}
+
+.badge-3 {
+  background: #ff6699;
+}
+
+.badge-2 {
+  background: #ff3366;
+}
+
+.badge-1 {
+  background: #ff0000;
+}
+
+.badge-0 {
+  background: gray;
 }
 </style>
