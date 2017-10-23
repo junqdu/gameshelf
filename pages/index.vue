@@ -4,32 +4,28 @@
       <table class="table" v-if="orderedGames">
         <thead>
           <tr>
-            <th scope="col"></th>
-            <th scope="col">Rank</th>
-            <th scope="col">Avg. Rating</th>
-            <th scope="col">My Rating</th>
-            <th scope="col">Name</th>
-            <th scope="col">Min. Player</th>
-            <th scope="col">Max. Player</th>
-            <th scope="col">Length</th>
-            <th scope="col">Best #Player</th>
-            <th scope="col">Rec. #Player</th>
+            <th scope="col" v-for="header in tableHeader" @click="sort(header.key)" :class="[header.key]">
+              <span>
+                {{header.value}}
+                <i class="fa" aria-hidden="true" v-if="sortBy === header.key" :class="{'fa-arrow-down': asc, 'fa-arrow-up': !asc}"></i>
+              </span>
+            </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in orderedGames">
-            <th scope="row">
+          <tr v-for="item in orderedGames" :key="item.id">
+            <td>
               <img :src="item.imageUrl" width="75px" />
-            </th>
-            <th scope="row">{{item.rank}}</th>
-            <th scope="row">{{item.average | number}}</th>
-            <th scope="row">{{item.rating}}</th>
-            <th scope="row">{{item.name}}</th>
-            <th scope="row">{{item.minPlayer}}</th>
-            <th scope="row">{{item.maxPlayer}}</th>
-            <th scope="row">{{item.playingtime}}</th>
-            <th scope="row" class="best-player">{{item.bggbestplayers}}</th>
-            <th scope="row" class="rec-player">{{item.bggrecplayers}}</th>
+            </td>
+            <td>{{item.rank}}</td>
+            <td>{{item.average | number}}</td>
+            <td>{{item.rating}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.minPlayer}}</td>
+            <td>{{item.maxPlayer}}</td>
+            <td>{{item.playingtime}} mins</td>
+            <td class="best-player">{{item.bggbestplayers}}</td>
+            <td class="rec-player">{{item.bggrecplayers}}</td>
           </tr>
         </tbody>
       </table>
@@ -45,18 +41,45 @@ import X2JS from 'x2js'
 // import _ from 'lodash'
 var _ = require('lodash')
 
-export default{
+export default {
+  data () {
+    return {
+      asc: true,
+      tableHeader: [
+        {key: '', value: ''},
+        {key: 'rank', value: 'Rank'},
+        {key: 'average', value: 'Avg. Rating'},
+        {key: 'rating', value: 'My Rating'},
+        {key: 'name', value: 'Name'},
+        {key: 'minPlayer', value: 'Min. Player'},
+        {key: 'maxPlayer', value: 'Max. Player'},
+        {key: 'playingtime', value: 'Length'},
+        {key: 'bggbestplayers', value: 'Best #Player'},
+        {key: 'bggrecplayers', value: 'Rec. #Player'}],
+      sortBy: 'rank'
+    }
+  },
   components: {
     Logo
   },
   computed: {
     orderedGames: function () {
-      return _.orderBy(this.items, 'rank')
+      return _.orderBy(this.items, this.sortBy, this.asc ? 'asc' : 'desc')
     }
   },
   created: function () {
     // `this` points to the vm instance
     // console.log('a is: ' + this.a)
+  },
+  methods: {
+    sort: function (key) {
+      if (key === this.sortBy) {
+        this.asc = !this.asc
+      } else {
+        this.asc = true
+        this.sortBy = key
+      }
+    }
   },
   asyncData ({ params }) {
     return axios.get('https://www.boardgamegeek.com/xmlapi2/collection?username=Za%20Warudo&own=1&excludesubtype=boardgameexpansion')
@@ -116,5 +139,22 @@ export default{
   max-width: 4rem;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.rank, .average, .minPlayer, .maxPlayer,
+.playingtime, .bggrecplayers, .bggbestplayers {
+  min-width: 6rem;
+}
+
+.rating, .playingtime {
+  min-width: 7rem;
+}
+
+.table td, .table th {
+  padding: .25rem;
+}
+
+.table td {
+  vertical-align: inherit;
 }
 </style>

@@ -22,6 +22,7 @@ module.exports = {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/bootstrap-vue',
+    '@nuxtjs/font-awesome',
 
     // Or if you have custom bootstrap CSS...
     ['@nuxtjs/bootstrap-vue', { css: false }],
