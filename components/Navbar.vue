@@ -1,7 +1,8 @@
 <template>
   <div class="header">
-    <nuxt-link to="/" exact>Home</nuxt-link>
-    <nuxt-link to="/about">About</nuxt-link>
+    <nuxt-link to="/" exact>Collection</nuxt-link>
+    <nuxt-link to="/wantToPlay">Want To Play</nuxt-link>
+    <nuxt-link to="/wantToBuy">Want To Buy</nuxt-link>
   </div>
 </template>
 

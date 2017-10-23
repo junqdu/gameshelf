@@ -20,7 +20,9 @@
             <td>{{item.rank}}</td>
             <td>{{item.average | number}}</td>
             <td>{{item.rating}}</td>
-            <td>{{item.name}}</td>
+            <td class="name">
+              <a :href="'https://boardgamegeek.com/boardgame/' + item.id">{{item.name}}</a>
+            </td>
             <td>{{item.minPlayer}}</td>
             <td>{{item.maxPlayer}}</td>
             <td>{{item.playingtime}} mins</td>
@@ -35,7 +37,6 @@
 
 <script>
 import Game from '~/components/Game.js'
-import Logo from '~/components/Logo.vue'
 import axios from 'axios'
 import X2JS from 'x2js'
 // import _ from 'lodash'
@@ -59,9 +60,6 @@ export default {
       sortBy: 'rank'
     }
   },
-  components: {
-    Logo
-  },
   computed: {
     orderedGames: function () {
       return _.orderBy(this.items, this.sortBy, this.asc ? 'asc' : 'desc')
@@ -73,6 +71,9 @@ export default {
   },
   methods: {
     sort: function (key) {
+      if (!key) {
+        return
+      }
       if (key === this.sortBy) {
         this.asc = !this.asc
       } else {
@@ -154,7 +155,15 @@ export default {
   padding: .25rem;
 }
 
+.table th:hover {
+  cursor: pointer;
+}
+
 .table td {
   vertical-align: inherit;
+}
+
+.name a:hover {
+  text-decoration: none;
 }
 </style>
