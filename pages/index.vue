@@ -24,7 +24,7 @@
                   </td>
                   <td>{{item.rank}}</td>
                   <td>
-                    <span class="badge badge-primary">{{item.average | number}}</span>
+                    <span class="badge" :class="['badge-' + getAverageRatingColor(item.average)]">{{item.average | number}}</span>
                   </td>
                   <td>
                     <span class="badge" :class="['badge-' + item.rating]">{{item.rating}}</span>
@@ -34,7 +34,9 @@
                   </td>
                   <!-- <td>{{item.minPlayer}}</td>
                   <td>{{item.maxPlayer}}</td> -->
-                  <td>{{item.weight | number}}</td>
+                  <td>
+                    <span class="badge" :class="['badge-' + getWeightColor(item.weight)]">{{item.weight | number}}</span>
+                  </td>
                   <td>{{item.playingtime}} mins</td>
                   <td class="best-player">{{item.bggbestplayers}}</td>
                   <!-- <td class="rec-player">{{item.bggrecplayers}}</td> -->
@@ -94,6 +96,32 @@ export default {
       } else {
         this.asc = true
         this.sortBy = key
+      }
+    },
+    getWeightColor: function (weight) {
+      if (weight > 4) {
+        return 'heavy'
+      } else if (weight > 3.5) {
+        return 'medium-heavy'
+      } else if (weight > 3) {
+        return 'medium'
+      } else if (weight > 2.5) {
+        return 'medium-light'
+      } else {
+        return 'light'
+      }
+    },
+    getAverageRatingColor: function (rating) {
+      if (rating > 8) {
+        return 't1'
+      } else if (rating > 7.5) {
+        return 't2'
+      } else if (rating > 7) {
+        return 't3'
+      } else if (rating > 6) {
+        return 't4'
+      } else {
+        return 't5'
       }
     }
   },
@@ -210,5 +238,46 @@ export default {
 
 .badge-0 {
   background: gray;
+}
+
+.badge-heavy {
+  background: #800080;
+  color: orange;
+}
+
+.badge-medium-heavy {
+  background: #a3529f;
+  color: orange;
+}
+
+.badge-medium {
+  background: #c38bbf;
+  color: orange;
+}
+
+.badge-medium-light {
+  background: #e2c5df;
+}
+
+.badge-light {
+  background: #ffffff;
+}
+
+.badge-t1 {
+  background: #008000;
+  color: white;
+}
+.badge-t2 {
+  background: #628d00;
+  color: white;
+}
+.badge-t3 {
+  background: #979700;
+}
+.badge-t4 {
+  background: #cc9f00;
+}
+.badge-t5 {
+  background: #ffa500;
 }
 </style>
