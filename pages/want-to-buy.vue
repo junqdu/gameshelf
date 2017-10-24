@@ -26,9 +26,9 @@
                   <td>
                     <span class="badge" :class="['badge-' + getAverageRatingColor(item.average)]">{{item.average | number}}</span>
                   </td>
-                  <td>
+                  <!-- <td>
                     <span class="badge" :class="['badge-' + item.rating]">{{item.rating}}</span>
-                  </td>
+                  </td> -->
                   <td class="name">
                     <a :href="'https://boardgamegeek.com/boardgame/' + item.id">{{item.name}}</a>
                   </td>
@@ -64,7 +64,7 @@ export default {
         {key: '', value: ''},
         {key: 'rank', value: 'Rank'},
         {key: 'average', value: 'Avg. Rating'},
-        {key: 'rating', value: 'My Rating'},
+        // {key: 'rating', value: 'My Rating'},
         {key: 'name', value: 'Name'},
         // {key: 'minPlayer', value: 'Min. Player'},
         // {key: 'maxPlayer', value: 'Max. Player'},
@@ -121,7 +121,7 @@ export default {
     }
   },
   asyncData ({ params }) {
-    return axios.get('https://www.boardgamegeek.com/xmlapi2/collection?username=Za%20Warudo&own=1&excludesubtype=boardgameexpansion')
+    return axios.get('https://www.boardgamegeek.com/xmlapi2/collection?username=Za%20Warudo&wishlist=1')
       .then((res) => {
         var x2js = new X2JS()
         var data = x2js.xml2js(res.data)
