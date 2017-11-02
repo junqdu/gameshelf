@@ -121,7 +121,11 @@ export default {
     }
   },
   asyncData ({ params }) {
-    return axios.get('https://www.boardgamegeek.com/xmlapi2/collection?username=Za%20Warudo&own=1&excludesubtype=boardgameexpansion')
+    return axios.get('https://www.boardgamegeek.com/xmlapi2/collection', {
+      excludesubtype: 'boardgameexpansion',
+      own: 1,
+      username: 'Za%20Warudo'
+    })
       .then((res) => {
         var x2js = new X2JS()
         var data = x2js.xml2js(res.data)
