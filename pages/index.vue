@@ -43,6 +43,7 @@
                 </tr>
               </tbody>
             </table>
+            Item count: {{orderedGames.length}}
           </b-col>
         </b-row>
       </b-container>
@@ -122,19 +123,36 @@ export default {
   },
   asyncData ({ params }) {
     return axios.get('https://www.boardgamegeek.com/xmlapi2/collection', {
-      excludesubtype: 'boardgameexpansion',
-      own: 1,
-      username: 'Za%20Warudo'
+      params: {
+        excludesubtype: 'boardgameexpansion',
+        own: 1,
+        stats: 1,
+        username: 'Za Warudo'
+      }
     })
       .then((res) => {
-        var x2js = new X2JS()
-        var data = x2js.xml2js(res.data)
+        if (res.status === 200) {
+          var x2js = new X2JS()
+          var data = x2js.xml2js(res.data)
 
-        var items = []
-        data.items.item.forEach(function (item) {
-          items.push(new Game({id: item._objectid, imageUrl: item.image}))
-        }, this)
-        return { items }
+          var items = []
+          let rank
+          data.items.item.forEach(function (item) {
+            if (item.stats.rating.ranks.rank.length) {
+              rank = parseFloat(item.stats.rating.ranks.rank[0]._value)
+            } else {
+              rank = parseFloat(item.stats.rating.ranks.rank._value)
+            }
+            items.push(new Game({
+              average: parseFloat(item.stats.rating.average._value),
+              id: item._objectid,
+              imageUrl: item.image,
+              rank,
+              rating: parseFloat(item.stats.rating._value)
+            }))
+          }, this)
+          return { items, games: data }
+        }
       })
   },
   filters: {

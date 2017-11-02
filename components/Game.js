@@ -6,5 +6,15 @@ export default class {
     }
     this.id = params.id
     this.imageUrl = params.imageUrl
+
+    if (params.rank) {
+      this.rank = params.rank
+    }
+    if (params.average) {
+      this.average = params.average
+    }
+    if (params.rating) {
+      this.rating = params.rating
+    }
   }
 }
