@@ -4,6 +4,9 @@
       <b-container class="bv-example-row">
         <b-row>
           <b-col>
+            <div class="filter">
+              <input v-model="bestnum" placeholder="Best# of Players">
+            </div>
             <table class="table table-striped" v-if="orderedGames">
               <thead>
                 <tr>
@@ -16,7 +19,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in orderedGames" :key="item.id">
+                <tr v-for="item in filterBy(orderedGames, bestnum)" :key="item.id">
                   <td>
                     <a :href="'https://boardgamegeek.com/boardgame/' + item.id">
                       <b-img width="75" :src="item.imageUrl"/>
@@ -61,6 +64,7 @@ export default {
   data () {
     return {
       asc: true,
+      bestnum: '',
       tableHeader: [
         {key: '', value: ''},
         {key: 'rank', value: 'Rank'},
@@ -83,6 +87,11 @@ export default {
     }
   },
   methods: {
+    filterBy: function (list, value) {
+      return list.filter(function (item) {
+        return item.bggbestplayers.indexOf(value) > -1
+      })
+    },
     sort: function (key) {
       if (!key) {
         return
@@ -175,6 +184,10 @@ export default {
 
 .links {
   padding-top: 15px;
+}
+
+.filter {
+  padding-bottom: 0.5rem;
 }
 </style>
 <style src="./table.less" lang="less" scoped></style>
