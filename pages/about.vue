@@ -1,6 +1,6 @@
 <template>
   <section class="container">
-    Hi
+    Hi I am an Evil Meeple
   </section>
 </template>
 
