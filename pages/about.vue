@@ -1,6 +1,7 @@
 <template>
   <section class="container">
     Hi I am an Evil Meeple
+    <script language="javascript" src="https://boardgamegeek.com/jswidget.php?username=Za%20Warudo&numitems=20&header=1&text=title&images=small&show=recentplays&imagesonly=1&imagepos=left&addstyles=1&showplaydate=1&domains%5B%5D=boardgame"></script>
   </section>
 </template>
 

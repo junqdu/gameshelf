@@ -1,13 +1,14 @@
 <template>
   <section class="container">
     <div>
-      <b-container class="bv-example-row">
+      <div v-if="loading" class="loader"></div>
+      <b-container v-if="!loading && !waitingForBGG" class="bv-example-row">
         <b-row>
           <b-col>
             <table class="table table-striped" v-if="orderedGames">
               <thead>
                 <tr>
-                  <th scope="col" v-for="header in tableHeader" @click="sort(header.key)" :class="[header.key]">
+                  <th scope="col" v-for="header in tableHeader" @click="sort(header.key)" :class="[header.key]" v-if="!header.condition">
                     <span>
                       {{header.value}}
                       <i class="fa" aria-hidden="true" v-if="sortBy === header.key" :class="{'fa-arrow-down': asc, 'fa-arrow-up': !asc}"></i>
@@ -17,7 +18,7 @@
               </thead>
               <tbody>
                 <tr v-for="item in orderedGames" :key="item.id">
-                  <td>
+                  <td v-if='!noImage'>
                     <a :href="'https://boardgamegeek.com/boardgame/' + item.id">
                       <b-img width="75" :src="item.imageUrl"/>
                     </a>
@@ -47,6 +48,7 @@
           </b-col>
         </b-row>
       </b-container>
+      <span v-if="waitingForBGG">Waiting for BGG to process. Please try again later for access.</span>
     </div>
   </section>
 </template>
@@ -58,11 +60,52 @@ import X2JS from 'x2js'
 var _ = require('lodash')
 
 export default {
+  created: function () {
+    return axios.get('https://www.boardgamegeek.com/xmlapi2/collection', {
+      params: {
+        stats: 1,
+        username: this.userId,
+        wanttoplay: 1
+      }
+    })
+      .then((res) => {
+        this.loading = false
+        if (res.status === 200) {
+          var x2js = new X2JS()
+          var data = x2js.xml2js(res.data)
+
+          var items = []
+          let rank
+          data.items.item.forEach(function (item) {
+            if (item.stats.rating.ranks.rank.length) {
+              rank = parseFloat(item.stats.rating.ranks.rank[0]._value)
+            } else {
+              rank = parseFloat(item.stats.rating.ranks.rank._value)
+            }
+            items.push(new Game({
+              average: parseFloat(item.stats.rating.average._value),
+              id: item._objectid,
+              imageUrl: item.thumbnail,
+              rank,
+              rating: parseFloat(item.stats.rating._value)
+            }))
+          })
+          this.$data.items = items
+        }
+      })
+      .catch(() => {
+        this.loading = false
+        this.waitingForBGG = true
+      })
+  },
   data () {
     return {
       asc: true,
+      items: [],
+      loading: true,
+      noImage: this.$route.query.noImage,
       tableHeader: [
-        {key: '', value: ''},
+        {key: '', value: '', condition: this.noImage},
         {key: 'rank', value: 'Rank'},
         {key: 'average', value: 'Avg. Rating'},
         // {key: 'rating', value: 'My Rating'},
@@ -74,7 +117,9 @@ export default {
         {key: 'bggbestplayers', value: 'Best #Player'}
         // {key: 'bggrecplayers', value: 'Rec. #Player'}
       ],
-      sortBy: 'rank'
+      sortBy: 'rank',
+      userId: this.$route.query.userId || 'Za Warudo',
+      waitingForBGG: false
     }
   },
   computed: {
@@ -121,39 +166,6 @@ export default {
       }
     }
   },
-  asyncData ({ params }) {
-    return axios.get('https://www.boardgamegeek.com/xmlapi2/collection', {
-      params: {
-        stats: 1,
-        username: 'Za Warudo',
-        wanttoplay: 1
-      }
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          var x2js = new X2JS()
-          var data = x2js.xml2js(res.data)
-
-          var items = []
-          let rank
-          data.items.item.forEach(function (item) {
-            if (item.stats.rating.ranks.rank.length) {
-              rank = parseFloat(item.stats.rating.ranks.rank[0]._value)
-            } else {
-              rank = parseFloat(item.stats.rating.ranks.rank._value)
-            }
-            items.push(new Game({
-              average: parseFloat(item.stats.rating.average._value),
-              id: item._objectid,
-              imageUrl: item.image,
-              rank,
-              rating: parseFloat(item.stats.rating._value)
-            }))
-          }, this)
-          return { items }
-        }
-      })
-  },
   filters: {
     number: function (value) {
       if (!value) return ''
@@ -174,6 +186,20 @@ export default {
 
 .links {
   padding-top: 15px;
+}
+
+.loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 5rem;
+  height: 5rem;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>
 <style src="./table.less" lang="less" scoped></style>

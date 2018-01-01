@@ -6,6 +6,9 @@ export default class {
     }
     this.id = params.id
     this.imageUrl = params.imageUrl
+    this.numplays = params.numplays
+    this.playingtime = params.playingtime
+    this.name = params.name
 
     if (params.rank) {
       this.rank = params.rank

@@ -27,7 +27,7 @@ module.exports = {
     // Or if you have custom bootstrap CSS...
     ['@nuxtjs/bootstrap-vue', { css: false }],
   ],
-  // mode: 'spa',
+  mode: 'spa',
   axios: {
     // proxyHeaders: false
   },
