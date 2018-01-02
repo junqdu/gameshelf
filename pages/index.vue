@@ -61,12 +61,19 @@
 
 <script>
 import axios from 'axios'
-// import cookie from '~/components/cookie.js'
+import cookie from '~/components/cookie.js'
 import Game from '~/components/Game.js'
 import X2JS from 'x2js'
 var _ = require('lodash')
 
 export default {
+  beforeCreate: function () {
+    if (this.$route.query.userId) {
+      cookie.set('username', this.$route.query.userId, 365)
+    } else if (!cookie.get('username')) {
+      cookie.set('username', 'Za Warudo', 365)
+    }
+  },
   computed: {
     orderedGames: function () {
       return _.orderBy(this.items, [this.sortBy, 'average'], [this.asc ? 'asc' : 'desc', 'desc'])
@@ -108,8 +115,6 @@ export default {
           })
           this.$data.items = items
           this.$data.games = data
-          // document.cookie = 'username=' + this.$route.query.userId
-          // console.log(cookie.get())
         }
       })
       .catch(() => {
@@ -142,7 +147,7 @@ export default {
         {key: 'numplays', value: 'Plays'}
       ],
       sortBy: 'rank',
-      userId: this.$route.query.userId || 'Za Warudo',
+      userId: cookie.get('username'),
       waitingForBGG: false
     }
   },

@@ -5,6 +5,11 @@
       <b-container v-if="!loading && !waitingForBGG" class="bv-example-row">
         <b-row>
           <b-col>
+            <div class="filter">
+              <input v-model="bestnum" placeholder="Best# of Players">
+              <input v-model="mintime" type="number" placeholder="Min. Play Time">
+              <input v-model="maxtime" type="number" placeholder="Max. Play Time">
+            </div>
             <table class="table table-striped" v-if="orderedGames">
               <thead>
                 <tr>
@@ -17,7 +22,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in orderedGames" :key="item.id">
+                <tr v-for="item in filterBy(orderedGames, bestnum, mintime, maxtime)" :key="item.id">
                   <td v-if='!noImage'>
                     <a :href="'https://boardgamegeek.com/boardgame/' + item.id">
                       <b-img width="75" :src="item.imageUrl"/>
@@ -54,12 +59,20 @@
 </template>
 
 <script>
-import Game from '~/components/Game.js'
 import axios from 'axios'
+import cookie from '~/components/cookie.js'
+import Game from '~/components/Game.js'
 import X2JS from 'x2js'
 var _ = require('lodash')
 
 export default {
+  beforeCreate: function () {
+    if (this.$route.query.userId) {
+      cookie.set('username', this.$route.query.userId, 365)
+    } else if (!cookie.get('username')) {
+      cookie.set('username', 'Za Warudo', 365)
+    }
+  },
   created: function () {
     return axios.get('https://www.boardgamegeek.com/xmlapi2/collection', {
       params: {
@@ -86,6 +99,9 @@ export default {
               average: parseFloat(item.stats.rating.average._value),
               id: item._objectid,
               imageUrl: item.thumbnail,
+              name: item.name.__text,
+              numplays: parseFloat(item.numplays),
+              playingtime: parseFloat(item.stats._playingtime),
               rank,
               rating: parseFloat(item.stats.rating._value)
             }))
@@ -101,8 +117,11 @@ export default {
   data () {
     return {
       asc: true,
+      bestnum: '',
       items: [],
       loading: true,
+      maxtime: 480,
+      mintime: 0,
       noImage: this.$route.query.noImage,
       tableHeader: [
         {key: '', value: '', condition: this.noImage},
@@ -118,7 +137,7 @@ export default {
         // {key: 'bggrecplayers', value: 'Rec. #Player'}
       ],
       sortBy: 'rank',
-      userId: this.$route.query.userId || 'Za Warudo',
+      userId: cookie.get('username'),
       waitingForBGG: false
     }
   },
@@ -128,6 +147,11 @@ export default {
     }
   },
   methods: {
+    filterBy: function (list, bestnum, mintime, maxtime) {
+      return list.filter(function (item) {
+        return _.get(item, 'bggbestplayers', '').indexOf(bestnum) > -1 && item.playingtime >= mintime && item.playingtime <= maxtime
+      })
+    },
     sort: function (key) {
       if (!key) {
         return
