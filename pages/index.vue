@@ -69,9 +69,9 @@ var _ = require('lodash')
 export default {
   beforeCreate: function () {
     if (this.$route.query.userId) {
-      cookie.set('username', this.$route.query.userId, 365)
+      cookie.set('username', this.$route.query.userId, 3650)
     } else if (!cookie.get('username')) {
-      cookie.set('username', 'Za Warudo', 365)
+      cookie.set('username', 'Za Warudo', 3650)
     }
   },
   computed: {
