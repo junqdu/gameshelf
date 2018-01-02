@@ -9,6 +9,7 @@ export default class {
     this.numplays = params.numplays
     this.playingtime = params.playingtime
     this.name = params.name
+    this.date = params.date
 
     if (params.rank) {
       this.rank = params.rank

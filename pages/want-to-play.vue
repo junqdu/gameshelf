@@ -53,7 +53,10 @@
           </b-col>
         </b-row>
       </b-container>
-      <span v-if="waitingForBGG">Waiting for BGG to process. Please try again later for access.</span>
+      <span v-if="waitingForBGG">
+        Waiting for BGG to process. Please try again later for access.
+        <button @click="refresh()">Refresh</button>
+      </span>
     </div>
   </section>
 </template>
@@ -151,6 +154,9 @@ export default {
       return list.filter(function (item) {
         return _.get(item, 'bggbestplayers', '').indexOf(bestnum) > -1 && item.playingtime >= mintime && item.playingtime <= maxtime
       })
+    },
+    refresh: function (key) {
+      location.reload()
     },
     sort: function (key) {
       if (!key) {
