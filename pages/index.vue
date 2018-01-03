@@ -88,7 +88,7 @@ export default {
         excludesubtype: 'boardgameexpansion',
         own: 1,
         stats: 1,
-        username: this.userId
+        username: this.$route.query.userId || this.userId
       }
     })
       .then((res) => {

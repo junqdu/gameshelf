@@ -80,7 +80,7 @@ export default {
     return axios.get('https://www.boardgamegeek.com/xmlapi2/collection', {
       params: {
         stats: 1,
-        username: this.userId,
+        username: this.$route.query.userId || this.userId,
         wanttoplay: 1
       }
     })

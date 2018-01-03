@@ -54,7 +54,7 @@ export default {
   created: function () {
     return axios.get('https://www.boardgamegeek.com/xmlapi2/plays', {
       params: {
-        username: this.userId
+        username: this.$route.query.userId || this.userId
       }
     })
       .then((res) => {
