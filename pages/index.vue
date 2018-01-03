@@ -120,7 +120,7 @@ export default {
               rating: parseFloat(item.stats.rating._value)
             }))
           })
-          this.$data.items = items
+          this.$data.items = _.uniqBy(items, 'id')
           this.$data.games = data
         }
       })
