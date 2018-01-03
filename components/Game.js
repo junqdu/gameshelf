@@ -4,19 +4,16 @@ export default class {
     for (var k in games[params.id]) {
       this[k] = games[params.id][k]
     }
+    this.average = params.average || ''
+    this.date = params.date
     this.id = params.id
     this.imageUrl = params.imageUrl
+    this.maxplayer = params.maxplayer
+    this.minplayer = params.minplayer
+    this.name = params.name
     this.numplays = params.numplays
     this.playingtime = params.playingtime
-    this.name = params.name
-    this.date = params.date
+    this.rank = params.rank || ''
     this.rating = params.rating || ''
-
-    if (params.rank) {
-      this.rank = params.rank
-    }
-    if (params.average) {
-      this.average = params.average
-    }
   }
 }

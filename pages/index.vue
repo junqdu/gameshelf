@@ -6,9 +6,11 @@
         <b-row>
           <b-col>
             <div class="filter">
-              <input v-model="bestnum" placeholder="Best# of Players">
-              <input v-model="mintime" type="number" placeholder="Min. Play Time">
-              <input v-model="maxtime" type="number" placeholder="Max. Play Time">
+              <input v-model="bestnum" type="number" placeholder="Best# of Players" min="1">
+              <input v-model="mintime" type="number" placeholder="Min Play Time" min="0" step="10">
+              <input v-model="maxtime" type="number" placeholder="Max Play Time" min="0" step="10">
+              <input v-model="recnum" type="number" placeholder="Recom# of Players" min="1">
+              <input v-model="supplayer" type="number" placeholder="Support Players" min="1">
             </div>
             <table class="table table-striped" v-if="orderedGames">
               <thead>
@@ -22,7 +24,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in filterBy(orderedGames, bestnum, mintime, maxtime)" :key="item.id">
+                <tr v-for="item in filterBy(orderedGames, bestnum, mintime, maxtime, supplayer, recnum)" :key="item.id">
                   <td v-if='!noImage'>
                     <a :href="'https://boardgamegeek.com/boardgame/' + item.id">
                       <b-img width="75" :src="item.imageUrl"/>
@@ -38,8 +40,8 @@
                   <td class="name">
                     <a :href="'https://boardgamegeek.com/boardgame/' + item.id">{{item.name}}</a>
                   </td>
-                  <!-- <td>{{item.minPlayer}}</td>
-                  <td>{{item.maxPlayer}}</td> -->
+                  <!-- <td>{{item.minplayer}}</td>
+                  <td>{{item.maxplayer}}</td> -->
                   <td>
                     <span class="badge" :class="['badge-' + getWeightColor(item.weight)]">{{item.weight | number}}</span>
                   </td>
@@ -109,6 +111,8 @@ export default {
               average: parseFloat(item.stats.rating.average._value),
               id: item._objectid,
               imageUrl: item.thumbnail,
+              maxplayer: parseFloat(item.stats._maxplayers),
+              minplayer: parseFloat(item.stats._minplayers),
               name: item.name.__text,
               numplays: parseFloat(item.numplays),
               playingtime: parseFloat(item.stats._playingtime),
@@ -132,9 +136,10 @@ export default {
       games: {},
       items: [],
       loading: true,
-      maxtime: 480,
-      mintime: 0,
+      maxtime: undefined,
+      mintime: undefined,
       noImage: this.$route.query.noImage,
+      recnum: '',
       tableHeader: [
         {key: '', value: '', condition: this.noImage},
         {key: 'rank', value: 'Rank'},
@@ -150,14 +155,19 @@ export default {
         {key: 'numplays', value: 'Plays'}
       ],
       sortBy: 'rank',
+      supplayer: undefined,
       userId: cookie.get('username'),
       waitingForBGG: false
     }
   },
   methods: {
-    filterBy: function (list, bestnum, mintime, maxtime) {
+    filterBy: function (list, bestnum, mintime, maxtime, supplayer, recnum) {
       return list.filter(function (item) {
-        return (!bestnum || _.get(item, 'bggbestplayers', '').split(',').includes(bestnum)) && item.playingtime >= mintime && item.playingtime <= maxtime
+        return (!bestnum || _.get(item, 'bggbestplayers', '').split(',').includes(bestnum)) &&
+        (!recnum || _.get(item, 'bggrecplayers', '').split(',').includes(recnum)) &&
+        (!mintime || item.playingtime >= mintime) &&
+        (!maxtime || item.playingtime <= maxtime) &&
+        (!supplayer || (item.minplayer <= supplayer && item.maxplayer >= supplayer))
       })
     },
     refresh: function (key) {
@@ -233,7 +243,7 @@ export default {
 
 input {
   margin-right: 0.5rem;
-  width: 8.5rem
+  width: 9rem
 }
 </style>
 <style src="./table.less" lang="less" scoped></style>

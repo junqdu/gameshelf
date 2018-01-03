@@ -26,6 +26,7 @@ with open('collection.csv', 'rb') as csvfile:
             # + ', "playingtime":' + row[playingtime]
             # + ', "bggrecplayers":"' + row[bggrecplayers]
             + ', "bggbestplayers":"' + row[bggbestplayers]
+            + '", "bggrecplayers":"' + row[bggrecplayers]
             + '", "rating":' + row[rating]
             + '},')
     x += '}'
