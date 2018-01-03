@@ -30,7 +30,7 @@
                   </td>
                   <td>{{item.rank}}</td>
                   <td>
-                    <span class="badge" :class="['badge-' + getAverageRatingColor(item.average)]">{{item.average | number}}</span>
+                    <span class="badge" :class="['badge-' + getRatingColor(item.average, true)]">{{item.average | number}}</span>
                   </td>
                   <td>
                     <span class="badge" :class="['badge-' + getRatingColor(item.rating)]">{{item.rating}}</span>
@@ -157,7 +157,7 @@ export default {
   methods: {
     filterBy: function (list, bestnum, mintime, maxtime) {
       return list.filter(function (item) {
-        return _.get(item, 'bggbestplayers', '').indexOf(bestnum) > -1 && item.playingtime >= mintime && item.playingtime <= maxtime
+        return (!bestnum || _.get(item, 'bggbestplayers', '').split(',').includes(bestnum)) && item.playingtime >= mintime && item.playingtime <= maxtime
       })
     },
     refresh: function (key) {
@@ -187,21 +187,8 @@ export default {
         return 'light'
       }
     },
-    getAverageRatingColor: function (rating) {
-      if (rating > 8) {
-        return 't1'
-      } else if (rating > 7.5) {
-        return 't2'
-      } else if (rating > 7) {
-        return 't3'
-      } else if (rating > 6) {
-        return 't4'
-      } else {
-        return 't5'
-      }
-    },
-    getRatingColor: function (rating) {
-      return _.ceil(rating)
+    getRatingColor: function (rating, roundDown) {
+      return roundDown ? _.floor(rating) : _.ceil(rating)
     }
   },
   filters: {
