@@ -33,7 +33,7 @@
                     <span class="badge" :class="['badge-' + getAverageRatingColor(item.average)]">{{item.average | number}}</span>
                   </td>
                   <td>
-                    <span class="badge" :class="['badge-' + item.rating]">{{item.rating}}</span>
+                    <span class="badge" :class="['badge-' + getRatingColor(item.rating)]">{{item.rating}}</span>
                   </td>
                   <td class="name">
                     <a :href="'https://boardgamegeek.com/boardgame/' + item.id">{{item.name}}</a>
@@ -199,6 +199,9 @@ export default {
       } else {
         return 't5'
       }
+    },
+    getRatingColor: function (rating) {
+      return _.ceil(rating)
     }
   },
   filters: {

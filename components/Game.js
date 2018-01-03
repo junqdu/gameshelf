@@ -10,15 +10,13 @@ export default class {
     this.playingtime = params.playingtime
     this.name = params.name
     this.date = params.date
+    this.rating = params.rating || ''
 
     if (params.rank) {
       this.rank = params.rank
     }
     if (params.average) {
       this.average = params.average
-    }
-    if (params.rating) {
-      this.rating = params.rating
     }
   }
 }
