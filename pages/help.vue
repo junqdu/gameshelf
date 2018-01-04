@@ -40,6 +40,10 @@ export default {
         {
           q: 'What is the goal/purpose of this site',
           a: 'For me to quickly filtering (based on things I care about, e.g. Best# of player and play time) down to a game I want to play.'
+        },
+        {
+          q: 'What game do you have data for?',
+          a: 'Up to BGG game id of 240000'
         }
       ],
       userId: cookie.get('username')
