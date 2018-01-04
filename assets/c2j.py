@@ -16,19 +16,20 @@ with open('collection.csv', 'rb') as csvfile:
                      quoting=csv.QUOTE_ALL, skipinitialspace=True)
     next(spamreader, None)
     for row in spamreader:
-        x += ('"' + row[1]
-            # + '"name":"' + row[name]
-            # + '", "average":' + row[average]
-            + '":{ "weight":' + row[weight]
-            # + ', "rank":' + row[rank]
-            # + ', "minPlayer":' + row[minPlayer]
-            # + ', "maxPlayer":' + row[maxPlayer]
-            # + ', "playingtime":' + row[playingtime]
-            # + ', "bggrecplayers":"' + row[bggrecplayers]
-            + ', "bggbestplayers":"' + row[bggbestplayers]
-            + '", "bggrecplayers":"' + row[bggrecplayers]
-            + '", "rating":' + row[rating]
-            + '},')
+        if row[rank] != '0':
+            x += ('"' + row[1]
+                # + '"name":"' + row[name]
+                # + '", "average":' + row[average]
+                + '":{ "weight":' + row[weight]
+                # + ', "rank":' + row[rank]
+                # + ', "minPlayer":' + row[minPlayer]
+                # + ', "maxPlayer":' + row[maxPlayer]
+                # + ', "playingtime":' + row[playingtime]
+                # + ', "bggrecplayers":"' + row[bggrecplayers]
+                + ', "bggbestplayers":"' + row[bggbestplayers]
+                + '", "bggrecplayers":"' + row[bggrecplayers]
+                + '", "rating":' + row[rating]
+                + '},')
     x += '}'
 
     new = list(x)
