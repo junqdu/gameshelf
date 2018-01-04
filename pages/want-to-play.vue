@@ -152,7 +152,12 @@ export default {
   },
   computed: {
     orderedGames: function () {
-      return _.orderBy(this.items, [this.sortBy, 'average'], [this.asc ? 'asc' : 'desc', 'desc'])
+      let temp = _.orderBy(this.items, [this.sortBy, 'average'], [this.asc ? 'asc' : 'desc', 'desc'])
+      while (!_.get(temp[0], 'rank')) {
+        temp.push(temp.shift())
+      }
+      this.items = temp
+      return this.items
     }
   },
   methods: {
