@@ -7,10 +7,10 @@
           <b-col>
             <div class="filter">
               <input v-model="bestnum" type="number" placeholder="Best# of Players" min="1">
-              <input v-model="mintime" type="number" placeholder="Min Play Time" min="0" step="10">
-              <input v-model="maxtime" type="number" placeholder="Max Play Time" min="0" step="10">
               <input v-model="recnum" type="number" placeholder="Recom# of Players" min="1">
               <input v-model="supplayer" type="number" placeholder="Support Players" min="1">
+              <input v-model="mintime" type="number" placeholder="Min Play Time" min="0" step="10">
+              <input v-model="maxtime" type="number" placeholder="Max Play Time" min="0" step="10">
             </div>
             <table class="table table-striped" v-if="orderedGames">
               <thead>
@@ -18,7 +18,7 @@
                   <th scope="col" v-for="header in tableHeader" @click="sort(header.key)" :class="[header.key]" v-if="!header.condition">
                     <span>
                       {{header.value}}
-                      <i class="fa" aria-hidden="true" v-if="sortBy === header.key" :class="{'fa-arrow-down': asc, 'fa-arrow-up': !asc}"></i>
+                      <i class="fa" aria-hidden="true" v-if="sortBy === header.key" :class="{'fa-arrow-down': !asc, 'fa-arrow-up': asc}"></i>
                     </span>
                   </th>
                 </tr>
