@@ -11,6 +11,7 @@
               <input v-model="supplayer" type="number" placeholder="Support Players" min="1">
               <input v-model="mintime" type="number" placeholder="Min Play Time" min="0" step="10">
               <input v-model="maxtime" type="number" placeholder="Max Play Time" min="0" step="10">
+              <input v-model="maxweight" type="number" placeholder="Max Weight" min="0" max="5" step="0.1">
             </div>
             <table class="table table-striped" v-if="orderedGames">
               <thead>
@@ -24,7 +25,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in filterBy(orderedGames, bestnum, mintime, maxtime, supplayer, recnum)" :key="item.id">
+                <tr v-for="item in filterBy(orderedGames)" :key="item.id">
                   <td v-if='!noImage'>
                     <a :href="'https://boardgamegeek.com/boardgame/' + item.id">
                       <b-img width="75" :src="item.imageUrl"/>
@@ -144,6 +145,7 @@ export default {
       items: [],
       loading: true,
       maxtime: undefined,
+      maxweight: undefined,
       mintime: undefined,
       noImage: this.$route.query.noImage,
       recnum: '',
@@ -168,13 +170,14 @@ export default {
     }
   },
   methods: {
-    filterBy: function (list, bestnum, mintime, maxtime, supplayer, recnum) {
-      return list.filter(function (item) {
-        return (!bestnum || _.get(item, 'bggbestplayers', '').split(',').includes(bestnum)) &&
-        (!recnum || _.get(item, 'bggrecplayers', '').split(',').includes(recnum)) &&
-        (!mintime || item.playingtime >= mintime) &&
-        (!maxtime || item.playingtime <= maxtime) &&
-        (!supplayer || (item.minplayer <= supplayer && item.maxplayer >= supplayer))
+    filterBy: function (list) {
+      return list.filter((item) => {
+        return (!this.bestnum || _.get(item, 'bggbestplayers', '').split(',').includes(this.bestnum)) &&
+        (!this.recnum || _.get(item, 'bggrecplayers', '').split(',').includes(this.recnum)) &&
+        (!this.mintime || item.playingtime >= this.mintime) &&
+        (!this.maxtime || item.playingtime <= this.maxtime) &&
+        (!this.supplayer || (item.minplayer <= this.supplayer && item.maxplayer >= this.supplayer)) &&
+        (!this.maxweight || item.weight <= this.maxweight)
       })
     },
     refresh: function (key) {
