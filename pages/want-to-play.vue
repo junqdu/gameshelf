@@ -1,7 +1,7 @@
 <template>
   <section class="container">
     <div>
-      <div v-if="loading" class="loader"></div>
+      <v-loader v-if="loading"></v-loader>
       <b-container v-if="!loading && !waitingForBGG" class="bv-example-row">
         <b-row>
           <b-col>
@@ -14,53 +14,11 @@
               <input v-model="maxweight" type="number" placeholder="Max Weight" min="1" max="5" step="0.1">
               <input v-model="minweight" type="number" placeholder="Min Weight" min="1" max="5" step="0.1">
             </div>
-            <table class="table table-striped" v-if="orderedGames">
-              <thead>
-                <tr>
-                  <th scope="col" v-for="header in tableHeader" @click="sort(header.key)" :class="[header.key]" v-if="!header.condition" :key="header.key">
-                    <span>
-                      {{header.value}}
-                      <i class="fa" aria-hidden="true" v-if="sortBy === header.key" :class="{'fa-arrow-down': !asc, 'fa-arrow-up': asc}"></i>
-                    </span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in filterBy(orderedGames)" :key="item.id">
-                  <td v-if='!noImage'>
-                    <a :href="'https://boardgamegeek.com/boardgame/' + item.id">
-                      <b-img width="75" :src="item.imageUrl"/>
-                    </a>
-                  </td>
-                  <td>{{item.rank}}</td>
-                  <td>
-                    <span class="badge" :class="['badge-' + getRatingColor(item.average, true)]">{{item.average | number}}</span>
-                  </td>
-                  <!-- <td>
-                    <span class="badge" :class="['badge-' + item.rating]">{{item.rating}}</span>
-                  </td> -->
-                  <td class="name">
-                    <a :href="'https://boardgamegeek.com/boardgame/' + item.id">{{item.name}}</a>
-                  </td>
-                  <!-- <td>{{item.minPlayer}}</td>
-                  <td>{{item.maxPlayer}}</td> -->
-                  <td>
-                    <span class="badge" :class="['badge-' + getWeightColor(item.weight)]">{{item.weight | number}}</span>
-                  </td>
-                  <td>{{item.playingtime}} mins</td>
-                  <td class="best-player">{{item.bggbestplayers}}</td>
-                  <!-- <td class="rec-player">{{item.bggrecplayers}}</td> -->
-                </tr>
-              </tbody>
-            </table>
-            Item count: {{orderedGames.length}}
+            <v-table :games="filteredItem()" :headers="tableHeader"></v-table>
           </b-col>
         </b-row>
       </b-container>
-      <span v-if="waitingForBGG">
-        Waiting for BGG to process. Please try again later for access.
-        <button @click="refresh()">Refresh</button>
-      </span>
+      <v-refresh v-if="waitingForBGG"></v-refresh>
     </div>
   </section>
 </template>
@@ -69,6 +27,9 @@
 import axios from 'axios'
 import cookie from '~/components/cookie.js'
 import Game from '~/components/Game.js'
+import VRefresh from '~/components/v-refresh.vue'
+import VLoader from '~/components/v-loader.vue'
+import VTable from '~/components/v-table.vue'
 import X2JS from 'x2js'
 var _ = require('lodash')
 
@@ -81,6 +42,11 @@ export default {
     } else if (!cookie.get('username')) {
       cookie.set('username', 'Za Warudo', 3650)
     }
+  },
+  components: {
+    VRefresh,
+    VLoader,
+    VTable
   },
   created: function () {
     return axios.get('https://www.boardgamegeek.com/xmlapi2/collection', {
@@ -117,7 +83,7 @@ export default {
               rating: parseFloat(item.stats.rating._value)
             }))
           })
-          this.$data.items = items
+          this.items = items
         }
       })
       .catch(() => {
@@ -127,8 +93,7 @@ export default {
   },
   data () {
     return {
-      asc: true,
-      bestnum: '',
+      bestnum: undefined,
       items: [],
       loading: true,
       maxtime: undefined,
@@ -136,42 +101,24 @@ export default {
       mintime: undefined,
       minweight: undefined,
       noImage: this.$route.query.noImage,
-      recnum: '',
+      recnum: undefined,
       tableHeader: [
         {key: '', value: '', condition: this.noImage},
         {key: 'rank', value: 'Rank'},
         {key: 'average', value: 'Avg. Rating'},
-        // {key: 'rating', value: 'My Rating'},
         {key: 'name', value: 'Name'},
-        // {key: 'minPlayer', value: 'Min. Player'},
-        // {key: 'maxPlayer', value: 'Max. Player'},
         {key: 'weight', value: 'Weight'},
         {key: 'playingtime', value: 'Length'},
         {key: 'bggbestplayers', value: 'Best #Player'}
-        // {key: 'bggrecplayers', value: 'Rec. #Player'}
       ],
-      sortBy: 'rank',
       supplayer: undefined,
       userId: cookie.get('username'),
       waitingForBGG: false
     }
   },
-  computed: {
-    orderedGames: function () {
-      if (this.items.length) {
-        let temp = _.orderBy(this.items, [this.sortBy, 'average'], [this.asc ? 'asc' : 'desc', 'desc'])
-        while (!_.get(temp[0], 'rank')) {
-          temp.push(temp.shift())
-        }
-        this.items = temp
-      }
-
-      return this.items
-    }
-  },
   methods: {
-    filterBy: function (list) {
-      return list.filter((item) => {
+    filteredItem: function () {
+      return this.items.filter((item) => {
         return (!this.bestnum || _.get(item, 'bggbestplayers', '').split(',').includes(this.bestnum)) &&
         (!this.recnum || _.get(item, 'bggrecplayers', '').split(',').includes(this.recnum)) &&
         (!this.mintime || item.playingtime >= this.mintime) &&
@@ -180,43 +127,6 @@ export default {
         (!this.maxweight || item.weight <= this.maxweight) &&
         (!this.minweight || item.weight >= this.minweight)
       })
-    },
-    refresh: function (key) {
-      location.reload()
-    },
-    sort: function (key) {
-      if (!key) {
-        return
-      }
-      if (key === this.sortBy) {
-        this.asc = !this.asc
-      } else {
-        this.asc = true
-        this.sortBy = key
-      }
-    },
-    getWeightColor: function (weight) {
-      if (weight > 4) {
-        return 'heavy'
-      } else if (weight > 3.5) {
-        return 'medium-heavy'
-      } else if (weight > 3) {
-        return 'medium'
-      } else if (weight > 2.5) {
-        return 'medium-light'
-      } else {
-        return 'light'
-      }
-    },
-    getRatingColor: function (rating, roundDown) {
-      return roundDown ? _.floor(rating) : _.ceil(rating)
-    }
-  },
-  filters: {
-    number: function (value) {
-      if (!value) return ''
-      value = parseFloat(value)
-      return value.toFixed(2)
     }
   }
 }
@@ -234,23 +144,8 @@ export default {
   padding-top: 15px;
 }
 
-.loader {
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
-  border-radius: 50%;
-  width: 5rem;
-  height: 5rem;
-  animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
 .filter input {
   margin-right: 0.5rem;
   width: 9rem
 }
 </style>
-<style src="./table.less" lang="less" scoped></style>

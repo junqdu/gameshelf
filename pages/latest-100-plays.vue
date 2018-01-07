@@ -1,38 +1,15 @@
 <template>
   <section class="container">
     <div>
-      <div v-if="loading" class="loader"></div>
+      <v-loader v-if="loading"></v-loader>
       <b-container v-if="!loading && !waitingForBGG" class="bv-example-row">
         <b-row>
           <b-col>
-            <table class="table table-striped" v-if="items">
-              <thead>
-                <tr>
-                  <th scope="col" v-for="header in tableHeader" :class="[header.key]" v-if="!header.condition" :key="header.key">
-                    <span>
-                      {{header.value}}
-                    </span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in items" :key="item.id">
-                  <td class="name">
-                    <a :href="'https://boardgamegeek.com/boardgame/' + item.id">{{item.name}}</a>
-                  </td>
-                  <td class="date">
-                    <a>{{item.date}}</a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <v-table :games="items" :headers="tableHeader"></v-table>
           </b-col>
         </b-row>
       </b-container>
-      <span v-if="waitingForBGG">
-        Waiting for BGG to process. Please try again later for access.
-        <button @click="refresh()">Refresh</button>
-      </span>
+      <v-refresh v-if="waitingForBGG"></v-refresh>
     </div>
   </section>
 </template>
@@ -40,6 +17,9 @@
 <script>
 import axios from 'axios'
 import cookie from '~/components/cookie.js'
+import VRefresh from '~/components/v-refresh.vue'
+import VLoader from '~/components/v-loader.vue'
+import VTable from '~/components/v-table.vue'
 import X2JS from 'x2js'
 var _ = require('lodash')
 
@@ -52,6 +32,11 @@ export default {
     } else if (!cookie.get('username')) {
       cookie.set('username', 'Za Warudo', 3650)
     }
+  },
+  components: {
+    VRefresh,
+    VLoader,
+    VTable
   },
   created: function () {
     return axios.get('https://www.boardgamegeek.com/xmlapi2/plays', {
@@ -84,8 +69,6 @@ export default {
   },
   data () {
     return {
-      asc: true,
-      games: {},
       items: [],
       loading: true,
       tableHeader: [
@@ -94,11 +77,6 @@ export default {
       ],
       userId: cookie.get('username'),
       waitingForBGG: false
-    }
-  },
-  methods: {
-    refresh: function (key) {
-      location.reload()
     }
   }
 }
@@ -120,22 +98,7 @@ export default {
   padding-bottom: 0.5rem;
 }
 
-.loader {
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
-  border-radius: 50%;
-  width: 5rem;
-  height: 5rem;
-  animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
 .table th:hover {
   cursor: default !important;
 }
 </style>
-<style src="./table.less" lang="less" scoped></style>
