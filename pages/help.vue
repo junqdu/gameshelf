@@ -51,8 +51,8 @@ export default {
           a: 'Up to BGG game id of 240000'
         },
         {
-          q: 'When if your data update?',
-          a: '1/1/2018'
+          q: 'When is your data update?',
+          a: '1/4/2018'
         }
       ],
       showexp: cookie.get('showexp'),
