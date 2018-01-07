@@ -135,7 +135,8 @@ export default {
         (!this.supplayer || (item.minplayer <= this.supplayer && item.maxplayer >= this.supplayer)) &&
         (!this.maxweight || item.weight <= this.maxweight) &&
         (!this.minweight || item.weight >= this.minweight) &&
-        ((cookie.get('showexp') === 'false' && item.type !== 'expansion') || cookie.get('showexp') === 'true')
+        ((cookie.get('showexp') === 'false' && item.type !== 'expansion') || cookie.get('showexp') === 'true') &&
+        ((cookie.get('showexp') === 'true' && item.type === 'expansion' && item.average >= cookie.get('expmin')) || item.type !== 'expansion')
       })
     }
   }

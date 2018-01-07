@@ -11,11 +11,16 @@
       </b-input-group-button>
     </b-input-group>
       <h5>Collection</h5>
-      <b-form-checkbox id="show-expansions" v-model="showexp">
-        Show Expansions
-      </b-form-checkbox>
-
-
+      <b-input-group>
+        <b-input-group-addon>
+          <input type="checkbox" id="show-expansions" v-model="showexp">
+        </b-input-group-addon>
+        <b-input-group-addon>
+          Show Expansions with miniumn rating of
+        </b-input-group-addon>
+        <b-form-input type="number" :disabled="!showexp" v-model="expmin"/>
+      </b-input-group>
+      <div>Note: Only game with rating of 6 or greater has data for weight and best/rec# of players.</div>
     <h4>FAQ</h4>
     <div v-for="item in faq">
       <div><b>Q: {{item.q}}</b></div>
@@ -33,18 +38,23 @@ import cookie from '~/components/cookie.js'
 export default {
   data () {
     return {
+      expmin: +cookie.get('expmin'),
       faq: [
         {
           q: 'Why are my seeing "Waiting for BGG to process. Please try again later for access."?',
-          a: 'This site relies on BGG, the bigger your collection is, the longer it take for BGG to prepare your data, just be patiently and smash your refresh button.'
+          a: 'This site relies on BGG, the bigger your collection is, the longer it takes for BGG to prepare your data, just be patiently and smash your refresh button.'
         },
         {
           q: 'Why only subset of my collection is shown?',
-          a: 'Only game that is "Owned" and non-expansion is shown.'
+          a: 'Only game that is flagged with "Owned" on BGG is shown.'
+        },
+        {
+          q: 'Why is the weight/best#/rec# data is not shown for some game?',
+          a: 'I only make that kind of data available for the ranked game, or expansion with rating 6 or greater.'
         },
         {
           q: 'What is the goal/purpose of this site',
-          a: 'For me to quickly filtering (based on things I care about, e.g. Best# of player and play time) down to a game I want to play.'
+          a: 'For me to simply and elegantly filtering (based on things I care about, e.g. Best# of player and play time) down to a game I want to play.'
         },
         {
           q: 'What game do you have data for?',
@@ -55,7 +65,7 @@ export default {
           a: '1/4/2018'
         }
       ],
-      showexp: cookie.get('showexp'),
+      showexp: cookie.get('showexp') === 'true',
       userId: cookie.get('username')
     }
   },
@@ -65,6 +75,9 @@ export default {
     }
   },
   watch: {
+    expmin: function (val) {
+      cookie.set('expmin', val, 3650)
+    },
     showexp: function (val) {
       cookie.set('showexp', val, 3650)
     }
