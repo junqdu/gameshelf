@@ -10,6 +10,11 @@
         <b-btn @click="save" variant="info">Save</b-btn>
       </b-input-group-button>
     </b-input-group>
+      <h5>Collection</h5>
+      <b-form-checkbox id="show-expansions" v-model="showexp">
+        Show Expansions
+      </b-form-checkbox>
+
 
     <h4>FAQ</h4>
     <div v-for="item in faq">
@@ -44,14 +49,24 @@ export default {
         {
           q: 'What game do you have data for?',
           a: 'Up to BGG game id of 240000'
+        },
+        {
+          q: 'When if your data update?',
+          a: '1/1/2018'
         }
       ],
+      showexp: cookie.get('showexp'),
       userId: cookie.get('username')
     }
   },
   methods: {
     save: function () {
       cookie.set('username', this.userId, 3650)
+    }
+  },
+  watch: {
+    showexp: function (val) {
+      cookie.set('showexp', val, 3650)
     }
   }
 }

@@ -11,25 +11,29 @@ with open('collection.csv', 'rb') as csvfile:
     playingtime = 29
     bggrecplayers = 33
     bggbestplayers = 34
+    itemtype = 42
     x = '{'
     spamreader = csv.reader(csvfile, quotechar='"', delimiter=',',
                      quoting=csv.QUOTE_ALL, skipinitialspace=True)
     next(spamreader, None)
     for row in spamreader:
-        if row[rank] != '0':
+        if (row[rank] != '0') or (row[itemtype] == 'expansion' and float(row[average]) >= 6) :
+            print float(row[average])
+            print row[name]
             x += ('"' + row[1]
                 # + '"name":"' + row[name]
                 # + '", "average":' + row[average]
-                + '":{ "weight":' + row[weight]
+                + '":{ "w":' + str(round(float(row[weight]), 2))
                 # + ', "rank":' + row[rank]
                 # + ', "minPlayer":' + row[minPlayer]
                 # + ', "maxPlayer":' + row[maxPlayer]
                 # + ', "playingtime":' + row[playingtime]
                 # + ', "bggrecplayers":"' + row[bggrecplayers]
-                + ', "bggbestplayers":"' + row[bggbestplayers]
-                + '", "bggrecplayers":"' + row[bggrecplayers]
-                + '", "rating":' + row[rating]
-                + '},')
+                + ', "b":"' + row[bggbestplayers]
+                + '", "r":"' + row[bggrecplayers]
+                + '", "t":"' + row[itemtype]
+                # + '", "rating":' + row[rating]
+                + '"},')
     x += '}'
 
     new = list(x)

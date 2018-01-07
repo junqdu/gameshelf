@@ -9,14 +9,15 @@
               <input v-model="bestnum" type="number" placeholder="Best# of Players" min="1">
               <input v-model="recnum" type="number" placeholder="Recom# of Players" min="1">
               <input v-model="supplayer" type="number" placeholder="Support Players" min="1">
-              <input v-model="mintime" type="number" placeholder="Min Play Time" min="0" step="10">
               <input v-model="maxtime" type="number" placeholder="Max Play Time" min="0" step="10">
-              <input v-model="maxweight" type="number" placeholder="Max Weight" min="0" max="5" step="0.1">
+              <input v-model="mintime" type="number" placeholder="Min Play Time" min="0" step="10">
+              <input v-model="maxweight" type="number" placeholder="Max Weight" min="1" max="5" step="0.1">
+              <input v-model="minweight" type="number" placeholder="Min Weight" min="1" max="5" step="0.1">
             </div>
             <table class="table table-striped" v-if="orderedGames">
               <thead>
                 <tr>
-                  <th scope="col" v-for="header in tableHeader" @click="sort(header.key)" :class="[header.key]" v-if="!header.condition">
+                  <th scope="col" v-for="header in tableHeader" @click="sort(header.key)" :class="[header.key]" v-if="!header.condition" :key="header.key">
                     <span>
                       {{header.value}}
                       <i class="fa" aria-hidden="true" v-if="sortBy === header.key" :class="{'fa-arrow-down': !asc, 'fa-arrow-up': asc}"></i>
@@ -53,7 +54,7 @@
                 </tr>
               </tbody>
             </table>
-            Item count: {{orderedGames.length}}
+            Item count: {{filterBy(orderedGames).length}}
           </b-col>
         </b-row>
       </b-container>
@@ -81,21 +82,27 @@ export default {
     } else if (!cookie.get('username')) {
       cookie.set('username', 'Za Warudo', 3650)
     }
+
+    if (cookie.get('showexp') === '') {
+      cookie.set('showexp', true)
+    }
   },
   computed: {
     orderedGames: function () {
-      let temp = _.orderBy(this.items, [this.sortBy, 'average'], [this.asc ? 'asc' : 'desc', 'desc'])
-      while (!_.get(temp[0], 'rank')) {
-        temp.push(temp.shift())
+      if (this.items.length) {
+        let temp = _.orderBy(this.items, [this.sortBy, 'average'], [this.asc ? 'asc' : 'desc', 'desc'])
+        while (!_.get(temp[0], 'rank')) {
+          temp.push(temp.shift())
+        }
+        this.items = temp
       }
-      this.items = temp
+
       return this.items
     }
   },
   created: function () {
     return axios.get('https://www.boardgamegeek.com/xmlapi2/collection', {
       params: {
-        excludesubtype: 'boardgameexpansion',
         own: 1,
         stats: 1,
         username: this.$route.query.userId || this.userId
@@ -109,7 +116,7 @@ export default {
 
           var items = []
           let rank
-          data.items.item.forEach(function (item) {
+          _.forEach(_.get(data, 'items.item'), function (item) {
             if (item.stats.rating.ranks.rank.length) {
               rank = parseFloat(item.stats.rating.ranks.rank[0]._value)
             } else {
@@ -147,6 +154,7 @@ export default {
       maxtime: undefined,
       maxweight: undefined,
       mintime: undefined,
+      minweight: undefined,
       noImage: this.$route.query.noImage,
       recnum: '',
       tableHeader: [
@@ -177,7 +185,9 @@ export default {
         (!this.mintime || item.playingtime >= this.mintime) &&
         (!this.maxtime || item.playingtime <= this.maxtime) &&
         (!this.supplayer || (item.minplayer <= this.supplayer && item.maxplayer >= this.supplayer)) &&
-        (!this.maxweight || item.weight <= this.maxweight)
+        (!this.maxweight || item.weight <= this.maxweight) &&
+        (!this.minweight || item.weight >= this.minweight) &&
+        ((cookie.get('showexp') === 'false' && item.type !== 'expansion') || cookie.get('showexp') === 'true')
       })
     },
     refresh: function (key) {

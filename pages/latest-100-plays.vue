@@ -8,7 +8,7 @@
             <table class="table table-striped" v-if="items">
               <thead>
                 <tr>
-                  <th scope="col" v-for="header in tableHeader" :class="[header.key]" v-if="!header.condition">
+                  <th scope="col" v-for="header in tableHeader" :class="[header.key]" v-if="!header.condition" :key="header.key">
                     <span>
                       {{header.value}}
                     </span>
@@ -40,8 +40,8 @@
 <script>
 import axios from 'axios'
 import cookie from '~/components/cookie.js'
-import Game from '~/components/Game.js'
 import X2JS from 'x2js'
+var _ = require('lodash')
 
 export default {
   beforeCreate: function () {
@@ -64,18 +64,17 @@ export default {
         if (res.status === 200) {
           var x2js = new X2JS()
           var data = x2js.xml2js(res.data)
-          this.$data.games = data
 
           var items = []
-          data.plays.play.forEach(function (play) {
-            items.push(new Game({
+          _.forEach(data.plays.play, (play) => {
+            items.push({
               date: play._date,
               id: play._id,
               name: play.item._name
-            }))
+            })
           })
+
           this.$data.items = items
-          this.$data.games = data
         }
       })
       .catch(() => {
