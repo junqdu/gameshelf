@@ -45,7 +45,7 @@ export default {
     }
 
     if (cookie.get('showexp') === '') {
-      cookie.set('showexp', true)
+      cookie.set('showexp', false, 3650)
     }
   },
   components: {
