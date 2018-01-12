@@ -3,7 +3,7 @@
     <table class="table table-striped" v-if="games">
       <thead>
         <tr>
-          <th scope="col" v-for="header in headers" @click="sort(header.key)" :class="[header.key]" v-if="!header.condition" :key="header.key">
+          <th scope="col" v-for="header in headers" @click="sort(header.key)" :class="[header.key]" v-if="!header.hide" :key="header.key">
             <span>
               {{header.value}}
               <i class="fa" aria-hidden="true" v-if="sortBy === header.key" :class="{'fa-arrow-down': !asc, 'fa-arrow-up': asc}"></i>
@@ -13,7 +13,7 @@
       </thead>
       <tbody>
         <tr v-for="item in orderedGames" :key="item.id">
-          <td v-if="!noImage && hasHeader('')">
+          <td v-if="hasHeader('', true)">
             <a :href="'https://boardgamegeek.com/boardgame/' + item.id">
               <b-img width="75" :src="item.imageUrl"/>
             </a>
@@ -79,8 +79,13 @@ export default {
     }
   },
   methods: {
-    hasHeader: function (key) {
-      return _.find(this.headers, ['key', key])
+    hasHeader: function (key, checkForHide) {
+      if (!checkForHide) {
+        return _.find(this.headers, ['key', key])
+      } else {
+        let header = _.find(this.headers, ['key', key])
+        return header ? !header.hide : false
+      }
     },
     getWeightColor: function (weight) {
       if (weight > 4) {

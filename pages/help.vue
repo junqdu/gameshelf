@@ -19,6 +19,11 @@
         <b-form-input type="number" :disabled="!showexp" v-model="expmin"/>
       </b-input-group>
       <div>Note: Only game with rating of 6 or greater has data for weight and best/rec# of players.</div>
+
+    <h4>URL params</h4>
+    <b-table striped hover :items="params"></b-table>
+    <a href="https://en.wikipedia.org/wiki/Query_string#Structure">How to use URL params?</a>
+
     <h4>FAQ</h4>
     <div v-for="item in faq">
       <div><b>Q: {{item.q}}</b></div>
@@ -62,6 +67,18 @@ export default {
           q: 'When is your data update?',
           a: '1/4/2018'
         }
+      ],
+      params: [
+        { paramName: 'userid', type: 'String', usage: "Determine who's collection to load" },
+        { paramName: 'noimage', type: 'Boolean', usage: 'When true, image will not be load in the table to save data on mobile' },
+        { paramName: 'showexp', type: 'Boolean', usage: 'When true, expansions will be shown' },
+        { paramName: 'bestnum', type: 'Number', usage: 'Prepopulate the best # of players filter' },
+        { paramName: 'recnum', type: 'Number', usage: 'Prepopulate the recommended # of player filter' },
+        { paramName: 'supplayer', type: 'Number', usage: 'Prepopulate the supported # of player filter' },
+        { paramName: 'maxweight', type: 'Number', usage: 'Prepopulate the max weight filter' },
+        { paramName: 'minweight', type: 'Number', usage: 'Prepopulate the min weight filter' },
+        { paramName: 'maxtime', type: 'Number', usage: 'Prepopulate the max play time filter' },
+        { paramName: 'mintime', type: 'Number', usage: 'Prepopulate the min play time filter' }
       ],
       showexp: cookie.get('showexp') === 'true',
       userId: cookie.get('username')

@@ -26,6 +26,7 @@
           </b-col>
         </b-row>
       </b-container>
+      <adsbygoogle />
       <v-refresh v-if="waitingForBGG"></v-refresh>
     </div>
   </section>
@@ -117,10 +118,9 @@ export default {
       maxweight: this.$route.query.maxweight || undefined,
       mintime: this.$route.query.mintime || undefined,
       minweight: this.$route.query.minweight || undefined,
-      noImage: this.$route.query.noImage,
       recnum: this.$route.query.recnum || undefined,
       tableHeader: [
-        {key: '', value: '', condition: this.noImage},
+        {key: '', value: '', hide: this.$route.query.noimage},
         {key: 'rank', value: 'Rank'},
         {key: 'average', value: 'Avg. Rating'},
         {key: 'rating', value: 'My Rating'},

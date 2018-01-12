@@ -108,10 +108,9 @@ export default {
       maxweight: this.$route.query.maxweight || undefined,
       mintime: this.$route.query.mintime || undefined,
       minweight: this.$route.query.minweight || undefined,
-      noImage: this.$route.query.noImage,
       recnum: this.$route.query.recnum || undefined,
       tableHeader: [
-        {key: '', value: '', condition: this.noImage},
+        {key: '', value: '', hide: this.$route.query.noimage},
         {key: 'rank', value: 'Rank'},
         {key: 'average', value: 'Avg. Rating'},
         {key: 'name', value: 'Name'},
