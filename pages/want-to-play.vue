@@ -93,15 +93,15 @@ export default {
   },
   data () {
     return {
-      bestnum: undefined,
+      bestnum: this.$route.query.bestnum || undefined,
       items: [],
       loading: true,
-      maxtime: undefined,
-      maxweight: undefined,
-      mintime: undefined,
-      minweight: undefined,
+      maxtime: this.$route.query.maxtime || undefined,
+      maxweight: this.$route.query.maxweight || undefined,
+      mintime: this.$route.query.mintime || undefined,
+      minweight: this.$route.query.minweight || undefined,
       noImage: this.$route.query.noImage,
-      recnum: undefined,
+      recnum: this.$route.query.recnum || undefined,
       tableHeader: [
         {key: '', value: '', condition: this.noImage},
         {key: 'rank', value: 'Rank'},
@@ -111,7 +111,7 @@ export default {
         {key: 'playingtime', value: 'Length'},
         {key: 'bggbestplayers', value: 'Best #Player'}
       ],
-      supplayer: undefined,
+      supplayer: this.$route.query.supplayer || undefined,
       userId: cookie.get('username'),
       waitingForBGG: false
     }

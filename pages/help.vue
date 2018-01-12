@@ -11,12 +11,10 @@
       </b-input-group-button>
     </b-input-group>
       <h5>Collection</h5>
+      Show Expansions with miniumn rating of:
       <b-input-group>
         <b-input-group-addon>
           <input type="checkbox" id="show-expansions" v-model="showexp">
-        </b-input-group-addon>
-        <b-input-group-addon>
-          Show Expansions with miniumn rating of
         </b-input-group-addon>
         <b-form-input type="number" :disabled="!showexp" v-model="expmin"/>
       </b-input-group>

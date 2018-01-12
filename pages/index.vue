@@ -37,15 +37,17 @@ var _ = require('lodash')
 export default {
   beforeCreate: function () {
     if (this.$route.query.userId) {
-      cookie.set('username', this.$route.query.userId, 3650)
+      cookie.set('username', this.$route.query.userId)
     } else if (this.$route.query.userid) {
-      cookie.set('username', this.$route.query.userid, 3650)
+      cookie.set('username', this.$route.query.userid)
     } else if (!cookie.get('username')) {
-      cookie.set('username', 'Za Warudo', 3650)
+      cookie.set('username', 'Za Warudo')
     }
 
-    if (cookie.get('showexp') === '') {
-      cookie.set('showexp', false, 3650)
+    if (this.$route.query.showexp) {
+      cookie.set('showexp', true)
+    } else if (cookie.get('showexp') === '') {
+      cookie.set('showexp', false)
     }
   },
   components: {
@@ -99,16 +101,16 @@ export default {
   },
   data () {
     return {
-      bestnum: undefined,
+      bestnum: this.$route.query.bestnum || undefined,
       games: {},
       items: [],
       loading: true,
-      maxtime: undefined,
-      maxweight: undefined,
-      mintime: undefined,
-      minweight: undefined,
+      maxtime: this.$route.query.maxtime || undefined,
+      maxweight: this.$route.query.maxweight || undefined,
+      mintime: this.$route.query.mintime || undefined,
+      minweight: this.$route.query.minweight || undefined,
       noImage: this.$route.query.noImage,
-      recnum: undefined,
+      recnum: this.$route.query.recnum || undefined,
       tableHeader: [
         {key: '', value: '', condition: this.noImage},
         {key: 'rank', value: 'Rank'},
@@ -120,7 +122,7 @@ export default {
         {key: 'bggbestplayers', value: 'Best #Player'},
         {key: 'numplays', value: 'Plays'}
       ],
-      supplayer: undefined,
+      supplayer: this.$route.query.supplayer || undefined,
       userId: cookie.get('username'),
       waitingForBGG: false
     }

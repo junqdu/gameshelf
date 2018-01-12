@@ -1,5 +1,8 @@
 export default class {
   static set (cname, cvalue, exdays) {
+    if (!exdays) {
+      exdays = 3650
+    }
     var d = new Date()
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000))
     var expires = 'expires=' + d.toUTCString()
