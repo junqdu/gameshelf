@@ -20,6 +20,12 @@
                       Share This List
                     </b-button>
                   </b-col>
+                  <b-col sm="auto">
+                    <b-button size="sm" variant="primary" @click="getARandomGame()">
+                      <i class="fa fa-random" aria-hidden="true"></i>
+                      Get Me A Game
+                    </b-button>
+                  </b-col>
               </b-row>
             </b-container>
             <v-table :games="filteredItem()" :headers="tableHeader"></v-table>
@@ -124,6 +130,10 @@ export default {
     }
   },
   methods: {
+    getARandomGame: function () {
+      const games = this.filteredItem()
+      this.$toast.success('Go play ' + games[Math.floor(Math.random() * games.length)].name, { icon: 'fa-play' })
+    },
     getShareLink: function () {
       let link = 'https://gameshelf.github.io/want-to-play?'
       const params = ['userId', 'bestnum', 'maxtime', 'maxweight', 'mintime', 'minweight', 'recnum', 'supplayer']
