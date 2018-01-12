@@ -23,7 +23,10 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/bootstrap-vue',
     '@nuxtjs/font-awesome',
-    '@nuxtjs/toast'
+    '@nuxtjs/toast',
+    ['@nuxtjs/google-adsense', {
+      id: 'ca-pub-4646777840516978'
+    }]
   ],
   mode: 'spa',
   axios: {
