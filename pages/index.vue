@@ -5,15 +5,23 @@
       <b-container v-if="!loading && !waitingForBGG" class="bv-example-row">
         <b-row>
           <b-col>
-            <div class="filter">
-              <input v-model="bestnum" type="number" placeholder="Best# of Players" min="1">
-              <input v-model="recnum" type="number" placeholder="Recom# of Players" min="1">
-              <input v-model="supplayer" type="number" placeholder="Support Players" min="1">
-              <input v-model="maxtime" type="number" placeholder="Max Play Time" min="0" step="10">
-              <input v-model="mintime" type="number" placeholder="Min Play Time" min="0" step="10">
-              <input v-model="maxweight" type="number" placeholder="Max Weight" min="1" max="5" step="0.1">
-              <input v-model="minweight" type="number" placeholder="Min Weight" min="1" max="5" step="0.1">
-            </div>
+            <b-container class="filters" fluid>
+              <b-row>
+                  <b-col sm="auto"><input v-model="bestnum" type="number" placeholder="Best# of Players" min="1"></b-col>
+                  <b-col sm="auto"><input v-model="recnum" type="number" placeholder="Recom# of Players" min="1"></b-col>
+                  <b-col sm="auto"><input v-model="supplayer" type="number" placeholder="Support Players" min="1"></b-col>
+                  <b-col sm="auto"><input v-model="maxtime" type="number" placeholder="Max Play Time" min="0" step="10"></b-col>
+                  <b-col sm="auto"><input v-model="mintime" type="number" placeholder="Min Play Time" min="0" step="10"></b-col>
+                  <b-col sm="auto"><input v-model="maxweight" type="number" placeholder="Max Weight" min="1" step="0.1"></b-col>
+                  <b-col sm="auto"><input v-model="minweight" type="number" placeholder="Min Weight" min="1" step="0.1"></b-col>
+                  <b-col sm="auto">
+                    <b-button size="sm" variant="primary" v-clipboard="getShareLink()" @click="$toast.success('Link copied to clipboard', { icon : 'fa-clipboard'})">
+                      <i class="fa fa-share-alt" aria-hidden="true"></i>
+                      Share This List
+                    </b-button>
+                  </b-col>
+              </b-row>
+            </b-container>
             <v-table :games="filteredItem()" :headers="tableHeader"></v-table>
           </b-col>
         </b-row>
@@ -128,6 +136,19 @@ export default {
     }
   },
   methods: {
+    getShareLink: function () {
+      let link = 'https://gameshelf.github.io?'
+      const params = ['userId', 'bestnum', 'maxtime', 'maxweight', 'mintime', 'minweight', 'recnum', 'supplayer']
+      _.forEach(params, param => {
+        if (this[param]) {
+          link = link + param + '=' + this[param] + '&'
+        }
+      })
+      if (cookie.get('showexp') === 'true') {
+        link = link + 'showexp' + '=' + cookie.get('showexp')
+      }
+      return link
+    },
     filteredItem: function () {
       return this.items.filter((item) => {
         return (!this.bestnum || _.get(item, 'bggbestplayers', '').split(',').includes(this.bestnum)) &&
@@ -153,16 +174,7 @@ export default {
   text-align: center;
 }
 
-.links {
-  padding-top: 15px;
-}
-
-.filter {
-  padding-bottom: 0.5rem;
-}
-
-.filter input {
-  margin-right: 0.5rem;
-  width: 9rem
+.filters .col-sm-auto {
+  padding-bottom: 0.25rem;
 }
 </style>

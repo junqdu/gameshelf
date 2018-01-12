@@ -176,4 +176,3 @@ export default {
   padding-top: 15px;
 }
 </style>
-<style src="./table.less" lang="less" scoped></style>

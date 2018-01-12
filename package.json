@@ -13,29 +13,31 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "@nuxtjs/axios ": "^4.4.0",
+    "@nuxtjs/axios ": "^4.5.2",
     "@nuxtjs/bootstrap-vue": "^2.0.4",
-    "@nuxtjs/font-awesome": "^1.0.2",
+    "@nuxtjs/font-awesome": "^1.0.3",
+    "@nuxtjs/toast": "^2.3.3",
     "bootstrap": "=4.0.0-beta.2",
     "jquery": "^3.2.1",
     "lodash": "^4.17.4",
-    "nuxt": "^1.0.0-rc11",
-    "popper.js": "^1.12.5",
+    "nuxt": "^1.0.0",
+    "popper.js": "^1.12.9",
+    "vue-clipboards": "^1.2.1",
     "vue-lodash": "^1.0.4",
     "vue-style-loader": "^3.0.3",
     "x2js": "^3.1.1"
   },
   "devDependencies": {
-    "babel-eslint": "^8.1.2",
-    "eslint": "^4.3.0",
+    "babel-eslint": "^8.2.1",
+    "eslint": "^4.15.0",
     "eslint-config-standard": "^11.0.0-beta.0",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-html": "^4.0.1",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-node": "^5.1.1",
-    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
-    "less": "^2.7.2",
+    "less": "^2.7.3",
     "less-loader": "^4.0.5"
   }
 }

@@ -23,13 +23,15 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/bootstrap-vue',
     '@nuxtjs/font-awesome',
-
-    // // Or if you have custom bootstrap CSS...
-    // ['@nuxtjs/bootstrap-vue', { css: false }],
+    '@nuxtjs/toast'
   ],
   mode: 'spa',
   axios: {
     // proxyHeaders: false
+  },
+  toast: {
+    iconPack: 'fontawesome',
+    position: 'top-right'
   },
   /*
   ** Build configuration
@@ -59,5 +61,6 @@ module.exports = {
         }
       })
     ]
-  }
+  },
+  plugins: ['~/plugins/vue-clipboards']
 }
