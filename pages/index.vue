@@ -119,6 +119,7 @@ export default {
       bestnum: this.$route.query.bestnum || undefined,
       games: {},
       items: [],
+      listView: true,
       loading: true,
       maxtime: this.$route.query.maxtime || undefined,
       maxweight: this.$route.query.maxweight || undefined,
@@ -144,7 +145,14 @@ export default {
   methods: {
     getARandomGame: function () {
       const games = this.filteredItem()
-      this.$toast.success('Go play ' + games[Math.floor(Math.random() * games.length)].name, { icon: 'fa-play' })
+      const ran = Math.floor(Math.random() * games.length)
+      this.$toast.success('Go play ' + games[ran].name, {
+        icon: 'fa-play',
+        action: {
+          text: 'Link',
+          href: 'https://boardgamegeek.com/boardgame/' + games[ran].id
+        }
+      })
     },
     getShareLink: function () {
       let link = 'https://gameshelf.github.io?'
