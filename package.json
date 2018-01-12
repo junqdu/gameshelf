@@ -1,7 +1,7 @@
 {
   "name": "gameshelf",
   "version": "1.0.0",
-  "description": "Nuxt.js project",
+  "description": "A simple and elegant presentation of your board game collection.",
   "author": "junqdu@gmail.com",
   "private": true,
   "scripts": {
