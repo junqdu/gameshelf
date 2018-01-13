@@ -21,7 +21,7 @@
     "bootstrap": "=4.0.0-beta.2",
     "jquery": "^3.2.1",
     "lodash": "^4.17.4",
-    "nuxt": "^1.0.0",
+    "nuxt": "^1.1.0",
     "popper.js": "^1.12.9",
     "vue-clipboards": "^1.2.1",
     "vue-lodash": "^1.0.4",

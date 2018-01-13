@@ -26,9 +26,22 @@
                       Get Me A Game
                     </b-button>
                   </b-col>
+                  <b-col sm="auto">
+                    <b-button size="sm" variant="primary" @click="listView = !listView">
+                      <span v-if="listView">
+                        <i class="fa fa-th" aria-hidden="true"></i>
+                        Toggle Grid View
+                      </span>
+                      <span v-if="!listView">
+                        <i class="fa fa-list" aria-hidden="true"></i>
+                        Toggle Table View
+                      </span>
+                    </b-button>
+                  </b-col>
               </b-row>
             </b-container>
-            <v-table :games="filteredItem()" :headers="tableHeader"></v-table>
+            <v-table :games="filteredItem()" :headers="tableHeader" v-if="listView"></v-table>
+            <v-grid :games="filteredItem()" v-if="!listView"></v-grid>
           </b-col>
         </b-row>
       </b-container>
@@ -41,6 +54,7 @@
 import axios from 'axios'
 import cookie from '~/components/cookie.js'
 import Game from '~/components/Game.js'
+import VGrid from '~/components/v-grid.vue'
 import VRefresh from '~/components/v-refresh.vue'
 import VLoader from '~/components/v-loader.vue'
 import VTable from '~/components/v-table.vue'
@@ -58,8 +72,9 @@ export default {
     }
   },
   components: {
-    VRefresh,
+    VGrid,
     VLoader,
+    VRefresh,
     VTable
   },
   created: function () {
@@ -109,6 +124,7 @@ export default {
     return {
       bestnum: this.$route.query.bestnum || undefined,
       items: [],
+      listView: true,
       loading: true,
       maxtime: this.$route.query.maxtime || undefined,
       maxweight: this.$route.query.maxweight || undefined,
@@ -171,7 +187,6 @@ export default {
 
 <style>
 .container {
-  min-height: 100vh;
   justify-content: center;
   align-items: center;
   text-align: center;

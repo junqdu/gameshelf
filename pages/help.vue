@@ -87,6 +87,9 @@ export default {
   methods: {
     save: function () {
       cookie.set('username', this.userId, 3650)
+      this.$toast.success('User ID updated', {
+        icon: 'fa-check'
+      })
     }
   },
   watch: {
@@ -95,6 +98,15 @@ export default {
     },
     showexp: function (val) {
       cookie.set('showexp', val, 3650)
+      if (val) {
+        this.$toast.success('Expansons will be shown', {
+          icon: 'fa-check'
+        })
+      } else {
+        this.$toast.success('Expansons will be hiden', {
+          icon: 'fa-check'
+        })
+      }
     }
   }
 }
