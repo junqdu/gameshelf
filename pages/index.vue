@@ -86,53 +86,65 @@ export default {
     VTable
   },
   created: function () {
-    return axios.get('https://www.boardgamegeek.com/xmlapi2/collection', {
-      params: {
-        own: 1,
-        stats: 1,
-        username: this.$route.query.userId || this.userId
+    let userIds = this.$route.query.userId || this.userId
+    userIds = userIds.split(',').slice(0, 9)
+    const promises = []
+
+    _.forEach(userIds, (userId) => {
+      if (userId) {
+        promises.push(axios.get('https://www.boardgamegeek.com/xmlapi2/collection', {
+          params: {
+            own: 1,
+            stats: 1,
+            username: userId
+          }
+        }))
       }
     })
-      .then((res) => {
-        this.loading = false
-        if (res.status === 200) {
-          var x2js = new X2JS()
-          var data = x2js.xml2js(res.data)
 
-          var items = []
-          let rank
-          _.forEach(_.get(data, 'items.item'), function (item) {
-            if (item.stats.rating.ranks.rank.length) {
-              rank = parseFloat(item.stats.rating.ranks.rank[0]._value)
-            } else {
-              rank = parseFloat(item.stats.rating.ranks.rank._value)
-            }
-            items.push(new Game({
-              average: parseFloat(item.stats.rating.average._value),
-              id: item._objectid,
-              imageUrl: item.thumbnail,
-              maxplayer: parseFloat(item.stats._maxplayers),
-              minplayer: parseFloat(item.stats._minplayers),
-              name: item.name.__text,
-              numplays: parseFloat(item.numplays),
-              playingtime: parseFloat(item.stats._playingtime),
-              rank,
-              rating: parseFloat(item.stats.rating._value)
-            }))
-          })
-          this.items = _.uniqBy(items, 'id')
-          this.games = data
-        }
+    axios.all(promises).then((results) => {
+      console.log(results)
+      var items = []
+      this.loading = false
+      var x2js = new X2JS()
+
+      _.forEach(results, (result) => {
+        var data = x2js.xml2js(result.data)
+        this.games.push(data)
+
+        let rank
+        _.forEach(_.get(data, 'items.item'), function (item) {
+          if (item.stats.rating.ranks.rank.length) {
+            rank = parseFloat(item.stats.rating.ranks.rank[0]._value)
+          } else {
+            rank = parseFloat(item.stats.rating.ranks.rank._value)
+          }
+          items.push(new Game({
+            average: parseFloat(item.stats.rating.average._value),
+            id: item._objectid,
+            imageUrl: item.thumbnail,
+            maxplayer: parseFloat(item.stats._maxplayers),
+            minplayer: parseFloat(item.stats._minplayers),
+            name: item.name.__text,
+            numplays: parseFloat(item.numplays),
+            playingtime: parseFloat(item.stats._playingtime),
+            rank,
+            rating: parseFloat(item.stats.rating._value)
+          }))
+        })
       })
-      .catch(() => {
-        this.loading = false
-        this.waitingForBGG = true
-      })
+
+      this.items = _.uniqBy(items, 'id')
+    }).catch((results) => {
+      console.log(results)
+      this.loading = false
+      this.waitingForBGG = true
+    })
   },
   data () {
     return {
       bestnum: this.$route.query.bestnum || undefined,
-      games: {},
+      games: [],
       items: [],
       listView: true,
       loading: true,
