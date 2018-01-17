@@ -46,7 +46,7 @@
         </b-row>
       </b-container>
       <adsbygoogle />
-      <v-refresh v-if="waitingForBGG"></v-refresh>
+      <v-refresh v-if="waitingForBGG" :message="errorMessage"></v-refresh>
     </div>
   </section>
 </template>
@@ -94,7 +94,6 @@ export default {
       if (userId) {
         promises.push(axios.get('https://www.boardgamegeek.com/xmlapi2/collection', {
           params: {
-            own: 1,
             stats: 1,
             username: userId
           }
@@ -103,8 +102,7 @@ export default {
     })
 
     axios.all(promises).then((results) => {
-      console.log(results)
-      var items = []
+      var items = {}
       this.loading = false
       var x2js = new X2JS()
 
@@ -112,31 +110,55 @@ export default {
         var data = x2js.xml2js(result.data)
         this.games.push(data)
 
+        let userId = _.get(result, 'config.params.username')
+
         let rank
-        _.forEach(_.get(data, 'items.item'), function (item) {
+        _.forEach(_.get(data, 'items.item'), item => {
           if (item.stats.rating.ranks.rank.length) {
             rank = parseFloat(item.stats.rating.ranks.rank[0]._value)
           } else {
             rank = parseFloat(item.stats.rating.ranks.rank._value)
           }
-          items.push(new Game({
-            average: parseFloat(item.stats.rating.average._value),
-            id: item._objectid,
-            imageUrl: item.thumbnail,
-            maxplayer: parseFloat(item.stats._maxplayers),
-            minplayer: parseFloat(item.stats._minplayers),
-            name: item.name.__text,
-            numplays: parseFloat(item.numplays),
-            playingtime: parseFloat(item.stats._playingtime),
-            rank,
-            rating: parseFloat(item.stats.rating._value)
-          }))
+
+          let gameId = item._objectid
+          let numplays = parseFloat(item.numplays)
+          let rating = parseFloat(item.stats.rating._value)
+          if (items[gameId]) {
+            items[gameId].users[userId] = {
+              numplays,
+              rating: rating || 0
+            }
+            items[gameId].numplays += numplays || 0
+            items[gameId].rating = this.getAverageRating(items[gameId].users)
+            if (!items[gameId].own) {
+              items[gameId].own = _.get(item, 'status._own') === '1'
+            }
+          } else {
+            items[gameId] = (new Game({
+              average: parseFloat(item.stats.rating.average._value),
+              id: gameId,
+              imageUrl: item.thumbnail,
+              maxplayer: parseFloat(item.stats._maxplayers),
+              minplayer: parseFloat(item.stats._minplayers),
+              name: item.name.__text,
+              numplays,
+              own: _.get(item, 'status._own') === '1',
+              playingtime: parseFloat(item.stats._playingtime),
+              rank,
+              rating,
+              userId
+            }))
+          }
         })
       })
 
-      this.items = _.uniqBy(items, 'id')
-    }).catch((results) => {
-      console.log(results)
+      this.items = items
+    }).catch((res) => {
+      if (res.config) {
+        this.errorMessage = `Waiting for BGG to process for user "${res.config.params.username}". Please try again later for access.`
+      } else {
+        this.errorMessage = res.message
+      }
       this.loading = false
       this.waitingForBGG = true
     })
@@ -144,8 +166,9 @@ export default {
   data () {
     return {
       bestnum: this.$route.query.bestnum || undefined,
+      errorMessage: '',
       games: [],
-      items: [],
+      items: {},
       listView: true,
       loading: true,
       maxtime: this.$route.query.maxtime || undefined,
@@ -157,7 +180,7 @@ export default {
         {key: '', value: '', hide: this.$route.query.noimage},
         {key: 'rank', value: 'Rank'},
         {key: 'average', value: 'Avg. Rating'},
-        {key: 'rating', value: 'My Rating'},
+        {key: 'rating', value: 'User Rating'},
         {key: 'name', value: 'Name'},
         {key: 'weight', value: 'Weight'},
         {key: 'playingtime', value: 'Length'},
@@ -170,6 +193,18 @@ export default {
     }
   },
   methods: {
+    getAverageRating: function (users) {
+      let sum = 0
+      let count = 0
+      _.forEach(users, user => {
+        if (user.rating) {
+          sum += user.rating
+          count++
+        }
+      })
+      let avg = sum / count
+      return avg || 0
+    },
     getARandomGame: function () {
       const games = this.filteredItem()
       const ran = Math.floor(Math.random() * games.length)
@@ -195,7 +230,7 @@ export default {
       return link
     },
     filteredItem: function () {
-      return this.items.filter((item) => {
+      return _.filter(this.items, (item) => {
         return (!this.bestnum || _.get(item, 'bggbestplayers', '').split(',').includes(this.bestnum)) &&
         (!this.recnum || _.get(item, 'bggrecplayers', '').split(',').includes(this.recnum)) &&
         (!this.mintime || item.playingtime >= this.mintime) &&
@@ -204,7 +239,8 @@ export default {
         (!this.maxweight || item.weight <= this.maxweight) &&
         (!this.minweight || item.weight >= this.minweight) &&
         ((cookie.get('showexp') === 'false' && item.type !== 'expansion') || cookie.get('showexp') === 'true') &&
-        ((cookie.get('showexp') === 'true' && item.type === 'expansion' && item.average >= cookie.get('expmin')) || item.type !== 'expansion')
+        ((cookie.get('showexp') === 'true' && item.type === 'expansion' && item.average >= cookie.get('expmin')) || item.type !== 'expansion') &&
+        item.own
       })
     }
   }

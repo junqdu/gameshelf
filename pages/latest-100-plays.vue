@@ -39,9 +39,11 @@ export default {
     VTable
   },
   created: function () {
+    let userIds = this.$route.query.userId || this.userId
+    userIds = userIds.split(',').slice(0, 9)
     return axios.get('https://www.boardgamegeek.com/xmlapi2/plays', {
       params: {
-        username: this.$route.query.userId || this.userId
+        username: userIds[0]
       }
     })
       .then((res) => {

@@ -1,6 +1,6 @@
 <template>
   <span>
-    Waiting for BGG to process. Please try again later for access.
+    {{message}}
     <button @click="refresh()">Refresh</button>
 </span>
 </template>
@@ -11,6 +11,9 @@ export default {
     refresh: function () {
       location.reload()
     }
+  },
+  props: {
+    message: { type: String }
   }
 }
 </script>

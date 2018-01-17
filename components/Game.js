@@ -9,9 +9,14 @@ export default class {
       this.weight = localData.w
       this.type = localData.t
     }
-    // for (var k in games[params.id]) {
-    //   this[k] = games[params.id][k]
-    // }
+
+    this.users = {}
+    this.users[params.userId] = {}
+    this.users[params.userId].numplays = params.numplays || 0
+    this.users[params.userId].rating = params.rating || 0
+    this.numplays = params.numplays || 0
+    this.rating = params.rating || 0
+
     this.average = params.average || ''
     this.date = params.date || ''
     this.id = params.id
@@ -19,9 +24,8 @@ export default class {
     this.maxplayer = params.maxplayer || ''
     this.minplayer = params.minplayer || ''
     this.name = params.name || ''
-    this.numplays = params.numplays || ''
     this.playingtime = params.playingtime || ''
     this.rank = params.rank || ''
-    this.rating = params.rating || ''
+    this.own = params.own
   }
 }

@@ -45,7 +45,7 @@
           </b-col>
         </b-row>
       </b-container>
-      <v-refresh v-if="waitingForBGG"></v-refresh>
+      <v-refresh :message="errorMessage" v-if="waitingForBGG"></v-refresh>
     </div>
   </section>
 </template>
@@ -78,10 +78,12 @@ export default {
     VTable
   },
   created: function () {
+    let userIds = this.$route.query.userId || this.userId
+    userIds = userIds.split(',').slice(0, 9)
     return axios.get('https://www.boardgamegeek.com/xmlapi2/collection', {
       params: {
         stats: 1,
-        username: this.$route.query.userId || this.userId,
+        username: userIds[0],
         wanttoplay: 1
       }
     })
@@ -115,7 +117,9 @@ export default {
           this.items = items
         }
       })
-      .catch(() => {
+      .catch((res) => {
+        console.log(res)
+        this.errorMessage = `Waiting for BGG to process for user "${res.config.params.username}". Please try again later for access.`
         this.loading = false
         this.waitingForBGG = true
       })
@@ -123,6 +127,7 @@ export default {
   data () {
     return {
       bestnum: this.$route.query.bestnum || undefined,
+      errorMessage: '',
       items: [],
       listView: true,
       loading: true,

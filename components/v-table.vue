@@ -22,8 +22,14 @@
           <td v-if="hasHeader('average')">
             <span class="badge" :class="['badge-' + getRatingColor(item.average, true)]">{{item.average | number}}</span>
           </td>
-          <td v-if="hasHeader('rating')">
-            <span class="badge" :class="['badge-' + getRatingColor(item.rating)]">{{item.rating}}</span>
+          <td v-if="hasHeader('rating') && singleUser">
+            <span v-if="item.users[userId].rating" class="badge" :class="['badge-' + getRatingColor(item.users[userId].rating)]">{{item.users[userId].rating}}</span>
+          </td>
+          <td v-if="hasHeader('rating') && !singleUser">
+            <span v-if="item.rating" class="badge" :class="['badge-' + getRatingColor(item.rating)]">
+              {{item.rating | number}}
+            </span>
+            <i class="fa fa-users" aria-hidden="true"  v-if="item.rating" v-b-popover.hover="getUserRatings(item.users)" title="Individual Ratings"></i>
           </td>
           <td class="name" v-if="hasHeader('name')">
             <a :href="'https://boardgamegeek.com/boardgame/' + item.id">{{item.name}}</a>
@@ -36,7 +42,11 @@
           </td>
           <td v-if="hasHeader('playingtime')">{{item.playingtime}} mins</td>
           <td class="best-player" v-if="hasHeader('bggbestplayers')">{{item.bggbestplayers}}</td>
-          <td class="num-plays" v-if="hasHeader('numplays')">{{item.numplays}}</td>
+          <td class="num-plays" v-if="hasHeader('numplays') && singleUser">{{item.users[userId].numplays}}</td>
+          <td class="num-plays" v-if="hasHeader('numplays') && !singleUser">
+            {{item.numplays}}
+            <i class="fa fa-users" aria-hidden="true" v-if="item.numplays" v-b-popover.hover="getUserPlays(item.users)" title="Individual Plays"></i>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -45,6 +55,7 @@
 </template>
 
 <script>
+import cookie from '~/components/cookie.js'
 var _ = require('lodash')
 
 export default {
@@ -58,17 +69,25 @@ export default {
             temp.push(temp.shift())
           }
         }
-
         this.games = temp
       }
-
       return this.games
     }
+  },
+  created: function () {
+    let users = cookie.get('username')
+    users = users.split(',')
+    if (users.length > 1 && users[users.length - 1]) {
+      this.singleUser = false
+    }
+    this.userId = users[0]
   },
   data () {
     return {
       asc: true,
-      sortBy: 'rank'
+      singleUser: true,
+      sortBy: 'rank',
+      userId: undefined
     }
   },
   filters: {
@@ -87,6 +106,27 @@ export default {
         return header ? !header.hide : false
       }
     },
+    getRatingColor: function (rating, roundDown) {
+      return roundDown ? _.floor(rating) : _.ceil(rating)
+    },
+    getUserRatings: function (users) {
+      let text = ''
+      _.forEach(users, (user, userName) => {
+        if (user.rating) {
+          text += `${userName}: ${user.rating}\n`
+        }
+      })
+      return text
+    },
+    getUserPlays: function (users) {
+      let text = ''
+      _.forEach(users, (user, userName) => {
+        if (user.numplays) {
+          text += `${userName}: ${user.numplays}\n`
+        }
+      })
+      return text
+    },
     getWeightColor: function (weight) {
       if (weight > 4) {
         return 'heavy'
@@ -99,9 +139,6 @@ export default {
       } else {
         return 'light'
       }
-    },
-    getRatingColor: function (rating, roundDown) {
-      return roundDown ? _.floor(rating) : _.ceil(rating)
     },
     sort: function (key) {
       if (!key) {
@@ -116,7 +153,7 @@ export default {
     }
   },
   props: {
-    games: { type: Array },
+    games: { type: Object },
     headers: { type: Array }
   }
 }
@@ -131,11 +168,7 @@ export default {
   min-width: 6rem;
 }
 
-.rating {
-  min-width: 7rem;
-}
-
-.average {
+.average, .rating {
   min-width: 8rem;
 }
 
