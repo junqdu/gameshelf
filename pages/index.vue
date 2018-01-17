@@ -95,7 +95,7 @@ export default {
         promises.push(axios.get('https://www.boardgamegeek.com/xmlapi2/collection', {
           params: {
             stats: 1,
-            username: userId
+            username: userId.trim()
           }
         }))
       }

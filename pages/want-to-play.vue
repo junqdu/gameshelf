@@ -83,7 +83,7 @@ export default {
     return axios.get('https://www.boardgamegeek.com/xmlapi2/collection', {
       params: {
         stats: 1,
-        username: userIds[0],
+        username: userIds[0].trim(),
         wanttoplay: 1
       }
     })

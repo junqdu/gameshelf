@@ -43,7 +43,7 @@ export default {
     userIds = userIds.split(',').slice(0, 9)
     return axios.get('https://www.boardgamegeek.com/xmlapi2/plays', {
       params: {
-        username: userIds[0]
+        username: userIds[0].trim()
       }
     })
       .then((res) => {

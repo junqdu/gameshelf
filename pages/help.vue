@@ -10,15 +10,19 @@
         <b-btn @click="save" variant="info">Save</b-btn>
       </b-input-group-button>
     </b-input-group>
-      <h5>Collection</h5>
-      Show Expansions with miniumn rating of:
-      <b-input-group>
-        <b-input-group-addon>
-          <input type="checkbox" id="show-expansions" v-model="showexp">
-        </b-input-group-addon>
-        <b-form-input type="number" :disabled="!showexp" v-model="expmin"/>
-      </b-input-group>
-      <div>Note: Only game with rating of 6 or greater has data for weight and best/rec# of players.</div>
+    <p>You can add multiple(up to 10) user IDs and seperate them by comma, e.g.
+      "userId1,userId2", this will merge the collection of the users. This only
+      work with "Collection" for now, other list won't be supported unless there
+      is a popular demand.</p>
+    <h5>Collection</h5>
+    Show Expansions with miniumn rating of:
+    <b-input-group>
+      <b-input-group-addon>
+        <input type="checkbox" id="show-expansions" v-model="showexp">
+      </b-input-group-addon>
+      <b-form-input type="number" :disabled="!showexp" v-model="expmin"/>
+    </b-input-group>
+    <div>Note: Only game with rating of 6 or greater has data for weight and best/rec# of players.</div>
 
     <h4>URL params</h4>
     <b-table striped hover :items="params"></b-table>
