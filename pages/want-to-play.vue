@@ -170,10 +170,11 @@ export default {
           link = link + param + '=' + this[param] + '&'
         }
       })
+      link = link.slice(0, link.length - 1)
       if (cookie.get('showexp') === 'true') {
         link = link + 'showexp' + '=' + cookie.get('showexp')
       }
-      return link
+      return encodeURI(link)
     },
     filteredItem: function () {
       return this.items.filter((item) => {
