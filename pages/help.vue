@@ -15,7 +15,7 @@
       work with "Collection" for now, other list won't be supported unless there
       is a popular demand.</p>
     <h5>Collection</h5>
-    Show Expansions with miniumn rating of:
+    <h6>Show Expansions with miniumn rating of:</h6>
     <b-input-group>
       <b-input-group-addon>
         <input type="checkbox" id="show-expansions" v-model="showexp">
@@ -23,6 +23,8 @@
       <b-form-input type="number" :disabled="!showexp" v-model="expmin"/>
     </b-input-group>
     <div>Note: Only game with rating of 6 or greater has data for weight and best/rec# of players.</div>
+    <h6>Best number of players filter:</h6>
+    <input type="checkbox" id="best-at-least" v-model="bestatleast"> Show "At least" rather than exact, e.g. when input 3, rather showing game played best with 3, it will show 3 and above.
 
     <h4>URL params</h4>
     <b-table striped hover :items="params"></b-table>
@@ -45,6 +47,7 @@ import cookie from '~/components/cookie.js'
 export default {
   data () {
     return {
+      bestatleast: cookie.get('bestatleast') === 'true',
       expmin: +cookie.get('expmin'),
       faq: [
         {
@@ -90,18 +93,21 @@ export default {
   },
   methods: {
     save: function () {
-      cookie.set('username', this.userId, 3650)
+      cookie.set('username', this.userId)
       this.$toast.success('User ID updated', {
         icon: 'fa-check'
       })
     }
   },
   watch: {
+    bestatleast: function (val) {
+      cookie.set('bestatleast', val)
+    },
     expmin: function (val) {
-      cookie.set('expmin', val, 3650)
+      cookie.set('expmin', val)
     },
     showexp: function (val) {
-      cookie.set('showexp', val, 3650)
+      cookie.set('showexp', val)
       if (val) {
         this.$toast.success('Expansons will be shown', {
           icon: 'fa-check'
@@ -130,5 +136,9 @@ export default {
 
 .help h4 {
   margin-top: 1rem
+}
+
+h6 {
+  margin-top: 0.5rem
 }
 </style>

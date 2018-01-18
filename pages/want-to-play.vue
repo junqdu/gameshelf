@@ -178,7 +178,16 @@ export default {
     },
     filteredItem: function () {
       return this.items.filter((item) => {
-        return (!this.bestnum || _.get(item, 'bggbestplayers', '').split(',').includes(this.bestnum)) &&
+        let bestnum = false
+        if (cookie.get('bestatleast')) {
+          const highestNum = _.get(item, 'bggbestplayers', '').split(',').pop()
+          if (highestNum) {
+            bestnum = +highestNum >= this.bestnum
+          }
+        } else {
+          bestnum = _.get(item, 'bggbestplayers', '').split(',').includes(this.bestnum)
+        }
+        return (!this.bestnum || bestnum) &&
         (!this.recnum || _.get(item, 'bggrecplayers', '').split(',').includes(this.recnum)) &&
         (!this.mintime || item.playingtime >= this.mintime) &&
         (!this.maxtime || item.playingtime <= this.maxtime) &&
