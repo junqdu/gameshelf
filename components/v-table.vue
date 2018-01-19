@@ -47,6 +47,12 @@
             {{item.numplays}}
             <i class="fa fa-users" aria-hidden="true" v-if="item.numplays" v-b-popover.hover="getUserPlays(item.users)" title="Individual Plays"></i>
           </td>
+          <td class="wishlist-priority" v-if="hasHeader('wishlistpriority')">
+            {{item.wishlistpriority | priority}}
+          </td>
+          <td class="comment" v-if="hasHeader('comment')">
+            {{item.comment}}
+          </td>
         </tr>
       </tbody>
     </table>
@@ -86,7 +92,7 @@ export default {
     return {
       asc: true,
       singleUser: true,
-      sortBy: 'rank',
+      sortBy: this.defaultSort || 'rank',
       userId: undefined
     }
   },
@@ -95,6 +101,20 @@ export default {
       if (!value) return ''
       value = parseFloat(value)
       return value.toFixed(2)
+    },
+    priority: function (value) {
+      switch (value) {
+        case '1':
+          return 'Must have'
+        case '2':
+          return 'Love to have'
+        case '3':
+          return 'Like to have'
+        case '4':
+          return 'Thinking about it'
+        default:
+          return "Don't buy this"
+      }
     }
   },
   methods: {
@@ -153,6 +173,7 @@ export default {
     }
   },
   props: {
+    defaultSort: {type: String},
     games: { type: Object },
     headers: { type: Array }
   }
@@ -164,7 +185,7 @@ export default {
   min-width: 5rem;
 }
 
-.playingtime, .weight {
+.playingtime, .weight, .wishlist-priority {
   min-width: 6rem;
 }
 

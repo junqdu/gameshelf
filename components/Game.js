@@ -27,5 +27,7 @@ export default class {
     this.playingtime = params.playingtime || ''
     this.rank = params.rank || ''
     this.own = params.own
+    this.wishlistpriority = params.wishlistpriority
+    this.comment = params.comment
   }
 }
