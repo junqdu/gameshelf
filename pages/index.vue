@@ -14,6 +14,7 @@
                   <b-col sm="auto"><input v-model="mintime" type="number" placeholder="Min Play Time" min="0" step="10"></b-col>
                   <b-col sm="auto"><input v-model="maxweight" type="number" placeholder="Max Weight" min="1" step="0.1"></b-col>
                   <b-col sm="auto"><input v-model="minweight" type="number" placeholder="Min Weight" min="1" step="0.1"></b-col>
+                  <b-col sm="auto"><input v-model="playlessthan" type="number" placeholder="Play Less Than" min="0"></b-col>
                   <b-col sm="auto">
                     <b-button size="sm" :id="'mech-filter'" variant="primary">
                       <i class="fa fa-gear" aria-hidden="true"></i>
@@ -204,6 +205,7 @@ export default {
       mechShow: [],
       mintime: this.$route.query.mintime || undefined,
       minweight: this.$route.query.minweight || undefined,
+      playlessthan: this.$route.query.playlessthan || undefined,
       recnum: this.$route.query.recnum || undefined,
       tableHeader: [
         {key: '', value: '', hide: this.$route.query.noimage},
@@ -255,7 +257,7 @@ export default {
     },
     getShareLink: function () {
       let link = 'https://gameshelf.github.io?'
-      const params = ['userId', 'bestnum', 'maxtime', 'maxweight', 'mintime', 'minweight', 'recnum', 'supplayer']
+      const params = ['userId', 'bestnum', 'maxtime', 'maxweight', 'mintime', 'minweight', 'recnum', 'supplayer', 'playlessthan']
       _.forEach(params, param => {
         if (this[param]) {
           link = link + param + '=' + this[param] + '&'
@@ -298,6 +300,7 @@ export default {
         (!this.minweight || item.weight >= this.minweight) &&
         ((cookie.get('showexp') === 'false' && item.type !== 'e') || cookie.get('showexp') === 'true') &&
         ((cookie.get('showexp') === 'true' && item.type === 'e' && item.average >= cookie.get('expmin')) || item.type !== 'e') &&
+        (!this.playlessthan || item.numplays <= this.playlessthan) &&
         item.own && mech
       })
     }

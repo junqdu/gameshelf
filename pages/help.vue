@@ -85,7 +85,8 @@ export default {
         { paramName: 'maxweight', type: 'Number', usage: 'Prepopulate the max weight filter' },
         { paramName: 'minweight', type: 'Number', usage: 'Prepopulate the min weight filter' },
         { paramName: 'maxtime', type: 'Number', usage: 'Prepopulate the max play time filter' },
-        { paramName: 'mintime', type: 'Number', usage: 'Prepopulate the min play time filter' }
+        { paramName: 'mintime', type: 'Number', usage: 'Prepopulate the min play time filter' },
+        { paramName: 'playlessthan', type: 'Number', usage: 'Prepopulate the play less than filter' }
       ],
       showexp: cookie.get('showexp') === 'true',
       userId: cookie.get('username')
