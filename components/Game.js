@@ -1,4 +1,6 @@
 const games = require('../assets/game.json')
+const mechs = require('../assets/mech.json')
+const keys = require('../assets/mechKey.json')
 
 export default class {
   constructor (params) {
@@ -8,6 +10,10 @@ export default class {
       this.bggrecplayers = localData.r
       this.weight = localData.w
       this.type = localData.t
+    }
+    const mechData = mechs[params.id]
+    if (mechData) {
+      this.mech = this.getMechData(mechData)
     }
 
     this.users = {}
@@ -29,5 +35,13 @@ export default class {
     this.own = params.own
     this.wishlistpriority = params.wishlistpriority
     this.comment = params.comment
+  }
+
+  getMechData (data) {
+    const result = []
+    data.forEach(function (datum) {
+      result.push(keys[datum])
+    })
+    return result
   }
 }

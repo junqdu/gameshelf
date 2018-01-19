@@ -53,6 +53,11 @@
           <td class="comment" v-if="hasHeader('comment')">
             {{item.comment}}
           </td>
+          <td class="mech" v-if="hasHeader('mech')">
+            <ul>
+              <li v-for="item in item.mech">{{item}}</li>
+            </ul>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -181,6 +186,12 @@ export default {
 </script>
 
 <style scoped>
+.mech ul {
+  font-size: small;
+  margin-bottom: 0em;
+  text-align: left;
+}
+
 .rank, .numplays {
   min-width: 5rem;
 }

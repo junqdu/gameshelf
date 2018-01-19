@@ -34,7 +34,7 @@ module.exports = {
   },
   toast: {
     iconPack: 'fontawesome',
-    position: 'top-right'
+    position: 'top-left'
   },
   /*
   ** Build configuration
