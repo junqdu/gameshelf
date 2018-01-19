@@ -17,7 +17,7 @@
                   <b-col sm="auto">
                     <b-button size="sm" :id="'mech-filter'" variant="primary">
                       <i class="fa fa-gear" aria-hidden="true"></i>
-                      Filter By Mechanics
+                      Filter By Mechanisms
                     </b-button>
                     <b-popover :target="'mech-filter'"
                               :placement="'bottom'"
@@ -26,13 +26,13 @@
                       <b-tabs>
                         <b-tab title="Show" active>
                           <b-form-group>
-                            <b-form-checkbox-group v-model="mechShow" name="mechanics" :options="mechOptions">
+                            <b-form-checkbox-group v-model="mechShow" name="mechanisms" :options="mechOptions">
                             </b-form-checkbox-group>
                           </b-form-group>
                         </b-tab>
                         <b-tab title="Hide" >
                           <b-form-group>
-                            <b-form-checkbox-group v-model="mechHide" name="mechanics" :options="mechOptions">
+                            <b-form-checkbox-group v-model="mechHide" name="mechanisms" :options="mechOptions">
                             </b-form-checkbox-group>
                           </b-form-group>
                         </b-tab>
@@ -215,7 +215,7 @@ export default {
         {key: 'playingtime', value: 'Length'},
         {key: 'bggbestplayers', value: 'Best #Player'},
         {key: 'numplays', value: 'Plays'},
-        {key: 'mech', value: 'Mechanics'}
+        {key: 'mech', value: 'Mechanisms'}
       ],
       supplayer: this.$route.query.supplayer || undefined,
       userId: cookie.get('username'),
@@ -285,7 +285,7 @@ export default {
           mech = _.intersection(this.mechShow, item.mech).length === this.mechShow.length
         }
 
-        if (this.mechHide.length > 0) {
+        if (this.mechHide.length > 0 && mech) {
           mech = !_.intersection(this.mechHide, item.mech).length > 0
         }
 
