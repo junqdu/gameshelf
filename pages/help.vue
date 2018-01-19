@@ -38,6 +38,14 @@
 
     <h4>Suggestion / Report Bug</h4>
     <a href="https://github.com/gameshelf/gameshelf.github.io/issues/new">Open an issue</a>
+
+    <h4>Donate</h4>
+    If you find this site useful and want buy me a drink.
+    <b-button size="sm" variant="primary" href="https://paypal.me/jotarora" target="_blank">
+      <i class="fa fa-paypal" aria-hidden="true"></i>
+      PayPal
+    </b-button>
+
   </section>
 </template>
 

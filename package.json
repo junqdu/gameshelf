@@ -13,15 +13,14 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "@nuxtjs/axios ": "^4.5.2",
+    "@nuxtjs/axios": "^4.5.2",
     "@nuxtjs/bootstrap-vue": "^2.0.4",
     "@nuxtjs/font-awesome": "^1.0.3",
-    "@nuxtjs/google-adsense": "^1.1.2",
     "@nuxtjs/toast": "^2.3.3",
     "bootstrap": "=4.0.0-beta.2",
     "jquery": "^3.2.1",
     "lodash": "^4.17.4",
-    "nuxt": "^1.1.0",
+    "nuxt": "^1.1.1",
     "popper.js": "^1.12.9",
     "vue-clipboards": "^1.2.1",
     "vue-lodash": "^1.0.4",

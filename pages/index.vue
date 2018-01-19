@@ -21,9 +21,10 @@
                       Filter By Mechanisms
                     </b-button>
                     <b-popover :target="'mech-filter'"
-                              :placement="'bottom'"
-                              triggers="focus"
-                              :content="`Placement ${placement}`">
+                               :placement="'bottom'"
+                               triggers="click"
+                               :show.sync="popoverShow"
+                               :content="`Placement ${placement}`">
                       <b-tabs>
                         <b-tab title="Show" active>
                           <b-form-group>
@@ -38,6 +39,7 @@
                           </b-form-group>
                         </b-tab>
                       </b-tabs>
+                      <b-btn @click="onClose" size="sm" variant="primary">Cancel</b-btn>
                     </b-popover>
                   </b-col>
                   <b-col sm="auto">
@@ -71,7 +73,6 @@
           </b-col>
         </b-row>
       </b-container>
-      <adsbygoogle />
       <v-refresh v-if="waitingForBGG" :message="errorMessage"></v-refresh>
     </div>
   </section>
@@ -206,6 +207,7 @@ export default {
       mintime: this.$route.query.mintime || undefined,
       minweight: this.$route.query.minweight || undefined,
       playlessthan: this.$route.query.playlessthan || undefined,
+      popoverShow: false,
       recnum: this.$route.query.recnum || undefined,
       tableHeader: [
         {key: '', value: '', hide: this.$route.query.noimage},
@@ -225,6 +227,41 @@ export default {
     }
   },
   methods: {
+    filteredItem: function () {
+      return _.filter(this.items, (item) => {
+        let bestnum = false
+        if (cookie.get('bestatleast')) {
+          const highestNum = _.get(item, 'bggbestplayers', '').split(',').pop()
+          if (highestNum) {
+            bestnum = +highestNum >= this.bestnum
+          }
+        } else {
+          bestnum = _.get(item, 'bggbestplayers', '').split(',').includes(this.bestnum)
+        }
+
+        let mech = true
+
+        if (this.mechShow.length > 0) {
+          mech = _.intersection(this.mechShow, item.mech).length === this.mechShow.length
+        }
+
+        if (this.mechHide.length > 0 && mech) {
+          mech = !_.intersection(this.mechHide, item.mech).length > 0
+        }
+
+        return (!this.bestnum || bestnum) &&
+        (!this.recnum || _.get(item, 'bggrecplayers', '').split(',').includes(this.recnum)) &&
+        (!this.mintime || item.playingtime >= this.mintime) &&
+        (!this.maxtime || item.playingtime <= this.maxtime) &&
+        (!this.supplayer || (item.minplayer <= this.supplayer && item.maxplayer >= this.supplayer)) &&
+        (!this.maxweight || item.weight <= this.maxweight) &&
+        (!this.minweight || item.weight >= this.minweight) &&
+        ((cookie.get('showexp') === 'false' && item.type !== 'e') || cookie.get('showexp') === 'true') &&
+        ((cookie.get('showexp') === 'true' && item.type === 'e' && item.average >= cookie.get('expmin')) || item.type !== 'e') &&
+        (!this.playlessthan || item.numplays <= this.playlessthan) &&
+        item.own && mech
+      })
+    },
     getAverageRating: function (users) {
       let sum = 0
       let count = 0
@@ -269,40 +306,8 @@ export default {
       }
       return encodeURI(link)
     },
-    filteredItem: function () {
-      return _.filter(this.items, (item) => {
-        let bestnum = false
-        if (cookie.get('bestatleast')) {
-          const highestNum = _.get(item, 'bggbestplayers', '').split(',').pop()
-          if (highestNum) {
-            bestnum = +highestNum >= this.bestnum
-          }
-        } else {
-          bestnum = _.get(item, 'bggbestplayers', '').split(',').includes(this.bestnum)
-        }
-
-        let mech = true
-
-        if (this.mechShow.length > 0) {
-          mech = _.intersection(this.mechShow, item.mech).length === this.mechShow.length
-        }
-
-        if (this.mechHide.length > 0 && mech) {
-          mech = !_.intersection(this.mechHide, item.mech).length > 0
-        }
-
-        return (!this.bestnum || bestnum) &&
-        (!this.recnum || _.get(item, 'bggrecplayers', '').split(',').includes(this.recnum)) &&
-        (!this.mintime || item.playingtime >= this.mintime) &&
-        (!this.maxtime || item.playingtime <= this.maxtime) &&
-        (!this.supplayer || (item.minplayer <= this.supplayer && item.maxplayer >= this.supplayer)) &&
-        (!this.maxweight || item.weight <= this.maxweight) &&
-        (!this.minweight || item.weight >= this.minweight) &&
-        ((cookie.get('showexp') === 'false' && item.type !== 'e') || cookie.get('showexp') === 'true') &&
-        ((cookie.get('showexp') === 'true' && item.type === 'e' && item.average >= cookie.get('expmin')) || item.type !== 'e') &&
-        (!this.playlessthan || item.numplays <= this.playlessthan) &&
-        item.own && mech
-      })
+    onClose () {
+      this.popoverShow = false
     }
   }
 }
