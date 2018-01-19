@@ -192,6 +192,10 @@ export default {
   text-align: left;
 }
 
+.comment {
+  text-align: left;
+}
+
 .rank, .numplays {
   min-width: 5rem;
 }
