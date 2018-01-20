@@ -39,7 +39,7 @@
                           </b-form-group>
                         </b-tab>
                       </b-tabs>
-                      <b-btn @click="onClose" size="sm" variant="primary">Cancel</b-btn>
+                      <b-btn @click="onClose" size="sm" variant="primary">Close</b-btn>
                     </b-popover>
                   </b-col>
                   <b-col sm="auto">
