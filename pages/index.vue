@@ -142,10 +142,10 @@ export default {
 
         let rank
         _.forEach(_.get(data, 'items.item'), item => {
-          if (item.stats.rating.ranks.rank.length) {
+          if (_.get(item, 'stats.rating.ranks.rank.length', false)) {
             rank = parseFloat(item.stats.rating.ranks.rank[0]._value)
           } else {
-            rank = parseFloat(item.stats.rating.ranks.rank._value)
+            rank = parseFloat(_.get(item, 'stats.rating.ranks.rank._value'))
           }
 
           let gameId = item._objectid
@@ -163,7 +163,7 @@ export default {
             }
           } else {
             items[gameId] = (new Game({
-              average: parseFloat(item.stats.rating.average._value),
+              average: parseFloat(_.get(item, 'stats.rating.average._value')),
               id: gameId,
               imageUrl: item.thumbnail,
               maxplayer: parseFloat(item.stats._maxplayers),

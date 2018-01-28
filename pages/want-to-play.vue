@@ -143,7 +143,8 @@ export default {
         {key: 'name', value: 'Name'},
         {key: 'weight', value: 'Weight'},
         {key: 'playingtime', value: 'Length'},
-        {key: 'bggbestplayers', value: 'Best #Player'}
+        {key: 'bggbestplayers', value: 'Best #Player'},
+        {key: 'mech', value: 'Mechanisms'}
       ],
       supplayer: this.$route.query.supplayer || undefined,
       userId: cookie.get('username'),
