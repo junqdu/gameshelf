@@ -52,8 +52,8 @@
                   </b-col>
               </b-row>
             </b-container>
-            <v-table :games="filteredItem()" :headers="tableHeader" v-if="listView"></v-table>
-            <v-grid :games="filteredItem()" v-if="!listView"></v-grid>
+            <v-table :games="filteredItem(this.items, this.ownedGames)" :headers="tableHeader" v-if="listView"></v-table>
+            <v-grid :games="filteredItem(this.items, this.ownedGames)" v-if="!listView"></v-grid>
           </b-col>
         </b-row>
       </b-container>
@@ -70,6 +70,7 @@ import VGrid from '~/components/v-grid.vue'
 import VRefresh from '~/components/v-refresh.vue'
 import VLoader from '~/components/v-loader.vue'
 import VTable from '~/components/v-table.vue'
+import filterItems from '~/components/filterItems.js'
 import X2JS from 'x2js'
 var _ = require('lodash')
 
@@ -191,28 +192,8 @@ export default {
       }
       return encodeURI(link)
     },
-    filteredItem: function () {
-      return this.items.filter((item) => {
-        let bestnum = false
-        if (cookie.get('bestatleast')) {
-          const highestNum = _.get(item, 'bggbestplayers', '').split(',').pop()
-          if (highestNum) {
-            bestnum = +highestNum >= this.bestnum
-          }
-        } else {
-          bestnum = _.get(item, 'bggbestplayers', '').split(',').includes(this.bestnum)
-        }
-        console.log(this, item)
-        return (!this.bestnum || bestnum) &&
-        (!this.recnum || _.get(item, 'bggrecplayers', '').split(',').includes(this.recnum)) &&
-        (!this.mintime || item.playingtime >= this.mintime) &&
-        (!this.maxtime || item.playingtime <= this.maxtime) &&
-        (!this.supplayer || (item.minplayer <= this.supplayer && item.maxplayer >= this.supplayer)) &&
-        (!this.maxweight || item.weight <= this.maxweight) &&
-        (!this.minweight || item.weight >= this.minweight) &&
-        (this.ownedGames ? item.own : true)
-      })
-    }
+
+    filteredItem: filterItems
   }
 }
 </script>
