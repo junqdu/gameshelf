@@ -202,7 +202,6 @@ export default {
         } else {
           bestnum = _.get(item, 'bggbestplayers', '').split(',').includes(this.bestnum)
         }
-        console.log(this, item)
         return (!this.bestnum || bestnum) &&
         (!this.recnum || _.get(item, 'bggrecplayers', '').split(',').includes(this.recnum)) &&
         (!this.mintime || item.playingtime >= this.mintime) &&
