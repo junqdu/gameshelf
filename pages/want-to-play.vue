@@ -192,7 +192,6 @@ export default {
       }
       return encodeURI(link)
     },
-
     filteredItem: filterItems
   }
 }
