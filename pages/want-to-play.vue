@@ -38,6 +38,18 @@
                       </span>
                     </b-button>
                   </b-col>
+                  <b-col sm="auto">
+                    <b-button size="sm" variant="primary" @click="ownedGames = !ownedGames">
+                      <span v-if="ownedGames">
+                        <i class="fa fa-users" aria-hidden="true"></i>
+                        Show All Games
+                      </span>
+                      <span v-if="!ownedGames">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        Show Only Owned Games
+                      </span>
+                    </b-button>
+                  </b-col>
               </b-row>
             </b-container>
             <v-table :games="filteredItem()" :headers="tableHeader" v-if="listView"></v-table>
@@ -109,6 +121,7 @@ export default {
               minplayer: parseFloat(item.stats._minplayers),
               name: item.name.__text,
               numplays: parseFloat(item.numplays),
+              own: _.get(item, 'status._own') === '1',
               playingtime: parseFloat(item.stats._playingtime),
               rank,
               rating: parseFloat(item.stats.rating._value)
@@ -135,6 +148,7 @@ export default {
       maxweight: this.$route.query.maxweight || undefined,
       mintime: this.$route.query.mintime || undefined,
       minweight: this.$route.query.minweight || undefined,
+      ownedGames: false,
       recnum: this.$route.query.recnum || undefined,
       tableHeader: [
         {key: '', value: '', hide: this.$route.query.noimage},
@@ -188,13 +202,15 @@ export default {
         } else {
           bestnum = _.get(item, 'bggbestplayers', '').split(',').includes(this.bestnum)
         }
+        console.log(this, item)
         return (!this.bestnum || bestnum) &&
         (!this.recnum || _.get(item, 'bggrecplayers', '').split(',').includes(this.recnum)) &&
         (!this.mintime || item.playingtime >= this.mintime) &&
         (!this.maxtime || item.playingtime <= this.maxtime) &&
         (!this.supplayer || (item.minplayer <= this.supplayer && item.maxplayer >= this.supplayer)) &&
         (!this.maxweight || item.weight <= this.maxweight) &&
-        (!this.minweight || item.weight >= this.minweight)
+        (!this.minweight || item.weight >= this.minweight) &&
+        (this.ownedGames ? item.own : true)
       })
     }
   }
