@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div>
     <table class="table table-striped" v-if="games">
       <thead>
         <tr>
@@ -12,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in orderedGames" :key="item.id">
+        <tr v-for="item in filteredGames" :key="item.id">
           <td v-if="hasHeader('', true)">
             <a :href="'https://boardgamegeek.com/boardgame/' + item.id">
               <b-img width="75" :src="item.imageUrl"/>
@@ -61,28 +61,30 @@
         </tr>
       </tbody>
     </table>
-    Item count: {{games.length}}
+    Item count: {{filteredGames.length}}
   </div>
 </template>
 
 <script>
 import cookie from '~/components/cookie.js'
+import filterItems from '~/components/filterItems.js'
 var _ = require('lodash')
 
 export default {
   computed: {
-    orderedGames: function () {
-      if (this.games.length) {
-        let temp = _.orderBy(this.games, [this.sortBy, 'average'], [this.asc ? 'asc' : 'desc', 'desc'])
+    filteredGames: function () {
+      let games = filterItems(this.games, this.$store.state.filters, true)
+      if (games.length) {
+        let temp = _.orderBy(games, [this.sortBy, 'average'], [this.asc ? 'asc' : 'desc', 'desc'])
         if (temp.length > 0 &&
             (!_.get(temp[0], 'rank') && _.get(temp[temp.length - 1], 'rank'))) {
           while (!_.get(temp[0], 'rank')) {
             temp.push(temp.shift())
           }
         }
-        this.games = temp
+        games = temp
       }
-      return this.games
+      return games
     }
   },
   created: function () {
@@ -94,6 +96,7 @@ export default {
     this.userId = users[0]
   },
   data () {
+    console.log(this)
     return {
       asc: true,
       singleUser: true,
@@ -179,6 +182,7 @@ export default {
   },
   props: {
     defaultSort: {type: String},
+    extFilters: { type: Object },
     games: { type: Object },
     headers: { type: Array }
   }
@@ -209,7 +213,7 @@ export default {
 }
 
 .bggbestplayers {
-  min-width: 9rem;
+  /* min-width: 9rem; */
 }
 
 .rec-player, .best-player {
