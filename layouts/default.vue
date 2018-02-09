@@ -1,7 +1,10 @@
 <template>
   <div class="app">
     <div class="main">
-      <navbar/>
+      <header>
+        <navbar/>
+        <username />
+      </header>
       <nuxt/>
     </div>
   </div>
@@ -9,10 +12,12 @@
 
 <script>
 import Navbar from '../components/Navbar'
+import Username from '../components/Username'
 
 export default {
   components: {
-    Navbar
+    Navbar,
+    Username
   }
 }
 </script>
@@ -24,6 +29,10 @@ export default {
 }
 .main {
   margin: 0 auto;
-  padding: 30px;
+  padding: 1.875rem;
+}
+header {
+  display: flex;
+  margin-bottom: 1rem;
 }
 </style>

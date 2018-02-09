@@ -22,7 +22,7 @@ export default {
 <style scoped>
 .header {
   display: flex;
-  margin-bottom: 20px;
+  flex: 1;
 }
 a {
   margin-right: 20px;
