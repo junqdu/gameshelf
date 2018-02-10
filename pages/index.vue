@@ -5,9 +5,14 @@
       <b-container v-if="!loading && !waitingForBGG" class="bv-example-row">
         <b-row>
           <b-col>
-            <v-filters></v-filters>
-            <v-table :games="items" :extFilters="filters" :headers="tableHeader" v-if="listView"></v-table>
-            <v-grid :games="items" v-if="!listView"></v-grid>
+            <v-filters ownedgames></v-filters>
+            <v-actions></v-actions>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <v-table :games="items" :extFilters="filters" :headers="tableHeader" v-if="state.views.listView"></v-table>
+            <v-grid :games="items" v-if="!state.views.listView"></v-grid>
           </b-col>
         </b-row>
       </b-container>
@@ -22,6 +27,7 @@ import cookie from '~/components/cookie.js'
 import filterItems from '~/components/filterItems.js'
 import Game from '~/components/Game.js'
 import VFilters from '~/components/v-filters.vue'
+import VActions from '~/components/v-actions.vue'
 import VGrid from '~/components/v-grid.vue'
 import VLoader from '~/components/v-loader.vue'
 import VRefresh from '~/components/v-refresh.vue'
@@ -29,7 +35,6 @@ import VTable from '~/components/v-table.vue'
 import X2JS from 'x2js'
 
 var _ = require('lodash')
-const keys = require('../assets/mechKey.json')
 
 export default {
   beforeCreate: function () {
@@ -52,17 +57,12 @@ export default {
     VLoader,
     VRefresh,
     VTable,
-    VFilters: {
-      ...VFilters,
-      watch: {
-        filters: function (filters) {
-          this.$store.commit('filters/set', filters)
-          this.filters = filters
-        }
-      }
-    }
+    VActions,
+    VFilters
   },
   created: function () {
+    this.$store.commit('filters/reset')
+    this.$store.commit('filters/setOwned', true)
     let userIds = this.$route.query.userId || this.userId
     userIds = userIds.split(',').slice(0, 9)
     const promises = []
@@ -145,20 +145,12 @@ export default {
       bestnum: this.$route.query.bestnum || undefined,
       errorMessage: '',
       games: [],
-      filters: {},
       items: {},
-      listView: true,
       loading: true,
-      maxtime: this.$route.query.maxtime || undefined,
-      maxweight: this.$route.query.maxweight || undefined,
-      mechOptions: this.getMechOptions(),
-      mechHide: [],
-      mechShow: [],
-      mintime: this.$route.query.mintime || undefined,
-      minweight: this.$route.query.minweight || undefined,
       playlessthan: this.$route.query.playlessthan || undefined,
       popoverShow: false,
       recnum: this.$route.query.recnum || undefined,
+      state: this.$store.state,
       tableHeader: [
         {key: '', value: '', hide: this.$route.query.noimage},
         {key: 'rank', value: 'Rank'},
@@ -200,16 +192,6 @@ export default {
           href: 'https://boardgamegeek.com/boardgame/' + games[ran].id
         }
       })
-    },
-    getMechOptions: function () {
-      const temp = []
-      _.forEach(keys, function (key) {
-        temp.push({text: key, value: key})
-      })
-      return temp
-    },
-    onClose () {
-      this.popoverShow = false
     }
   }
 }

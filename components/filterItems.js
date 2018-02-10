@@ -3,7 +3,8 @@ import filter from 'lodash/filter'
 import get from 'lodash/get'
 import intersection from 'lodash/intersection'
 
-export default function filterItems (items, filters, owned = true) {
+export default function filterItems (items, filters) {
+  // console.log(filters ? {...filters} : 'nada')
   return filter(items, (item) => {
     let bestnum = false
     if (typeof filters !== 'object') {
@@ -39,7 +40,7 @@ export default function filterItems (items, filters, owned = true) {
       ((cookie.get('showexp') === 'false' && item.type !== 'e') || cookie.get('showexp') === 'true') &&
       ((cookie.get('showexp') === 'true' && item.type === 'e' && item.average >= cookie.get('expmin')) || item.type !== 'e') &&
       (!filters.playlessthan || item.numplays <= filters.playlessthan) &&
-      (owned ? item.own : true) &&
+      (typeof filters.ownedgames === 'boolean' && filters.ownedgames ? item.own : true) &&
       mech
     )
     return pass

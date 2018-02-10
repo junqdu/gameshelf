@@ -73,7 +73,7 @@ var _ = require('lodash')
 export default {
   computed: {
     filteredGames: function () {
-      let games = filterItems(this.games, this.$store.state.filters, true)
+      let games = filterItems(this.games, this.$store.state.filters)
       if (games.length) {
         let temp = _.orderBy(games, [this.sortBy, 'average'], [this.asc ? 'asc' : 'desc', 'desc'])
         if (temp.length > 0 &&
@@ -96,7 +96,6 @@ export default {
     this.userId = users[0]
   },
   data () {
-    console.log(this)
     return {
       asc: true,
       singleUser: true,
