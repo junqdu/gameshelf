@@ -24,7 +24,8 @@ const createStore = () => {
       },
       views: {
         listView: true
-      }
+      },
+      items: []
     },
     mutations: {
       'filters/reset' (state, routeQuery) {
@@ -43,6 +44,9 @@ const createStore = () => {
       },
       'views/toggleListView' (state) {
         state.views.listView = !state.views.listView
+      },
+      'items/set' (state, items) {
+        state.items = items
       }
     }
   })

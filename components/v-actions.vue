@@ -31,18 +31,20 @@
 
 <script>
 
+import filterItems from '~/components/filterItems'
 import params from '~/components/params.js'
+
 export default {
   data () {
     return {
       getShareLink: function () {
-        let link = 'https://gameshelf.github.io?'
+        let link = `${window.location}?`
         const { filters } = this.$store.state
         const queryParams = params.map(param => (filters[param] ? `${param}=${filters[param]}` : null)).filter(i => !!i).join('&')
         return encodeURI(`${link}${queryParams}`)
       },
       getARandomGame: function () {
-        const games = this.filteredItem()
+        const games = filterItems(this.$store.state.items, this.$store.state.filters)
         const ran = Math.floor(Math.random() * games.length)
         this.$toast.success('Go play ' + games[ran].name, {
           icon: 'fa-play',

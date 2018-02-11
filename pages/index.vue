@@ -128,6 +128,7 @@ export default {
           }
         })
       })
+      this.$store.commit('items/set', items)
 
       this.items = items
     }).catch((res) => {
