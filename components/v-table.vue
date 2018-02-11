@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div>
     <table class="table table-striped" v-if="games">
       <thead>
         <tr>
@@ -209,7 +209,7 @@ export default {
 }
 
 .bggbestplayers {
-  min-width: 9rem;
+  /* min-width: 9rem; */
 }
 
 .rec-player, .best-player {
