@@ -37,7 +37,8 @@ export default {
     return {
       getShareLink: function () {
         let link = 'https://gameshelf.github.io?'
-        const queryParams = params.map(param => (this.$store.state.filters[param] ? `${param}=${this[param]}` : null)).filter(i => !!i).join('&')
+        const { filters } = this.$store.state
+        const queryParams = params.map(param => (filters[param] ? `${param}=${filters[param]}` : null)).filter(i => !!i).join('&')
         return encodeURI(`${link}${queryParams}`)
       },
       getARandomGame: function () {

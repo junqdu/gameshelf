@@ -11,8 +11,8 @@
         </b-row>
         <b-row>
           <b-col>
-            <v-table :games="items" :extFilters="filters" :headers="tableHeader" v-if="state.views.listView"></v-table>
-            <v-grid :games="items" v-if="!state.views.listView"></v-grid>
+            <v-table :games="items" :extFilters="filters" :headers="tableHeader" v-if="views.listView"></v-table>
+            <v-grid :games="items" v-if="!views.listView"></v-grid>
           </b-col>
         </b-row>
       </b-container>
@@ -61,7 +61,7 @@ export default {
     VFilters
   },
   created: function () {
-    this.$store.commit('filters/reset')
+    this.$store.commit('filters/reset', this.$route.query)
     this.$store.commit('filters/setOwned', true)
     let userIds = this.$route.query.userId || this.userId
     userIds = userIds.split(',').slice(0, 9)
@@ -142,15 +142,12 @@ export default {
   },
   data () {
     return {
-      bestnum: this.$route.query.bestnum || undefined,
       errorMessage: '',
       games: [],
       items: {},
       loading: true,
-      playlessthan: this.$route.query.playlessthan || undefined,
       popoverShow: false,
-      recnum: this.$route.query.recnum || undefined,
-      state: this.$store.state,
+      views: this.$store.state.views,
       tableHeader: [
         {key: '', value: '', hide: this.$route.query.noimage},
         {key: 'rank', value: 'Rank'},

@@ -12,13 +12,13 @@
         label="Players">
         <b-row>
           <b-col sm="auto">
-            <b-form-input v-model="bestnum" type="number" placeholder="Best #" min="1" size="sm" />
+            <b-form-input v-model="filters.bestnum" type="number" placeholder="Best #" min="1" size="sm" />
           </b-col>
           <b-col sm="auto">
-            <b-form-input v-model="recnum" type="number" placeholder="Recommended #" min="1" size="sm" />
+            <b-form-input v-model="filters.recnum" type="number" placeholder="Recommended #" min="1" size="sm" />
           </b-col>
           <b-col sm="auto">
-            <b-form-input v-model="supplayer" type="number" placeholder="Supported #" min="1" size="sm" />
+            <b-form-input v-model="filters.supplayer" type="number" placeholder="Supported #" min="1" size="sm" />
           </b-col>
         </b-row>
       </b-form-group>
@@ -28,10 +28,10 @@
           label="Play Time">
         <b-row>
           <b-col sm="auto">
-            <b-form-input v-model="mintime" type="number" placeholder="Min Play Time" min="0" step="10" size="sm" />
+            <b-form-input v-model="filters.mintime" type="number" placeholder="Min Play Time" min="0" step="10" size="sm" />
           </b-col>
           <b-col sm="auto">
-            <b-form-input v-model="maxtime" type="number" placeholder="Max Play Time" min="0" step="10" size="sm" />
+            <b-form-input v-model="filters.maxtime" type="number" placeholder="Max Play Time" min="0" step="10" size="sm" />
           </b-col>
         </b-row>
       </b-form-group>
@@ -41,10 +41,10 @@
           label="Weight">
         <b-row>
           <b-col sm="auto">
-            <b-form-input v-model="minweight" type="number" placeholder="Min Weight" min="1" step="0.1" size="sm" />
+            <b-form-input v-model="filters.minweight" type="number" placeholder="Min Weight" min="1" step="0.1" size="sm" />
           </b-col>
             <b-col sm="auto">
-              <b-form-input v-model="maxweight" type="number" placeholder="Max Weight" min="1" step="0.1" size="sm" />
+              <b-form-input v-model="filters.maxweight" type="number" placeholder="Max Weight" min="1" step="0.1" size="sm" />
             </b-col>
         </b-row>
       </b-form-group>
@@ -54,7 +54,7 @@
           label="Plays">
         <b-row>
           <b-col sm="auto">
-            <b-form-input v-model="playlessthan" type="number" placeholder="Fewer Than" min="0" size="sm" />
+            <b-form-input v-model="filters.playlessthan" type="number" placeholder="Fewer Than" min="0" size="sm" />
           </b-col>
         </b-row>
       </b-form-group>
@@ -105,6 +105,7 @@
 
 <script>
 
+import { mapState } from 'vuex'
 import cookie from '~/components/cookie.js'
 import params from '~/components/params.js'
 const mechKeys = require('~/assets/mechKey.json')
@@ -120,7 +121,10 @@ export default {
     }
   },
   computed: {
-    filters: function () {
+    ...mapState({
+      filters: state => state.filters
+    }),
+    _filters: function () {
       const filters = params.reduce((acc, val) => {
         acc[val] = this[val]
         return acc
@@ -129,7 +133,7 @@ export default {
     }
   },
   watch: {
-    filters: function (filters) {
+    _filters: function (filters) {
       this.filters = filters
       this.$store.commit('filters/set', filters)
     }
