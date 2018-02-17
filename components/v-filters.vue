@@ -200,6 +200,6 @@ export default {
 <style>
 .filters.container-fluid {
   text-align: left;
-  margin-bottom: 1rem;
+  margin-bottom: .5rem;
 }
 </style>
