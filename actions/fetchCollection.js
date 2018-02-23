@@ -4,7 +4,8 @@ import pickBy from 'lodash/pickBy'
 export default async function fetchCollection (userId, {
   wantToPlay,
   trade,
-  own
+  own,
+  wishlist
 }) {
   const result = await axios.get('https://www.boardgamegeek.com/xmlapi2/collection', {
     params: pickBy({
@@ -12,7 +13,8 @@ export default async function fetchCollection (userId, {
       username: userId.trim(),
       wanttoplay: wantToPlay,
       trade,
-      own
+      own,
+      wishlist
     }, (val, key) => {
       return typeof val !== 'undefined'
     })

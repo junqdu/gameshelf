@@ -60,13 +60,13 @@ export default {
     this.$store.commit('filters/reset', this.$route.query)
     this.$store.commit('filters/setOwned', true)
     const userIds = this.$route.query.userId || this.userId
-    this.fetch({ userIds, page: this.$route.name })
+    this.fetch({ userIds, page: 'index' })
   },
   computed: mapState({
-    items: state => state.items[this.$route.name],
-    loading: state => state.pageState[this.$route.name] ? !state.pageState[this.$route.name].loaded : true,
-    error: state => state.pageState[this.$route.name] ? state.pageState[this.$route.name].error : null,
-    errorMessage: state => state.pageState[this.$route.name] ? state.pageState[this.$route.name].errorMessage : null,
+    items: state => state.items['index'],
+    loading: state => state.pageState['index'] ? !state.pageState['index'].loaded : true,
+    error: state => state.pageState['index'] ? state.pageState['index'].error : null,
+    errorMessage: state => state.pageState['index'] ? state.pageState['index'].errorMessage : null,
     views: state => state.views
   }),
   data () {
