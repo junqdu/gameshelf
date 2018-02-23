@@ -25,7 +25,6 @@ import VLoader from '~/components/v-loader.vue'
 import VTable from '~/components/v-table.vue'
 import VFilters from '~/components/v-filters.vue'
 import VActions from '~/components/v-actions.vue'
-import filterItems from '~/components/filterItems.js'
 import { mapActions, mapState } from 'vuex'
 
 export default {
@@ -46,12 +45,9 @@ export default {
     VFilters,
     VActions
   },
-  methods: {
-    filteredItem: filterItems,
-    ...mapActions({
-      fetch: 'items/query/fetch'
-    })
-  },
+  methods: mapActions({
+    fetch: 'items/query/fetch'
+  }),
   computed: mapState({
     items: state => state.items['wishlist'],
     loading: state => state.pageState['wishlist'] ? !state.pageState['wishlist'].loaded : true,

@@ -112,6 +112,9 @@ const createStore = () => {
         if (collections) {
           commit('items/query/done', { key: page, val: combineCollections(collections) })
         }
+      },
+      'items/cache/clear': () => {
+        localStorage.clear(/^collection/)
       }
     }
   })

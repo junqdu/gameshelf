@@ -26,6 +26,13 @@
     <h6>Best number of players filter:</h6>
     <input type="checkbox" id="best-at-least" v-model="bestatleast"> Show "At least" rather than exact, e.g. when input 3, rather showing game played best with 3, it will show 3 and above.
 
+    <h4>Clear cache</h4>
+    <b-input-group>
+      <b-input-group-button slot="left">
+        <b-btn @click="clear" variant="warning">Clear cache</b-btn>
+      </b-input-group-button>
+    </b-input-group>
+
     <h4>URL params</h4>
     <b-table striped hover :items="params"></b-table>
     <a href="https://en.wikipedia.org/wiki/Query_string#Structure">How to use URL params?</a>
@@ -51,6 +58,7 @@
 
 <script>
 import cookie from '~/components/cookie.js'
+import { mapActions } from 'vuex'
 
 export default {
   data () {
@@ -101,6 +109,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      clear: 'items/cache/clear'
+    }),
     save: function () {
       cookie.set('username', this.userId)
       this.$toast.success('User ID updated', {
