@@ -72,7 +72,7 @@ const createStore = () => {
         }
       },
       'items/query/error': (state, { key, err }) => {
-        console.log(key, err)
+        console.error(key, err)
         state.pageState = {
           [key]: {
             ...(state.pageState[key] || {}),
@@ -84,17 +84,18 @@ const createStore = () => {
       }
     },
     actions: {
-      'items/query/fetch/index': async ({ commit }, userId) => {
-        commit('items/query/fetch', 'index')
-        const ids = userId.split(',').slice(0, 9)
+      'items/query/fetch': async ({ commit }, params) => {
+        const { page, userIds } = params
+        commit('items/query/fetch', page)
+        const ids = userIds.split(',').slice(0, 9)
         const collections = await Promise.all(ids.map(async id => {
-          const stored = localStorage.get(`collection/${id}`)
+          const stored = localStorage.get(`collection/${id}/${page}`)
           if (stored) {
             return stored
           }
-          const result = await fetchCollection(id)
+          const result = await fetchCollection(id, params)
           try {
-            localStorage.set(`collection/${id}`, result)
+            localStorage.set(`collection/${id}/${page}`, result)
           } catch (e) {
             console.error(e)
           }
@@ -102,13 +103,14 @@ const createStore = () => {
         })).catch((res) => {
           console.error(res)
           if (res.config) {
-            commit('items/query/error', { key: 'index', err: `Waiting for BGG to process for user "${res.config.params.username}". Please try again later for access.` })
+            const username = res.config.params.username
+            commit('items/query/error', { key: page, err: `Waiting for BGG to process for user "${username}". Please try again later for access.` })
           } else {
             commit('items/query/error', res.message)
           }
         })
         if (collections) {
-          commit('items/query/done', { key: 'index', val: combineCollections(collections) })
+          commit('items/query/done', { key: page, val: combineCollections(collections) })
         }
       }
     }

@@ -59,20 +59,18 @@ export default {
   created: function () {
     this.$store.commit('filters/reset', this.$route.query)
     this.$store.commit('filters/setOwned', true)
-    let userIds = this.$route.query.userId || this.userId
-    this.fetch(userIds)
+    const userIds = this.$route.query.userId || this.userId
+    this.fetch({ userIds, page: this.$route.name })
   },
   computed: mapState({
-    items: state => state.items['index'],
-    loading: state => state.pageState['index'] ? !state.pageState['index'].loaded : true,
-    error: state => state.pageState['index'] ? state.pageState['index'].error : null,
-    errorMessage: state => state.pageState['index'] ? state.pageState['index'].errorMessage : null
+    items: state => state.items[this.$route.name],
+    loading: state => state.pageState[this.$route.name] ? !state.pageState[this.$route.name].loaded : true,
+    error: state => state.pageState[this.$route.name] ? state.pageState[this.$route.name].error : null,
+    errorMessage: state => state.pageState[this.$route.name] ? state.pageState[this.$route.name].errorMessage : null,
+    views: state => state.views
   }),
   data () {
     return {
-      listView: true,
-      popoverShow: false,
-      views: this.$store.state.views,
       tableHeader: [
         {key: '', value: '', hide: this.$route.query.noimage},
         {key: 'rank', value: 'Rank'},
@@ -85,15 +83,13 @@ export default {
         {key: 'numplays', value: 'Plays'},
         {key: 'mech', value: 'Mechanisms'}
       ],
-      supplayer: this.$route.query.supplayer || undefined,
-      userId: cookie.get('username'),
-      waitingForBGG: false
+      userId: cookie.get('username')
     }
   },
   methods: {
     filteredItem: filterItems,
     ...mapActions({
-      fetch: 'items/query/fetch/index'
+      fetch: 'items/query/fetch'
     })
   }
 }
