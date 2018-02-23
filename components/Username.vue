@@ -1,7 +1,9 @@
 <template>
   <div class="username-bar">
-    <input type="text" v-model="username" placeholder="Your BGG username" />
-    <button @click="change()">Change user</button>
+    <form @submit="change()">
+      <input type="text" v-model="username" placeholder="Your BGG username" />
+      <button @click="change()">Change user</button>
+    </form>
   </div>
 </template>
 
@@ -14,9 +16,6 @@ export default {
       cookie.set('username', this.username)
       location.reload()
     }
-  },
-  data: {
-    username: cookie.get('username')
   },
   props: {
     username: {

@@ -5,49 +5,10 @@
       <b-container v-if="!loading && !waitingForBGG" class="bv-example-row">
         <b-row>
           <b-col>
-            <b-container class="filters" fluid>
-              <b-row>
-                  <b-col sm="auto"><input v-model="bestnum" type="number" placeholder="Best# of Players" min="1"></b-col>
-                  <b-col sm="auto"><input v-model="recnum" type="number" placeholder="Recom# of Players" min="1"></b-col>
-                  <b-col sm="auto"><input v-model="supplayer" type="number" placeholder="Support Players" min="1"></b-col>
-                  <b-col sm="auto"><input v-model="maxtime" type="number" placeholder="Max Play Time" min="0" step="10"></b-col>
-                  <b-col sm="auto"><input v-model="mintime" type="number" placeholder="Min Play Time" min="0" step="10"></b-col>
-                  <b-col sm="auto"><input v-model="maxweight" type="number" placeholder="Max Weight" min="1" step="0.1"></b-col>
-                  <b-col sm="auto"><input v-model="minweight" type="number" placeholder="Min Weight" min="1" step="0.1"></b-col>
-                  <b-col sm="auto">
-                    <b-button size="sm" variant="primary" v-clipboard="getShareLink()" @click="$toast.success('Link copied to clipboard', { icon : 'fa-clipboard'})">
-                      <i class="fa fa-share-alt" aria-hidden="true"></i>
-                      Share This List
-                    </b-button>
-                  </b-col>
-                  <b-col sm="auto">
-                    <b-button size="sm" variant="primary" v-clipboard="getText()" @click="$toast.success('Copied as text', { icon : 'fa-clipboard'})">
-                      <i class="fa fa-clipboard" aria-hidden="true"></i>
-                      Copy As Text
-                    </b-button>
-                  </b-col>
-                  <b-col sm="auto">
-                    <b-button size="sm" variant="primary" @click="getARandomGame()">
-                      <i class="fa fa-random" aria-hidden="true"></i>
-                      Get Me A Game
-                    </b-button>
-                  </b-col>
-                  <b-col sm="auto">
-                    <b-button size="sm" variant="primary" @click="listView = !listView">
-                      <span v-if="listView">
-                        <i class="fa fa-th" aria-hidden="true"></i>
-                        Toggle Grid View
-                      </span>
-                      <span v-if="!listView">
-                        <i class="fa fa-list" aria-hidden="true"></i>
-                        Toggle Table View
-                      </span>
-                    </b-button>
-                  </b-col>
-              </b-row>
-            </b-container>
-            <v-table :games="filteredItem()" :default-sort="'wishlistpriority'" :headers="tableHeader" v-if="listView"></v-table>
-            <v-grid :games="filteredItem()" v-if="!listView"></v-grid>
+            <v-filters></v-filters>
+            <v-actions></v-actions>
+            <v-table :games="items" :default-sort="'wishlistpriority'" :headers="tableHeader" v-if="views.listView"></v-table>
+            <v-grid :games="items" v-if="!views.listView"></v-grid>
           </b-col>
         </b-row>
       </b-container>
@@ -64,6 +25,8 @@ import VGrid from '~/components/v-grid.vue'
 import VRefresh from '~/components/v-refresh.vue'
 import VLoader from '~/components/v-loader.vue'
 import VTable from '~/components/v-table.vue'
+import VFilters from '~/components/v-filters.vue'
+import VActions from '~/components/v-actions.vue'
 import X2JS from 'x2js'
 var _ = require('lodash')
 
@@ -81,9 +44,12 @@ export default {
     VGrid,
     VLoader,
     VRefresh,
-    VTable
+    VTable,
+    VFilters,
+    VActions
   },
   created: function () {
+    this.$store.commit('filters/setOwned', false)
     let userIds = this.$route.query.userId || this.userId
     userIds = userIds.split(',').slice(0, 9)
     return axios.get('https://www.boardgamegeek.com/xmlapi2/collection', {
@@ -133,16 +99,10 @@ export default {
   },
   data () {
     return {
-      bestnum: this.$route.query.bestnum || undefined,
       errorMessage: '',
       items: [],
       listView: true,
       loading: true,
-      maxtime: this.$route.query.maxtime || undefined,
-      maxweight: this.$route.query.maxweight || undefined,
-      mintime: this.$route.query.mintime || undefined,
-      minweight: this.$route.query.minweight || undefined,
-      recnum: this.$route.query.recnum || undefined,
       tableHeader: [
         {key: '', value: '', hide: this.$route.query.noimage},
         {key: 'rank', value: 'Rank'},
@@ -153,8 +113,8 @@ export default {
         {key: 'bggbestplayers', value: 'Best #Player'},
         {key: 'wishlistpriority', value: 'Priority'}
       ],
-      supplayer: this.$route.query.supplayer || undefined,
       userId: cookie.get('username'),
+      views: this.$store.state.views,
       waitingForBGG: false
     }
   },
@@ -168,49 +128,6 @@ export default {
           text: 'Link',
           href: 'https://boardgamegeek.com/boardgame/' + games[ran].id
         }
-      })
-    },
-    getText: function () {
-      let result = ''
-      let games = this.filteredItem()
-      games = _.sortBy(games, ['name'])
-      _.forEach(games, function (game) {
-        result += game.name + '\n'
-      })
-      return result
-    },
-    getShareLink: function () {
-      let link = 'https://gameshelf.github.io/wishlist?'
-      const params = ['userId', 'bestnum', 'maxtime', 'maxweight', 'mintime', 'minweight', 'recnum', 'supplayer']
-      _.forEach(params, param => {
-        if (this[param]) {
-          link = link + param + '=' + this[param] + '&'
-        }
-      })
-      link = link.slice(0, link.length - 1)
-      if (cookie.get('showexp') === 'true') {
-        link = link + 'showexp' + '=' + cookie.get('showexp')
-      }
-      return encodeURI(link)
-    },
-    filteredItem: function () {
-      return this.items.filter((item) => {
-        let bestnum = false
-        if (cookie.get('bestatleast')) {
-          const highestNum = _.get(item, 'bggbestplayers', '').split(',').pop()
-          if (highestNum) {
-            bestnum = +highestNum >= this.bestnum
-          }
-        } else {
-          bestnum = _.get(item, 'bggbestplayers', '').split(',').includes(this.bestnum)
-        }
-        return (!this.bestnum || bestnum) &&
-        (!this.recnum || _.get(item, 'bggrecplayers', '').split(',').includes(this.recnum)) &&
-        (!this.mintime || item.playingtime >= this.mintime) &&
-        (!this.maxtime || item.playingtime <= this.maxtime) &&
-        (!this.supplayer || (item.minplayer <= this.supplayer && item.maxplayer >= this.supplayer)) &&
-        (!this.maxweight || item.weight <= this.maxweight) &&
-        (!this.minweight || item.weight >= this.minweight)
       })
     }
   }
