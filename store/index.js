@@ -6,6 +6,8 @@ import LocalStorage from '~/components/LocalStorage'
 
 const localStorage = new LocalStorage()
 
+const EXPIRE_TIME = 24 * 60 * 60 * 100 // one day! -- 24 hours, 60 mins, 60 secs, 1000 ms
+
 const getInitialFilters = (routeQuery = {}) => ({
   bestnum: routeQuery.bestnum || null,
   maxweight: routeQuery.maxweight || null,
@@ -86,30 +88,34 @@ const createStore = () => {
     actions: {
       'items/query/fetch': async ({ commit }, params) => {
         const { page, userIds } = params
+        let inError = false
         commit('items/query/fetch', page)
         const ids = userIds.split(',').slice(0, 9)
         const collections = await Promise.all(ids.map(async id => {
+          const now = new Date().getTime()
           const stored = localStorage.get(`collection/${id}/${page}`)
-          if (stored) {
+          const storedExpiry = localStorage.get(`collectionExpiry/${id}/${page}`)
+          if (stored && now <= storedExpiry) {
             return stored
           }
-          const result = await fetchCollection(id, params)
           try {
+            const result = await fetchCollection(id, params)
             localStorage.set(`collection/${id}/${page}`, result)
+            localStorage.set(`collectionExpiry/${id}/${page}`, (now + EXPIRE_TIME))
+            return result
           } catch (e) {
+            inError = true
             console.error(e)
+            if (e.config) {
+              const username = e.config.params.username
+              commit('items/query/error', { key: page, err: `Waiting for BGG to process for user "${username}". Please try again later for access.` })
+            } else {
+              commit('items/query/error', e.toString())
+            }
+            return stored
           }
-          return result
-        })).catch((res) => {
-          console.error(res)
-          if (res.config) {
-            const username = res.config.params.username
-            commit('items/query/error', { key: page, err: `Waiting for BGG to process for user "${username}". Please try again later for access.` })
-          } else {
-            commit('items/query/error', res.message)
-          }
-        })
-        if (collections) {
+        }))
+        if (collections && !inError) {
           commit('items/query/done', { key: page, val: combineCollections(collections) })
         }
       },

@@ -7,7 +7,7 @@ export default async function fetchCollection (userId, {
   own,
   wishlist
 }) {
-  const result = await axios.get('https://www.boardgamegeek.com/xmlapi2/collection', {
+  return axios.get('https://www.boardgamegeek.com/xmlapi2/collection', {
     params: pickBy({
       stats: 1,
       username: userId.trim(),
@@ -19,5 +19,4 @@ export default async function fetchCollection (userId, {
       return typeof val !== 'undefined'
     })
   })
-  return result
 }
