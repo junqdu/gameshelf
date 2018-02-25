@@ -1,14 +1,26 @@
 <template>
-  <div class="header">
-    <nuxt-link to="/" exact>Collection</nuxt-link>
-    <nuxt-link to="/want-to-play">Want To Play</nuxt-link>
-    <nuxt-link to="/wishlist">Wishlist</nuxt-link>
-    <nuxt-link to="/trade-sale">Trade/Sale</nuxt-link>
-    <nuxt-link to="/latest-100-plays">Latest 100 Plays</nuxt-link>
-    <nuxt-link to="/help">Help</nuxt-link>
+  <b-nav class="header">
+    <b-nav-item>
+      <nuxt-link to="/" exact>Collection</nuxt-link>
+    </b-nav-item>
+    <b-nav-item>
+      <nuxt-link to="/want-to-play">Want To Play</nuxt-link>
+    </b-nav-item>
+    <b-nav-item>
+      <nuxt-link to="/wishlist">Wishlist</nuxt-link>
+    </b-nav-item>
+    <b-nav-item>
+      <nuxt-link to="/trade-sale">Trade/Sale</nuxt-link>
+    </b-nav-item>
+    <b-nav-item>
+      <nuxt-link to="/latest-100-plays">Latest 100 Plays</nuxt-link>
+    </b-nav-item>
+    <b-nav-item>
+      <nuxt-link to="/help">Help</nuxt-link>
+    </b-nav-item>
     <!-- <nuxt-link to="/about">About</nuxt-link> -->
     <!-- <nuxt-link to="/want-to-buy">Want To Buy</nuxt-link> -->
-  </div>
+  </b-nav>
 </template>
 
 <script>
@@ -23,10 +35,11 @@ export default {
 .header {
   display: flex;
   flex: 1;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-size: .875rem;
 }
 a {
-  margin-right: 20px;
-  font-size: 14px;
   color: #999;
   text-decoration: none;
   text-transform: uppercase;
