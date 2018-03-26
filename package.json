@@ -24,7 +24,7 @@
     "popper.js": "^1.14.1",
     "vue-clipboards": "^1.2.4",
     "vue-lodash": "^2.0.0",
-    "vue-style-loader": "^4.1.0",
+    "vue-style-loader": "^3.0.3",
     "x2js": "^3.2.1"
   },
   "devDependencies": {
