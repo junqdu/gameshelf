@@ -30,6 +30,7 @@ module.exports = {
     // proxyHeaders: false
   },
   toast: {
+    duration: 1500,
     iconPack: 'fontawesome',
     position: 'top-left'
   },

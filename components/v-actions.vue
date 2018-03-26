@@ -31,6 +31,7 @@
 
 <script>
 
+import cookie from '~/components/cookie'
 import filterItems from '~/components/filterItems'
 import params from '~/components/params.js'
 
@@ -38,7 +39,7 @@ export default {
   data () {
     return {
       getShareLink: function () {
-        let link = `${window.location}?`
+        let link = `${window.origin}?userId=${cookie.get('username')}&`
         const { filters } = this.$store.state
         const queryParams = params.map(param => (filters[param] ? `${param}=${filters[param]}` : null)).filter(i => !!i).join('&')
         return encodeURI(`${link}${queryParams}`)
