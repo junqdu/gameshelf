@@ -43,7 +43,8 @@ function parse (result = {}, items) { // eslint-disable-line
         playingtime: parseFloat(item.stats._playingtime),
         rank,
         rating,
-        userId
+        userId,
+        wishlistpriority: item.status._wishlistpriority
       }))
     }
   })
