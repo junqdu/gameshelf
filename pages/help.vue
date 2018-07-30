@@ -1,14 +1,11 @@
 <template>
   <section class="container left help">
     <h4>User setting</h4>
-    <b-input-group>
-      <b-input-group-addon>
-        User ID
-      </b-input-group-addon>
+    <b-input-group prepend="User ID">
       <b-form-input v-model="userId"></b-form-input>
-      <b-input-group-button slot="right">
-        <b-btn @click="save" variant="info">Save</b-btn>
-      </b-input-group-button>
+      <b-input-group-append>
+        <b-btn @click="save" variant="primary">Save</b-btn>
+      </b-input-group-append>
     </b-input-group>
     <p>You can add multiple(up to 10) user IDs and seperate them by comma, e.g.
       "userId1,userId2", this will merge the collection of the users. This only
@@ -17,9 +14,9 @@
     <h5>Collection</h5>
     <h6>Show Expansions with miniumn rating of:</h6>
     <b-input-group>
-      <b-input-group-addon>
+      <b-input-group-prepend is-text>
         <input type="checkbox" id="show-expansions" v-model="showexp">
-      </b-input-group-addon>
+      </b-input-group-prepend>
       <b-form-input type="number" :disabled="!showexp" v-model="expmin"/>
     </b-input-group>
     <div>Note: Only game with rating of 6 or greater has data for weight and best/rec# of players.</div>
@@ -27,11 +24,7 @@
     <input type="checkbox" id="best-at-least" v-model="bestatleast"> Show "At least" rather than exact, e.g. when input 3, rather showing game played best with 3, it will show 3 and above.
 
     <h4>Clear cache</h4>
-    <b-input-group>
-      <b-input-group-button slot="left">
-        <b-btn @click="clear" variant="warning">Clear cache</b-btn>
-      </b-input-group-button>
-    </b-input-group>
+    <b-button @click="clear" variant="warning">Clear cache</b-button>
 
     <h4>URL params</h4>
     <b-table striped hover :items="params"></b-table>

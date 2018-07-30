@@ -2,7 +2,7 @@
   <div class="username-bar">
     <form @submit="change()">
       <input type="text" v-model.trim="username" placeholder="Your BGG username" />
-      <button @click="change()">Change user</button>
+      <b-button @click="change()" class="btn-sm">Change user</b-button>
     </form>
   </div>
 </template>
