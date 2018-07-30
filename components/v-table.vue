@@ -55,7 +55,7 @@
           </td>
           <td class="mech" v-if="hasHeader('mech')">
             <ul>
-              <li v-for="item in item.mech">{{item}}</li>
+              <li v-for="item in item.mech" :key="item">{{item}}</li>
             </ul>
           </td>
         </tr>
