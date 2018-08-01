@@ -87,7 +87,7 @@ export default {
         },
         {
           q: 'When is your data update?',
-          a: '1/4/2018'
+          a: '7/31/2018'
         }
       ],
       params: [
