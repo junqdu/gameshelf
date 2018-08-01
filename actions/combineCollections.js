@@ -27,6 +27,10 @@ function parse (result = {}, items) { // eslint-disable-line
         rating: rating || 0
       }
       items[gameId].numplays += numplays || 0
+      let numOfUser = Object.keys(items[gameId].users).length
+      if (items[gameId].users[userId].rating) {
+        items[gameId].rating = ((items[gameId].rating * (numOfUser - 1)) + items[gameId].users[userId].rating) / numOfUser
+      }
       if (!items[gameId].own) {
         items[gameId].own = get(item, 'status._own') === '1'
       }

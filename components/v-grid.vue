@@ -37,7 +37,7 @@ export default {
     }
   },
   props: {
-    games: { type: Array }
+    games: { type: Object }
   }
 }
 </script>

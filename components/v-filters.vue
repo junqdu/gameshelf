@@ -72,13 +72,13 @@
             <b-tabs>
               <b-tab title="Show" active>
                 <b-form-group>
-                  <b-form-checkbox-group v-model="mechShow" name="mechanisms" :options="mechOptions">
+                  <b-form-checkbox-group v-model="filters.mechShow" name="mechanisms" :options="mechOptions">
                   </b-form-checkbox-group>
                 </b-form-group>
               </b-tab>
               <b-tab title="Hide">
                 <b-form-group>
-                  <b-form-checkbox-group v-model="mechHide" name="mechanisms" :options="mechOptions">
+                  <b-form-checkbox-group v-model="filters.mechHide" name="mechanisms" :options="mechOptions">
                   </b-form-checkbox-group>
                 </b-form-group>
               </b-tab>
