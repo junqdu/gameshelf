@@ -94,6 +94,11 @@ export default {
       this.singleUser = false
     }
     this.userId = users[0]
+    let playernames = cookie.get('playername').split(',')
+    this.playerNameMap = {}
+    for (let i = 0; i < playernames.length; i++) {
+      this.playerNameMap[users[i]] = playernames[i]
+    }
   },
   data () {
     return {
@@ -140,7 +145,11 @@ export default {
       let text = ''
       _.forEach(users, (user, userName) => {
         if (user.rating) {
-          text += `${userName}: ${user.rating}\n`
+          if (this.playerNameMap[userName]) {
+            text += `${this.playerNameMap[userName]}: ${user.rating}\n`
+          } else {
+            text += `${userName}: ${user.rating}\n`
+          }
         }
       })
       return text
@@ -149,7 +158,11 @@ export default {
       let text = ''
       _.forEach(users, (user, userName) => {
         if (user.numplays) {
-          text += `${userName}: ${user.numplays}\n`
+          if (this.playerNameMap[userName]) {
+            text += `${this.playerNameMap[userName]}: ${user.numplays}\n`
+          } else {
+            text += `${userName}: ${user.numplays}\n`
+          }
         }
       })
       return text

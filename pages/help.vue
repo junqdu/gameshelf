@@ -7,6 +7,12 @@
         <b-btn @click="save" variant="primary">Save</b-btn>
       </b-input-group-append>
     </b-input-group>
+    <b-input-group prepend="Player Name">
+      <b-form-input v-model="playername"></b-form-input>
+      <b-input-group-append>
+        <b-btn @click="save" variant="primary">Save</b-btn>
+      </b-input-group-append>
+    </b-input-group>
     <p>You can add multiple(up to 10) user IDs and seperate them by comma, e.g.
       "userId1,userId2", this will merge the collection of the users. This only
       work with "Collection" for now, other list won't be supported unless there
@@ -97,6 +103,7 @@ export default {
         { paramName: 'mintime', type: 'Number', usage: 'Prepopulate the min play time filter' },
         { paramName: 'playlessthan', type: 'Number', usage: 'Prepopulate the play less than filter' }
       ],
+      playername: cookie.get('playername'),
       showexp: cookie.get('showexp') === 'true',
       userId: cookie.get('username')
     }
@@ -107,7 +114,8 @@ export default {
     }),
     save: function () {
       cookie.set('username', this.userId)
-      this.$toast.success('User ID updated', {
+      cookie.set('playername', this.playername)
+      this.$toast.success('User ID and player name updated', {
         icon: 'fa-check'
       })
     }
