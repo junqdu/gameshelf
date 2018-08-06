@@ -1,6 +1,7 @@
 import X2JS from 'x2js'
 import Game from '~/components/Game'
 import get from 'lodash/get'
+import isArray from 'lodash/isArray'
 
 function parse (result = {}, items) { // eslint-disable-line
   const x2js = new X2JS()
@@ -11,6 +12,9 @@ function parse (result = {}, items) { // eslint-disable-line
   let userId = get(result, 'config.params.username')
 
   let rank
+  if (get(games, 'items.item') && !isArray(get(games, 'items.item'))) {
+    games.items.item = [games.items.item]
+  }
   get(games, 'items.item', []).forEach(item => {
     if (get(item, 'stats.rating.ranks.rank.length', false)) {
       rank = parseFloat(item.stats.rating.ranks.rank[0]._value)
