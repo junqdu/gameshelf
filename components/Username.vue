@@ -1,7 +1,7 @@
 <template>
   <div class="username-bar">
     <form @submit="change()">
-      <input type="text" v-model.trim="username" placeholder="Your BGG username" />
+      <input type="text" v-model.trim="mutableUsername" placeholder="Your BGG username" />
       <b-button @click="change()" class="btn-sm">Change user</b-button>
     </form>
   </div>
@@ -11,9 +11,14 @@
 import cookie from '~/components/cookie'
 
 export default {
+  data: function () {
+    return {
+      mutableUsername: this.username
+    }
+  },
   methods: {
     change: function () {
-      cookie.set('username', this.username)
+      cookie.set('username', this.mutableUsername)
       location.reload()
     }
   },

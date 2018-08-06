@@ -34,6 +34,9 @@ function parse (result = {}, items) { // eslint-disable-line
       if (!items[gameId].own) {
         items[gameId].own = get(item, 'status._own') === '1'
       }
+      if (get(item, 'status._own') === '1') {
+        items[gameId].users[userId].own = true
+      }
     } else {
       items[gameId] = (new Game({
         average: parseFloat(get(item, 'stats.rating.average._value')),

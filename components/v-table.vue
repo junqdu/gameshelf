@@ -33,6 +33,7 @@
           </td>
           <td class="name" v-if="hasHeader('name')">
             <a :href="'https://boardgamegeek.com/boardgame/' + item.id">{{item.name}}</a>
+            <i class="fa fa-users" aria-hidden="true" v-if="!singleUser" v-b-popover.hover="getOwners(item.users)" title="Owners"></i>
           </td>
           <td class="date" v-if="hasHeader('date')">
             <a>{{item.date}}</a>
@@ -137,6 +138,19 @@ export default {
         let header = _.find(this.headers, ['key', key])
         return header ? !header.hide : false
       }
+    },
+    getOwners: function (users) {
+      let text = ''
+      _.forEach(users, (user, userName) => {
+        if (user.own) {
+          if (this.playerNameMap[userName]) {
+            text += `${this.playerNameMap[userName]}\n`
+          } else {
+            text += `${userName}\n`
+          }
+        }
+      })
+      return text
     },
     getRatingColor: function (rating, roundDown) {
       return roundDown ? _.floor(rating) : _.ceil(rating)

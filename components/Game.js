@@ -20,6 +20,7 @@ export default class {
     this.users[params.userId] = {}
     this.users[params.userId].numplays = params.numplays || 0
     this.users[params.userId].rating = params.rating || 0
+    this.users[params.userId].own = params.own
     this.numplays = params.numplays || 0
     this.rating = params.rating || 0
 
