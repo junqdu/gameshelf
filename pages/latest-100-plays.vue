@@ -55,6 +55,7 @@ export default {
           var items = {}
           _.forEach(data.plays.play, (play) => {
             items[play._id] = {
+              comment: play.comments,
               date: play._date,
               id: play._id,
               name: play.item._name
@@ -75,7 +76,8 @@ export default {
       loading: true,
       tableHeader: [
         {key: 'name', value: 'Name'},
-        {key: 'date', value: 'Date'}
+        {key: 'date', value: 'Date'},
+        {key: 'comment', value: 'Comment'}
       ],
       userId: cookie.get('username'),
       waitingForBGG: false

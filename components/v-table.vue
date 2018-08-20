@@ -75,8 +75,13 @@ var _ = require('lodash')
 export default {
   computed: {
     filteredGames: function () {
-      let games = filterItems(this.games, this.$store.state.filters)
-      if (games.length) {
+      let games
+      if (this.$route.name === 'latest-100-plays') {
+        games = this.games
+      } else {
+        games = filterItems(this.games, this.$store.state.filters)
+      }
+      if (_.keys(games).length) {
         let temp = _.orderBy(games, [this.sortBy, 'average'], [this.asc ? 'asc' : 'desc', 'desc'])
         if (temp.length > 0 &&
             (!_.get(temp[0], 'rank') && _.get(temp[temp.length - 1], 'rank'))) {
@@ -226,6 +231,7 @@ export default {
 
 .comment {
   text-align: left;
+  max-width: 50vh;
 }
 
 .rank, .numplays {
