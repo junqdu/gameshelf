@@ -11,7 +11,7 @@
         </b-row>
         <b-row>
           <b-col>
-            <v-table :games="items" :headers="tableHeader" v-if="views.listView"></v-table>
+            <v-table :default-asc="true" :games="items" :headers="tableHeader" v-if="views.listView"></v-table>
             <v-grid :games="items" v-if="!views.listView"></v-grid>
           </b-col>
         </b-row>
@@ -31,6 +31,7 @@ import VLoader from '~/components/v-loader.vue'
 import VRefresh from '~/components/v-refresh.vue'
 import VTable from '~/components/v-table.vue'
 import { mapActions, mapState } from 'vuex'
+import _ from 'lodash'
 
 export default {
   beforeCreate: function () {
@@ -63,7 +64,7 @@ export default {
     this.fetch({ userIds, page: 'index' })
   },
   computed: mapState({
-    items: state => state.items['index'],
+    items: state => _.pickBy(state.items['index'], ['own', true]),
     loading: state => state.pageState['index'] ? !state.pageState['index'].loaded : true,
     error: state => state.pageState['index'] ? state.pageState['index'].error : null,
     errorMessage: state => state.pageState['index'] ? state.pageState['index'].errorMessage : null,

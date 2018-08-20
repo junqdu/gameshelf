@@ -33,7 +33,7 @@
           </td>
           <td class="name" v-if="hasHeader('name')">
             <a :href="'https://boardgamegeek.com/boardgame/' + item.id">{{item.name}}</a>
-            <i class="fa fa-users" aria-hidden="true" v-if="!singleUser" v-b-popover.hover="getOwners(item.users)" title="Owners"></i>
+            <i class="fa fa-users" aria-hidden="true" v-if="!singleUser && getOwners(item.users)" v-b-popover.hover="getOwners(item.users)" title="Owners"></i>
           </td>
           <td class="date" v-if="hasHeader('date')">
             <a>{{item.date}}</a>
@@ -52,6 +52,7 @@
             {{item.wishlistpriority | priority}}
           </td>
           <td class="comment" v-if="hasHeader('comment')">
+            <!-- <pre>{{item.comment}}</pre> -->
             {{item.comment}}
           </td>
           <td class="mech" v-if="hasHeader('mech')">
@@ -103,7 +104,7 @@ export default {
   },
   data () {
     return {
-      asc: true,
+      asc: _.get(this, 'defaultAsc', true),
       singleUser: true,
       sortBy: this.defaultSort || 'rank',
       userId: undefined
@@ -207,6 +208,7 @@ export default {
     }
   },
   props: {
+    defaultAsc: {type: Boolean},
     defaultSort: {type: String},
     extFilters: { type: Object },
     games: { type: Object },

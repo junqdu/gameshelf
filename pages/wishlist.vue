@@ -7,7 +7,7 @@
           <b-col>
             <v-filters></v-filters>
             <v-actions></v-actions>
-            <v-table :games="items" :default-sort="'wishlistpriority'" :headers="tableHeader" v-if="views.listView"></v-table>
+            <v-table :default-asc="true" :games="items" :default-sort="'wishlistpriority'" :headers="tableHeader" v-if="views.listView"></v-table>
             <v-grid :games="items" v-if="!views.listView"></v-grid>
           </b-col>
         </b-row>
@@ -26,6 +26,7 @@ import VTable from '~/components/v-table.vue'
 import VFilters from '~/components/v-filters.vue'
 import VActions from '~/components/v-actions.vue'
 import { mapActions, mapState } from 'vuex'
+import _ from 'lodash'
 
 export default {
   beforeCreate: function () {
@@ -49,16 +50,18 @@ export default {
     fetch: 'items/query/fetch'
   }),
   computed: mapState({
-    items: state => state.items['wishlist'],
-    loading: state => state.pageState['wishlist'] ? !state.pageState['wishlist'].loaded : true,
-    error: state => state.pageState['wishlist'] ? state.pageState['wishlist'].error : null,
-    errorMessage: state => state.pageState['wishlist'] ? state.pageState['wishlist'].errorMessage : null,
+    items: state => _.pickBy(state.items['index'], ['wishlist', true]),
+    loading: state => state.pageState['index'] ? !state.pageState['index'].loaded : true,
+    error: state => state.pageState['index'] ? state.pageState['index'].error : null,
+    errorMessage: state => state.pageState['index'] ? state.pageState['index'].errorMessage : null,
     views: state => state.views
   }),
   created: function () {
     this.$store.commit('filters/setOwned', false)
     const userIds = this.$route.query.userId || this.userId
-    this.fetch({ userIds, page: 'wishlist', own: 0, wishlist: 1 })
+    // if (!state.items.all) {
+    this.fetch({userIds, page: 'index'})
+    // }
   },
   data () {
     return {

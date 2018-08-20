@@ -65,14 +65,10 @@ export default {
         {key: '', value: ''},
         {key: 'rank', value: 'Rank'},
         {key: 'average', value: 'Avg. Rating'},
-        // {key: 'rating', value: 'My Rating'},
         {key: 'name', value: 'Name'},
-        // {key: 'minPlayer', value: 'Min. Player'},
-        // {key: 'maxPlayer', value: 'Max. Player'},
         {key: 'weight', value: 'Weight'},
         {key: 'playingtime', value: 'Length'},
         {key: 'bggbestplayers', value: 'Best #Player'}
-        // {key: 'bggrecplayers', value: 'Rec. #Player'}
       ],
       sortBy: 'rank'
     }

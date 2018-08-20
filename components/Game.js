@@ -26,6 +26,7 @@ export default class {
 
     this.average = params.average || ''
     this.date = params.date || ''
+    this.forTrade = params.forTrade
     this.id = params.id
     this.imageUrl = params.imageUrl || ''
     this.maxplayer = params.maxplayer || ''
@@ -34,6 +35,8 @@ export default class {
     this.playingtime = params.playingtime || ''
     this.rank = params.rank || ''
     this.own = params.own
+    this.wantToPlay = params.wantToPlay
+    this.wishlist = params.wishlist
     this.wishlistpriority = params.wishlistpriority
     this.comment = params.comment
   }

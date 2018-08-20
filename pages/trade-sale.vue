@@ -11,7 +11,7 @@
         </b-row>
         <b-row>
           <b-col>
-            <v-table :games="items" :headers="tableHeader" v-if="views.listView"></v-table>
+            <v-table :default-asc="true" :games="items" :headers="tableHeader" v-if="views.listView"></v-table>
             <v-grid :games="items" v-if="!views.listView"></v-grid>
           </b-col>
         </b-row>
@@ -30,6 +30,7 @@ import VTable from '~/components/v-table.vue'
 import VFilters from '~/components/v-filters.vue'
 import VActions from '~/components/v-actions.vue'
 import { mapActions, mapState } from 'vuex'
+import _ from 'lodash'
 
 export default {
   beforeCreate: function () {
@@ -51,13 +52,13 @@ export default {
   },
   created: function () {
     const userIds = this.$route.query.userId || this.userId
-    this.fetch({ userIds, page: 'trade-sale', own: 1, trade: 1 })
+    this.fetch({ userIds, page: 'index' })
   },
   computed: mapState({
-    items: state => state.items['trade-sale'],
-    loading: state => state.pageState['trade-sale'] ? !state.pageState['trade-sale'].loaded : true,
-    error: state => state.pageState['trade-sale'] ? state.pageState['trade-sale'].error : null,
-    errorMessage: state => state.pageState['trade-sale'] ? state.pageState['trade-sale'].errorMessage : null,
+    items: state => _.pickBy(state.items['index'], ['forTrade', true]),
+    loading: state => state.pageState['index'] ? !state.pageState['index'].loaded : true,
+    error: state => state.pageState['index'] ? state.pageState['index'].error : null,
+    errorMessage: state => state.pageState['index'] ? state.pageState['index'].errorMessage : null,
     views: state => state.views
   }),
   data () {

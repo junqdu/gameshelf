@@ -14,6 +14,12 @@
         </b-button>
       </b-col>
       <b-col sm="auto">
+        <b-button size="sm" variant="primary" v-clipboard="getList()" @click="$toast.success('List copied to clipboard', { icon : 'fa-clipboard'})">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+          Copy This List
+        </b-button>
+      </b-col>
+      <b-col sm="auto">
         <b-button size="sm" variant="primary" @click="toggleListView()">
           <span v-if="views.listView">
             <i class="fa fa-th" aria-hidden="true"></i>
@@ -34,6 +40,7 @@
 import cookie from '~/components/cookie'
 import filterItems from '~/components/filterItems'
 import params from '~/components/params.js'
+import _ from 'lodash'
 
 export default {
   data () {
@@ -43,6 +50,14 @@ export default {
         const { filters } = this.$store.state
         const queryParams = params.map(param => (filters[param] ? `${param}=${filters[param]}` : null)).filter(i => !!i).join('&')
         return encodeURI(`${link}${queryParams}`)
+      },
+      getList: function () {
+        const games = filterItems(this.$store.state.items[this.$route.name], this.$store.state.filters)
+        let result = ''
+        _.forEach(games, game => {
+          result += game.name + ' - ' + game.comment + '\n'
+        })
+        return result
       },
       getARandomGame: function () {
         const games = filterItems(this.$store.state.items[this.$route.name], this.$store.state.filters)
