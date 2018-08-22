@@ -54,6 +54,9 @@
           label="Plays">
         <b-row>
           <b-col sm="auto">
+            <b-form-input v-model="filters.playgreaterthan" type="number" placeholder="Greater Than" min="0" size="sm" />
+          </b-col>
+          <b-col sm="auto">
             <b-form-input v-model="filters.playlessthan" type="number" placeholder="Fewer Than" min="0" size="sm" />
           </b-col>
         </b-row>
@@ -171,6 +174,9 @@ export default {
     },
     ownedgames: {
       type: Boolean
+    },
+    playgreaterthan: {
+      type: Number
     },
     playlessthan: {
       type: Number

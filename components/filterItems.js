@@ -42,6 +42,7 @@ export default function filterItems (items, filters) {
       ((showExp === 'false' && item.type !== 'e') || showExp === 'true') &&
       ((showExp === 'true' && item.type === 'e' && item.average >= expmin) || item.type !== 'e') &&
       (!filters.playlessthan || item.numplays <= filters.playlessthan) &&
+      (!filters.playgreaterthan || item.numplays >= filters.playgreaterthan) &&
       (typeof filters.ownedgames === 'boolean' && filters.ownedgames ? item.own : true) &&
       mech
     )
