@@ -15,7 +15,7 @@
       </b-col>
       <b-col sm="auto">
         <b-button size="sm" variant="primary" v-clipboard="getList()" @click="$toast.success('List copied to clipboard', { icon : 'fa-clipboard'})">
-          <i class="fa fa-share-alt" aria-hidden="true"></i>
+          <i class="fa fa-copy" aria-hidden="true"></i>
           Copy This List
         </b-button>
       </b-col>
@@ -38,7 +38,6 @@
 <script>
 
 import cookie from '~/components/cookie'
-import filterItems from '~/components/filterItems'
 import params from '~/components/params.js'
 import _ from 'lodash'
 
@@ -52,21 +51,19 @@ export default {
         return encodeURI(`${link}${queryParams}`)
       },
       getList: function () {
-        const games = filterItems(this.$store.state.items[this.$route.name], this.$store.state.filters)
         let result = ''
-        _.forEach(games, game => {
+        _.forEach(this.games, game => {
           result += game.name + ' - ' + game.comment + '\n'
         })
         return result
       },
       getARandomGame: function () {
-        const games = filterItems(this.$store.state.items[this.$route.name], this.$store.state.filters)
-        const ran = Math.floor(Math.random() * games.length)
-        this.$toast.success('Go play ' + games[ran].name, {
+        let game = _.sample(this.games)
+        this.$toast.success('Go play ' + game.name, {
           icon: 'fa-play',
           action: {
             text: 'Link',
-            href: 'https://boardgamegeek.com/boardgame/' + games[ran].id
+            href: 'https://boardgamegeek.com/boardgame/' + game.id
           }
         })
       },
@@ -77,6 +74,9 @@ export default {
     toggleListView () {
       this.$store.commit('views/toggleListView')
     }
+  },
+  props: {
+    games: { type: Object }
   }
 }
 </script>

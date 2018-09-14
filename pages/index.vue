@@ -6,7 +6,7 @@
         <b-row>
           <b-col>
             <v-filters ownedgames></v-filters>
-            <v-actions></v-actions>
+            <v-actions :games="items"></v-actions>
           </b-col>
         </b-row>
         <b-row>

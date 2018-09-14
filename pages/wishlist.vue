@@ -6,7 +6,7 @@
         <b-row>
           <b-col>
             <v-filters></v-filters>
-            <v-actions></v-actions>
+            <v-actions :games="items"></v-actions>
             <v-table :default-asc="true" :games="items" :default-sort="'wishlistpriority'" :headers="tableHeader" v-if="views.listView"></v-table>
             <v-grid :games="items" v-if="!views.listView"></v-grid>
           </b-col>
