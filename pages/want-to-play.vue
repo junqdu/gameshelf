@@ -55,36 +55,6 @@ export default {
     VFilters,
     VActions
   },
-  beforeCreate: function () {
-    if (this.$route.query.userId) {
-      cookie.set('username', this.$route.query.userId, 3650)
-    } else if (this.$route.query.userid) {
-      cookie.set('username', this.$route.query.userid, 3650)
-    } else if (!cookie.get('username')) {
-      cookie.set('username', 'Za Warudo', 3650)
-    }
-  },
-  methods: {
-    ...mapActions({
-      fetch: 'items/query/fetch'
-    })
-  },
-  created: function () {
-    this.$store.commit('filters/reset')
-    this.$store.commit('filters/setOwned', false)
-    const userIds = this.$route.query.userId || this.userId
-    this.fetch({
-      userIds,
-      page: 'index'
-    })
-  },
-  computed: mapState({
-    items: state => _.pickBy(state.items['index'], ['wantToPlay', true]),
-    loading: state => state.pageState['index'] ? !state.pageState['index'].loaded : true,
-    error: state => state.pageState['index'] ? state.pageState['index'].error : null,
-    errorMessage: state => state.pageState['index'] ? state.pageState['index'].errorMessage : null,
-    views: state => state.views
-  }),
   data () {
     return {
       filters: {},
@@ -100,6 +70,36 @@ export default {
       ],
       userId: cookie.get('username')
     }
+  },
+  computed: mapState({
+    items: state => _.pickBy(state.items['index'], ['wantToPlay', true]),
+    loading: state => state.pageState['index'] ? !state.pageState['index'].loaded : true,
+    error: state => state.pageState['index'] ? state.pageState['index'].error : null,
+    errorMessage: state => state.pageState['index'] ? state.pageState['index'].errorMessage : null,
+    views: state => state.views
+  }),
+  beforeCreate: function () {
+    if (this.$route.query.userId) {
+      cookie.set('username', this.$route.query.userId, 3650)
+    } else if (this.$route.query.userid) {
+      cookie.set('username', this.$route.query.userid, 3650)
+    } else if (!cookie.get('username')) {
+      cookie.set('username', 'Za Warudo', 3650)
+    }
+  },
+  created: function () {
+    this.$store.commit('filters/reset')
+    this.$store.commit('filters/setOwned', false)
+    const userIds = this.$route.query.userId || this.userId
+    this.fetch({
+      userIds,
+      page: 'index'
+    })
+  },
+  methods: {
+    ...mapActions({
+      fetch: 'items/query/fetch'
+    })
   }
 }
 </script>

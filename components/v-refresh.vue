@@ -8,7 +8,7 @@
 <script>
 export default {
   props: {
-    message: { type: String }
+    message: { type: String, required: true }
   },
   methods: {
     refresh: function () {

@@ -20,6 +20,12 @@
 import cookie from '~/components/cookie'
 
 export default {
+  props: {
+    username: {
+      default: cookie.get('username'),
+      type: String
+    }
+  },
   data: function () {
     return {
       mutableUsername: this.username
@@ -29,12 +35,6 @@ export default {
     change: function () {
       cookie.set('username', this.mutableUsername)
       location.reload()
-    }
-  },
-  props: {
-    username: {
-      default: cookie.get('username'),
-      type: String
     }
   }
 }

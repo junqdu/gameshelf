@@ -225,6 +225,67 @@ import params from '~/components/params.js'
 const mechKeys = require('~/assets/mechKey.json')
 
 export default {
+    props: {
+    bestnum: {
+      type: Number,
+      required: true
+    },
+    maxtime: {
+      type: Number,
+      required: true
+    },
+    maxweight: {
+      type: Number,
+      required: true
+    },
+    minweight: {
+      type: Number,
+      required: true
+    },
+    mintime: {
+      type: Number,
+      required: true
+    },
+    mechShow: {
+      default: () => [],
+      type: Array,
+      required: true
+    },
+    mechHide: {
+      default: () => [],
+      type: Array,
+      required: true
+    },
+    ownedgames: {
+      type: Boolean,
+      required: true
+    },
+    playgreaterthan: {
+      type: Number,
+      required: true
+    },
+    playlessthan: {
+      type: Number,
+      required: true
+    },
+    recnum: {
+      type: Number,
+      required: true
+    },
+    showexp: {
+      default: !!cookie.get('showexp'),
+      type: Boolean,
+      required: true
+    },
+    showOwned: {
+      type: Boolean,
+      required: true
+    },
+    supplayer: {
+      type: Number,
+      required: true
+    }
+  },
   data () {
     return {
       mechOptions: this.getMechOptions(),
@@ -257,53 +318,6 @@ export default {
     },
     onClose () {
       this.popoverShow = false
-    }
-  },
-  props: {
-    bestnum: {
-      type: Number
-    },
-    maxtime: {
-      type: Number
-    },
-    maxweight: {
-      type: Number
-    },
-    minweight: {
-      type: Number
-    },
-    mintime: {
-      type: Number
-    },
-    mechShow: {
-      default: () => [],
-      type: Array
-    },
-    mechHide: {
-      default: () => [],
-      type: Array
-    },
-    ownedgames: {
-      type: Boolean
-    },
-    playgreaterthan: {
-      type: Number
-    },
-    playlessthan: {
-      type: Number
-    },
-    recnum: {
-      type: Number
-    },
-    showexp: {
-      default: !!cookie.get('showexp'),
-      type: Boolean
-    },
-    showOwned: {
-      type: Boolean
-    },
-    supplayer: {
-      type: Number
     }
   }
 }

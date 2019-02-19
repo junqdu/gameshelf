@@ -26,7 +26,7 @@ import _ from 'lodash'
 
 export default {
   props: {
-    games: { type: Object }
+    games: { type: Object, required: true }
   },
   computed: {
     filteredGames: function () {

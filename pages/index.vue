@@ -56,6 +56,30 @@ export default {
     VActions,
     VFilters
   },
+  data () {
+    return {
+      tableHeader: [
+        { key: '', value: '', hide: this.$route.query.noimage },
+        { key: 'rank', value: 'Rank' },
+        { key: 'average', value: 'Avg. Rating' },
+        { key: 'rating', value: 'User Rating' },
+        { key: 'name', value: 'Name' },
+        { key: 'weight', value: 'Weight' },
+        { key: 'playingtime', value: 'Length' },
+        { key: 'bggbestplayers', value: 'Best #Player' },
+        { key: 'numplays', value: 'Plays' },
+        { key: 'mech', value: 'Mechanisms' }
+      ],
+      userId: cookie.get('username')
+    }
+  },
+  computed: mapState({
+    items: state => _.pickBy(state.items['index'], ['own', true]),
+    loading: state => state.pageState['index'] ? !state.pageState['index'].loaded : true,
+    error: state => state.pageState['index'] ? state.pageState['index'].error : null,
+    errorMessage: state => state.pageState['index'] ? state.pageState['index'].errorMessage : null,
+    views: state => state.views
+  }),
   beforeCreate: function () {
     if (this.$route.query.userId) {
       cookie.set('username', this.$route.query.userId)
@@ -76,30 +100,6 @@ export default {
     this.$store.commit('filters/setOwned', true)
     const userIds = this.$route.query.userId || this.userId
     this.fetch({ userIds, page: 'index' })
-  },
-  computed: mapState({
-    items: state => _.pickBy(state.items['index'], ['own', true]),
-    loading: state => state.pageState['index'] ? !state.pageState['index'].loaded : true,
-    error: state => state.pageState['index'] ? state.pageState['index'].error : null,
-    errorMessage: state => state.pageState['index'] ? state.pageState['index'].errorMessage : null,
-    views: state => state.views
-  }),
-  data () {
-    return {
-      tableHeader: [
-        { key: '', value: '', hide: this.$route.query.noimage },
-        { key: 'rank', value: 'Rank' },
-        { key: 'average', value: 'Avg. Rating' },
-        { key: 'rating', value: 'User Rating' },
-        { key: 'name', value: 'Name' },
-        { key: 'weight', value: 'Weight' },
-        { key: 'playingtime', value: 'Length' },
-        { key: 'bggbestplayers', value: 'Best #Player' },
-        { key: 'numplays', value: 'Plays' },
-        { key: 'mech', value: 'Mechanisms' }
-      ],
-      userId: cookie.get('username')
-    }
   },
   methods: {
     filteredItem: filterItems,
