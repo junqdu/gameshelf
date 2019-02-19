@@ -74,6 +74,7 @@
 <script>
 
 import cookie from '~/components/cookie'
+import filterItems from '~/components/filterItems.js'
 import params from '~/components/params.js'
 import _ from 'lodash'
 
@@ -97,7 +98,7 @@ export default {
         return result
       },
       getARandomGame: function () {
-        let game = _.sample(this.games)
+        let game = _.sample(filterItems(this.games, this.$store.state.filters))
         this.$toast.success('Go play ' + game.name, {
           icon: 'fa-play',
           action: {
