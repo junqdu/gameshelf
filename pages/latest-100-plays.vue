@@ -75,9 +75,9 @@ export default {
       items: {},
       loading: true,
       tableHeader: [
-        {key: 'name', value: 'Name'},
-        {key: 'date', value: 'Date'},
-        {key: 'comment', value: 'Comment'}
+        { key: 'name', value: 'Name' },
+        { key: 'date', value: 'Date' },
+        { key: 'comment', value: 'Comment' }
       ],
       userId: cookie.get('username'),
       waitingForBGG: false

@@ -213,8 +213,8 @@ export default {
     }
   },
   props: {
-    defaultAsc: {type: Boolean},
-    defaultSort: {type: String},
+    defaultAsc: { type: Boolean },
+    defaultSort: { type: String },
     extFilters: { type: Object },
     games: { type: Object },
     headers: { type: Array }

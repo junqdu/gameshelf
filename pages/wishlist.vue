@@ -60,21 +60,21 @@ export default {
     this.$store.commit('filters/setOwned', false)
     const userIds = this.$route.query.userId || this.userId
     // if (!state.items.all) {
-    this.fetch({userIds, page: 'index'})
+    this.fetch({ userIds, page: 'index' })
     // }
   },
   data () {
     return {
       listView: true,
       tableHeader: [
-        {key: '', value: '', hide: this.$route.query.noimage},
-        {key: 'rank', value: 'Rank'},
-        {key: 'average', value: 'Avg. Rating'},
-        {key: 'name', value: 'Name'},
-        {key: 'weight', value: 'Weight'},
-        {key: 'playingtime', value: 'Length'},
-        {key: 'bggbestplayers', value: 'Best #Player'},
-        {key: 'wishlistpriority', value: 'Priority'}
+        { key: '', value: '', hide: this.$route.query.noimage },
+        { key: 'rank', value: 'Rank' },
+        { key: 'average', value: 'Avg. Rating' },
+        { key: 'name', value: 'Name' },
+        { key: 'weight', value: 'Weight' },
+        { key: 'playingtime', value: 'Length' },
+        { key: 'bggbestplayers', value: 'Best #Player' },
+        { key: 'wishlistpriority', value: 'Priority' }
       ],
       userId: cookie.get('username'),
       waitingForBGG: false

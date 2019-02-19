@@ -75,14 +75,14 @@ export default {
     return {
       filters: {},
       tableHeader: [
-        {key: '', value: '', hide: this.$route.query.noimage},
-        {key: 'rank', value: 'Rank'},
-        {key: 'average', value: 'Avg. Rating'},
-        {key: 'name', value: 'Name'},
-        {key: 'weight', value: 'Weight'},
-        {key: 'playingtime', value: 'Length'},
-        {key: 'bggbestplayers', value: 'Best #Player'},
-        {key: 'mech', value: 'Mechanisms'}
+        { key: '', value: '', hide: this.$route.query.noimage },
+        { key: 'rank', value: 'Rank' },
+        { key: 'average', value: 'Avg. Rating' },
+        { key: 'name', value: 'Name' },
+        { key: 'weight', value: 'Weight' },
+        { key: 'playingtime', value: 'Length' },
+        { key: 'bggbestplayers', value: 'Best #Player' },
+        { key: 'mech', value: 'Mechanisms' }
       ],
       userId: cookie.get('username')
     }
