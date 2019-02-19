@@ -13,7 +13,7 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.3.1",
+    "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/font-awesome": "^1.0.3",
     "@nuxtjs/toast": "^3.0.1",
     "bootstrap-vue": "^2.0.0-rc.11",
