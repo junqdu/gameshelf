@@ -2,14 +2,21 @@
   <div class="header">
     <b-container class="bv-example-row">
       <b-row align-v="center">
-        <b-col v-for="item in filteredGames" :key="item.id">
+        <b-col
+          v-for="item in filteredGames"
+          :key="item.id"
+        >
           <a :href="'https://boardgamegeek.com/boardgame/' + item.id">
-            <b-img width="100" rounded :src="item.imageUrl"/>
+            <b-img
+              width="100"
+              rounded
+              :src="item.imageUrl"
+            />
           </a>
         </b-col>
       </b-row>
     </b-container>
-    Item count: {{filteredGames.length}}
+    Item count: {{ filteredGames.length }}
   </div>
 </template>
 
@@ -18,6 +25,9 @@ import filterItems from '~/components/filterItems.js'
 import _ from 'lodash'
 
 export default {
+  props: {
+    games: { type: Object }
+  },
   computed: {
     filteredGames: function () {
       let games = filterItems(this.games, this.$store.state.filters)
@@ -35,9 +45,6 @@ export default {
 
       return games
     }
-  },
-  props: {
-    games: { type: Object }
   }
 }
 </script>

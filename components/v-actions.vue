@@ -1,32 +1,68 @@
 <template>
-  <b-container class="actions" fluid>
+  <b-container
+    class="actions"
+    fluid
+  >
     <b-row>
       <b-col sm="auto">
-        <b-button size="sm" variant="primary" v-clipboard="getShareLink()" @click="$toast.success('Link copied to clipboard', { icon : 'fa-clipboard'})">
-          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        <b-button
+          v-clipboard="getShareLink()"
+          size="sm"
+          variant="primary"
+          @click="$toast.success('Link copied to clipboard', { icon : 'fa-clipboard'})"
+        >
+          <i
+            class="fa fa-share-alt"
+            aria-hidden="true"
+          />
           Share This List
         </b-button>
       </b-col>
       <b-col sm="auto">
-        <b-button size="sm" variant="primary" @click="getARandomGame()">
-          <i class="fa fa-random" aria-hidden="true"></i>
+        <b-button
+          size="sm"
+          variant="primary"
+          @click="getARandomGame()"
+        >
+          <i
+            class="fa fa-random"
+            aria-hidden="true"
+          />
           Get Me A Game
         </b-button>
       </b-col>
       <b-col sm="auto">
-        <b-button size="sm" variant="primary" v-clipboard="getList()" @click="$toast.success('List copied to clipboard', { icon : 'fa-clipboard'})">
-          <i class="fa fa-copy" aria-hidden="true"></i>
+        <b-button
+          v-clipboard="getList()"
+          size="sm"
+          variant="primary"
+          @click="$toast.success('List copied to clipboard', { icon : 'fa-clipboard'})"
+        >
+          <i
+            class="fa fa-copy"
+            aria-hidden="true"
+          />
           Copy This List
         </b-button>
       </b-col>
       <b-col sm="auto">
-        <b-button size="sm" variant="primary" @click="toggleListView()">
+        <b-button
+          size="sm"
+          variant="primary"
+          @click="toggleListView()"
+        >
           <span v-if="views.listView">
-            <i class="fa fa-th" aria-hidden="true"></i>
+            <i
+              class="fa fa-th"
+              aria-hidden="true"
+            />
             Toggle Grid View
           </span>
           <span v-if="!views.listView">
-            <i class="fa fa-list" aria-hidden="true"></i>
+            <i
+              class="fa fa-list"
+              aria-hidden="true"
+            />
             Toggle Table View
           </span>
         </b-button>
@@ -42,6 +78,9 @@ import params from '~/components/params.js'
 import _ from 'lodash'
 
 export default {
+  props: {
+    games: { type: Object }
+  },
   data () {
     return {
       getShareLink: function () {
@@ -74,9 +113,6 @@ export default {
     toggleListView () {
       this.$store.commit('views/toggleListView')
     }
-  },
-  props: {
-    games: { type: Object }
   }
 }
 </script>

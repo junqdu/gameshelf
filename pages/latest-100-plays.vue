@@ -1,15 +1,23 @@
 <template>
   <section class="container">
     <div>
-      <v-loader v-if="loading"></v-loader>
-      <b-container v-if="!loading && !waitingForBGG" class="bv-example-row">
+      <v-loader v-if="loading" />
+      <b-container
+        v-if="!loading && !waitingForBGG"
+        class="bv-example-row"
+      >
         <b-row>
           <b-col>
-            <v-table :games="items" :headers="tableHeader" :default-asc="false" :default-sort="'date'"></v-table>
+            <v-table
+              :games="items"
+              :headers="tableHeader"
+              :default-asc="false"
+              :default-sort="'date'"
+            />
           </b-col>
         </b-row>
       </b-container>
-      <v-refresh v-if="waitingForBGG"></v-refresh>
+      <v-refresh v-if="waitingForBGG" />
     </div>
   </section>
 </template>
@@ -24,6 +32,24 @@ import X2JS from 'x2js'
 var _ = require('lodash')
 
 export default {
+  components: {
+    VRefresh,
+    VLoader,
+    VTable
+  },
+  data () {
+    return {
+      items: {},
+      loading: true,
+      tableHeader: [
+        { key: 'name', value: 'Name' },
+        { key: 'date', value: 'Date' },
+        { key: 'comment', value: 'Comment' }
+      ],
+      userId: cookie.get('username'),
+      waitingForBGG: false
+    }
+  },
   beforeCreate: function () {
     if (this.$route.query.userId) {
       cookie.set('username', this.$route.query.userId, 3650)
@@ -32,11 +58,6 @@ export default {
     } else if (!cookie.get('username')) {
       cookie.set('username', 'Za Warudo', 3650)
     }
-  },
-  components: {
-    VRefresh,
-    VLoader,
-    VTable
   },
   created: function () {
     let userIds = this.$route.query.userId || this.userId
@@ -69,19 +90,6 @@ export default {
         this.loading = false
         this.waitingForBGG = true
       })
-  },
-  data () {
-    return {
-      items: {},
-      loading: true,
-      tableHeader: [
-        { key: 'name', value: 'Name' },
-        { key: 'date', value: 'Date' },
-        { key: 'comment', value: 'Comment' }
-      ],
-      userId: cookie.get('username'),
-      waitingForBGG: false
-    }
   }
 }
 </script>

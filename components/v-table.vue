@@ -1,69 +1,164 @@
 <template>
   <div>
-    <table class="table table-striped" v-if="games">
+    <table
+      v-if="games"
+      class="table table-striped"
+    >
       <thead>
         <tr>
-          <th scope="col" v-for="header in headers" @click="sort(header.key)" :class="[header.key]" v-if="!header.hide" :key="header.key">
+          <th
+            v-for="header in filteredHeaders"
+            :key="header.key"
+            scope="col"
+            :class="[header.key]"
+            @click="sort(header.key)"
+          >
             <span>
-              {{header.value}}
-              <i class="fa" aria-hidden="true" v-if="sortBy === header.key" :class="{'fa-arrow-down': !asc, 'fa-arrow-up': asc}"></i>
+              {{ header.value }}
+              <i
+                v-if="sortBy === header.key"
+                aria-hidden="true"
+                class="fa"
+                :class="{'fa-arrow-down': !asc, 'fa-arrow-up': asc}"
+              />
             </span>
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in filteredGames" :key="item.id">
+        <tr
+          v-for="item in filteredGames"
+          :key="item.id"
+        >
           <td v-if="hasHeader('', true)">
             <a :href="'https://boardgamegeek.com/boardgame/' + item.id">
-              <b-img width="75" :src="item.imageUrl"/>
+              <b-img
+                width="75"
+                :src="item.imageUrl"
+              />
             </a>
           </td>
-          <td v-if="hasHeader('rank')">{{item.rank}}</td>
+          <td v-if="hasHeader('rank')">
+            {{ item.rank }}
+          </td>
           <td v-if="hasHeader('average')">
-            <span class="badge" :class="['badge-' + getRatingColor(item.average, true)]">{{item.average | number}}</span>
+            <span
+              class="badge"
+              :class="['badge-' + getRatingColor(item.average, true)]"
+            >
+              {{ item.average | number }}
+            </span>
           </td>
           <td v-if="hasHeader('rating') && singleUser">
-            <span v-if="item.users[userId].rating" class="badge" :class="['badge-' + getRatingColor(item.users[userId].rating)]">{{item.users[userId].rating}}</span>
+            <span
+              v-if="item.users[userId].rating"
+              class="badge"
+              :class="['badge-' + getRatingColor(item.users[userId].rating)]"
+            >
+              {{ item.users[userId].rating }}
+            </span>
           </td>
           <td v-if="hasHeader('rating') && !singleUser">
-            <span v-if="item.rating" class="badge" :class="['badge-' + getRatingColor(item.rating)]">
-              {{item.rating | number}}
+            <span
+              v-if="item.rating"
+              class="badge"
+              :class="['badge-' + getRatingColor(item.rating)]"
+            >
+              {{ item.rating | number }}
             </span>
-            <i class="fa fa-users" aria-hidden="true"  v-if="item.rating" v-b-popover.hover="getUserRatings(item.users)" title="Individual Ratings"></i>
+            <i
+              v-if="item.rating"
+              v-b-popover.hover="getUserRatings(item.users)"
+              aria-hidden="true"
+              class="fa fa-users"
+              title="Individual Ratings"
+            />
           </td>
-          <td class="name" v-if="hasHeader('name')">
-            <a :href="'https://boardgamegeek.com/boardgame/' + item.id">{{item.name}}</a>
-            <i class="fa fa-users" aria-hidden="true" v-if="!singleUser && getOwners(item.users)" v-b-popover.hover="getOwners(item.users)" title="Owners"></i>
+          <td
+            v-if="hasHeader('name')"
+            class="name"
+          >
+            <a :href="'https://boardgamegeek.com/boardgame/' + item.id">{{ item.name }}</a>
+            <i
+              v-if="!singleUser && getOwners(item.users)"
+              v-b-popover.hover="getOwners(item.users)"
+              aria-hidden="true"
+              class="fa fa-users"
+              title="Owners"
+            />
           </td>
-          <td class="date" v-if="hasHeader('date')">
-            <a>{{item.date}}</a>
+          <td
+            v-if="hasHeader('date')"
+            class="date"
+          >
+            <a>{{ item.date }}</a>
           </td>
           <td v-if="hasHeader('weight')">
-            <span class="badge" :class="['badge-' + getWeightColor(item.weight)]">{{item.weight | number}}</span>
+            <span
+              class="badge"
+              :class="['badge-' + getWeightColor(item.weight)]"
+            >
+              {{ item.weight | number }}
+            </span>
           </td>
-          <td v-if="hasHeader('playingtime')">{{item.playingtime}} mins</td>
-          <td class="best-player" v-if="hasHeader('bggbestplayers')">{{item.bggbestplayers}}</td>
-          <td class="num-plays" v-if="hasHeader('numplays') && singleUser">{{item.users[userId].numplays}}</td>
-          <td class="num-plays" v-if="hasHeader('numplays') && !singleUser">
-            {{item.numplays}}
-            <i class="fa fa-users" aria-hidden="true" v-if="item.numplays" v-b-popover.hover="getUserPlays(item.users)" title="Individual Plays"></i>
+          <td v-if="hasHeader('playingtime')">
+            {{ item.playingtime }} mins
           </td>
-          <td class="wishlist-priority" v-if="hasHeader('wishlistpriority')">
-            {{item.wishlistpriority | priority}}
+          <td
+            v-if="hasHeader('bggbestplayers')"
+            class="best-player"
+          >
+            {{ item.bggbestplayers }}
           </td>
-          <td class="comment" v-if="hasHeader('comment')">
+          <td
+            v-if="hasHeader('numplays') && singleUser"
+            class="num-plays"
+          >
+            {{ item.users[userId].numplays }}
+          </td>
+          <td
+            v-if="hasHeader('numplays') && !singleUser"
+            class="num-plays"
+          >
+            {{ item.numplays }}
+            <i
+              v-if="item.numplays"
+              v-b-popover.hover="getUserPlays(item.users)"
+              aria-hidden="true"
+              class="fa fa-users"
+              title="Individual Plays"
+            />
+          </td>
+          <td
+            v-if="hasHeader('wishlistpriority')"
+            class="wishlist-priority"
+          >
+            {{ item.wishlistpriority | priority }}
+          </td>
+          <td
+            v-if="hasHeader('comment')"
+            class="comment"
+          >
             <!-- <pre>{{item.comment}}</pre> -->
-            {{item.comment}}
+            {{ item.comment }}
           </td>
-          <td class="mech" v-if="hasHeader('mech')">
+          <td
+            v-if="hasHeader('mech')"
+            class="mech"
+          >
             <ul>
-              <li v-for="item in item.mech" :key="item">{{item}}</li>
+              <li
+                v-for="mechanic in item.mech"
+                :key="mechanic"
+              >
+                {{ mechanic }}
+              </li>
             </ul>
           </td>
         </tr>
       </tbody>
     </table>
-    Item count: {{filteredGames.length}}
+    Item count: {{ filteredGames.length }}
   </div>
 </template>
 
@@ -73,48 +168,6 @@ import filterItems from '~/components/filterItems.js'
 var _ = require('lodash')
 
 export default {
-  computed: {
-    filteredGames: function () {
-      let games
-      if (this.$route.name === 'latest-100-plays') {
-        games = this.games
-      } else {
-        games = filterItems(this.games, this.$store.state.filters)
-      }
-      if (_.keys(games).length) {
-        let temp = _.orderBy(games, [this.sortBy, 'average'], [this.asc ? 'asc' : 'desc', 'desc'])
-        if (temp.length > 0 &&
-            (!_.get(temp[0], 'rank') && _.get(temp[temp.length - 1], 'rank'))) {
-          while (!_.get(temp[0], 'rank')) {
-            temp.push(temp.shift())
-          }
-        }
-        games = temp
-      }
-      return games
-    }
-  },
-  created: function () {
-    let users = cookie.get('username')
-    users = users.split(',')
-    if (users.length > 1 && users[users.length - 1]) {
-      this.singleUser = false
-    }
-    this.userId = users[0]
-    let playernames = cookie.get('playername').split(',')
-    this.playerNameMap = {}
-    for (let i = 0; i < playernames.length; i++) {
-      this.playerNameMap[users[i]] = playernames[i]
-    }
-  },
-  data () {
-    return {
-      asc: _.get(this, 'defaultAsc', true),
-      singleUser: true,
-      sortBy: this.defaultSort || 'rank',
-      userId: undefined
-    }
-  },
   filters: {
     number: function (value) {
       if (!value) return ''
@@ -134,6 +187,58 @@ export default {
         default:
           return "Don't buy this"
       }
+    }
+  },
+  props: {
+    defaultAsc: { type: Boolean },
+    defaultSort: { type: String, required: true },
+    extFilters: { type: Object, required: true },
+    games: { type: Object, required: true },
+    headers: { type: Array, required: true }
+  },
+  data () {
+    return {
+      asc: _.get(this, 'defaultAsc', true),
+      singleUser: true,
+      sortBy: this.defaultSort || 'rank',
+      userId: undefined
+    }
+  },
+  computed: {
+    filteredGames: function () {
+      let games
+      if (this.$route.name === 'latest-100-plays') {
+        games = this.games
+      } else {
+        games = filterItems(this.games, this.$store.state.filters)
+      }
+      if (_.keys(games).length) {
+        let temp = _.orderBy(games, [this.sortBy, 'average'], [this.asc ? 'asc' : 'desc', 'desc'])
+        if (temp.length > 0 &&
+            (!_.get(temp[0], 'rank') && _.get(temp[temp.length - 1], 'rank'))) {
+          while (!_.get(temp[0], 'rank')) {
+            temp.push(temp.shift())
+          }
+        }
+        games = temp
+      }
+      return games
+    },
+    filteredHeaders: function () {
+      return _.filter(this.headers, ['hide', false])
+    }
+  },
+  created: function () {
+    let users = cookie.get('username')
+    users = users.split(',')
+    if (users.length > 1 && users[users.length - 1]) {
+      this.singleUser = false
+    }
+    this.userId = users[0]
+    let playernames = cookie.get('playername').split(',')
+    this.playerNameMap = {}
+    for (let i = 0; i < playernames.length; i++) {
+      this.playerNameMap[users[i]] = playernames[i]
     }
   },
   methods: {
@@ -211,13 +316,6 @@ export default {
         this.sortBy = key
       }
     }
-  },
-  props: {
-    defaultAsc: { type: Boolean },
-    defaultSort: { type: String },
-    extFilters: { type: Object },
-    games: { type: Object },
-    headers: { type: Array }
   }
 }
 </script>

@@ -1,22 +1,36 @@
 <template>
   <section class="container">
     <div>
-      <v-loader v-if="loading && !error"></v-loader>
-      <b-container v-if="!loading && !error" class="bv-example-row">
+      <v-loader v-if="loading && !error" />
+      <b-container
+        v-if="!loading && !error"
+        class="bv-example-row"
+      >
         <b-row>
           <b-col>
-            <v-filters ownedgames></v-filters>
-            <v-actions :games="items"></v-actions>
+            <v-filters ownedgames />
+            <v-actions :games="items" />
           </b-col>
         </b-row>
         <b-row>
           <b-col>
-            <v-table :default-asc="true" :games="items" :headers="tableHeader" v-if="views.listView"></v-table>
-            <v-grid :games="items" v-if="!views.listView"></v-grid>
+            <v-table
+              v-if="views.listView"
+              :default-asc="true"
+              :games="items"
+              :headers="tableHeader"
+            />
+            <v-grid
+              v-if="!views.listView"
+              :games="items"
+            />
           </b-col>
         </b-row>
       </b-container>
-      <v-refresh v-if="error" :message="errorMessage"></v-refresh>
+      <v-refresh
+        v-if="error"
+        :message="errorMessage"
+      />
     </div>
   </section>
 </template>
@@ -34,6 +48,14 @@ import { mapActions, mapState } from 'vuex'
 import _ from 'lodash'
 
 export default {
+  components: {
+    VGrid,
+    VLoader,
+    VRefresh,
+    VTable,
+    VActions,
+    VFilters
+  },
   beforeCreate: function () {
     if (this.$route.query.userId) {
       cookie.set('username', this.$route.query.userId)
@@ -48,14 +70,6 @@ export default {
     } else if (cookie.get('showexp') === '') {
       cookie.set('showexp', false)
     }
-  },
-  components: {
-    VGrid,
-    VLoader,
-    VRefresh,
-    VTable,
-    VActions,
-    VFilters
   },
   created: function () {
     this.$store.commit('filters/reset', this.$route.query)

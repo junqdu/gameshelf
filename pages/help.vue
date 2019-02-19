@@ -2,44 +2,81 @@
   <section class="container left help">
     <h4>User setting</h4>
     <b-input-group prepend="User ID">
-      <b-form-input v-model="userId"></b-form-input>
+      <b-form-input v-model="userId" />
       <b-input-group-append>
-        <b-btn @click="save" variant="primary">Save</b-btn>
+        <b-btn
+          variant="primary"
+          @click="save"
+        >
+          Save
+        </b-btn>
       </b-input-group-append>
     </b-input-group>
     <b-input-group prepend="Player Name">
-      <b-form-input v-model="playername"></b-form-input>
+      <b-form-input v-model="playername" />
       <b-input-group-append>
-        <b-btn @click="save" variant="primary">Save</b-btn>
+        <b-btn
+          variant="primary"
+          @click="save"
+        >
+          Save
+        </b-btn>
       </b-input-group-append>
     </b-input-group>
-    <p>You can add multiple(up to 10) user IDs and seperate them by comma, e.g.
+    <p>
+      You can add multiple(up to 10) user IDs and seperate them by comma, e.g.
       "userId1,userId2", this will merge the collection of the users. This only
       work with "Collection" for now, other list won't be supported unless there
-      is a popular demand.</p>
+      is a popular demand.
+    </p>
     <h5>Collection</h5>
     <h6>Show Expansions with miniumn rating of:</h6>
     <b-input-group>
       <b-input-group-prepend is-text>
-        <input type="checkbox" id="show-expansions" v-model="showexp">
+        <input
+          id="show-expansions"
+          v-model="showexp"
+          type="checkbox"
+        >
       </b-input-group-prepend>
-      <b-form-input type="number" :disabled="!showexp" v-model="expmin"/>
+      <b-form-input
+        v-model="expmin"
+        type="number"
+        :disabled="!showexp"
+      />
     </b-input-group>
     <div>Note: Only game with rating of 6 or greater has data for weight and best/rec# of players.</div>
     <h6>Best number of players filter:</h6>
-    <input type="checkbox" id="best-at-least" v-model="bestatleast"> Show "At least" rather than exact, e.g. when input 3, rather showing game played best with 3, it will show 3 and above.
+    <input
+      id="best-at-least"
+      v-model="bestatleast"
+      type="checkbox"
+    >
+    Show "At least" rather than exact, e.g. when input 3, rather showing game played best with 3, it will show 3 and above.
 
     <h4>Clear cache</h4>
-    <b-button @click="clear" variant="warning">Clear cache</b-button>
+    <b-button
+      variant="warning"
+      @click="clear"
+    >
+      Clear cache
+    </b-button>
 
     <h4>URL params</h4>
-    <b-table striped hover :items="params"></b-table>
+    <b-table
+      striped
+      hover
+      :items="params"
+    />
     <a href="https://en.wikipedia.org/wiki/Query_string#Structure">How to use URL params?</a>
 
     <h4>FAQ</h4>
-    <div v-for="item in faq">
-      <div><b>Q: {{item.q}}</b></div>
-      <div>A: {{item.a}}</div>
+    <div
+      v-for="item in faq"
+      :key="item.q"
+    >
+      <div><b>Q: {{ item.q }}</b></div>
+      <div>A: {{ item.a }}</div>
     </div>
 
     <h4>Suggestion / Report Bug</h4>
@@ -53,11 +90,18 @@
 
     <h4>Donate</h4>
     If you find this site useful and want buy me a drink.
-    <b-button size="sm" variant="primary" href="https://paypal.me/jotarora" target="_blank">
-      <i class="fa fa-paypal" aria-hidden="true"></i>
+    <b-button
+      size="sm"
+      variant="primary"
+      href="https://paypal.me/jotarora"
+      target="_blank"
+    >
+      <i
+        aria-hidden="true"
+        class="fa fa-paypal"
+      />
       PayPal
     </b-button>
-
   </section>
 </template>
 
@@ -114,18 +158,6 @@ export default {
       userId: cookie.get('username')
     }
   },
-  methods: {
-    ...mapActions({
-      clear: 'items/cache/clear'
-    }),
-    save: function () {
-      cookie.set('username', this.userId)
-      cookie.set('playername', this.playername)
-      this.$toast.success('User ID and player name updated', {
-        icon: 'fa-check'
-      })
-    }
-  },
   watch: {
     bestatleast: function (val) {
       cookie.set('bestatleast', val)
@@ -144,6 +176,18 @@ export default {
           icon: 'fa-check'
         })
       }
+    }
+  },
+  methods: {
+    ...mapActions({
+      clear: 'items/cache/clear'
+    }),
+    save: function () {
+      cookie.set('username', this.userId)
+      cookie.set('playername', this.playername)
+      this.$toast.success('User ID and player name updated', {
+        icon: 'fa-check'
+      })
     }
   }
 }

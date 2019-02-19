@@ -74,7 +74,6 @@ const createStore = () => {
         }
       },
       'items/query/error': (state, { key, err }) => {
-        console.error(key, err)
         state.pageState = {
           [key]: {
             ...(state.pageState[key] || {}),
@@ -105,7 +104,6 @@ const createStore = () => {
             return result
           } catch (e) {
             inError = true
-            console.error(e)
             if (e.config) {
               const username = e.config.params.username
               commit('items/query/error', { key: page, err: `Waiting for BGG to process for user "${username}". Please try again later for access.` })

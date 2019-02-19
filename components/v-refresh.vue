@@ -1,19 +1,19 @@
 <template>
   <span>
-    {{message}}
+    {{ message }}
     <button @click="refresh()">Refresh</button>
-</span>
+  </span>
 </template>
 
 <script>
 export default {
+  props: {
+    message: { type: String }
+  },
   methods: {
     refresh: function () {
       location.reload()
     }
-  },
-  props: {
-    message: { type: String }
   }
 }
 </script>

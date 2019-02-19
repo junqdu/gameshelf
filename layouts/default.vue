@@ -2,10 +2,10 @@
   <div class="app">
     <div class="main">
       <header>
-        <navbar/>
+        <navbar />
         <username />
       </header>
-      <nuxt/>
+      <nuxt />
     </div>
   </div>
 </template>

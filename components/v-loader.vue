@@ -1,6 +1,5 @@
 <template>
-  <div class="loader">
-  </div>
+  <div class="loader" />
 </template>
 
 <script>

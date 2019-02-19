@@ -1,8 +1,17 @@
 <template>
   <div class="username-bar">
     <form @submit="change()">
-      <input type="text" v-model.trim="mutableUsername" placeholder="Your BGG username" />
-      <b-button @click="change()" class="btn-sm">Change user</b-button>
+      <input
+        v-model.trim="mutableUsername"
+        type="text"
+        placeholder="Your BGG username"
+      >
+      <b-button
+        class="btn-sm"
+        @click="change()"
+      >
+        Change user
+      </b-button>
     </form>
   </div>
 </template>

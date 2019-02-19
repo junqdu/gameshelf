@@ -1,102 +1,213 @@
 <template>
-  <b-container class="filters" fluid>
+  <b-container
+    class="filters"
+    fluid
+  >
     <b-row>
       <b-col>
-        <b-btn v-b-toggle.collapse1 variant="outline-primary" size="sm">Toggle Filters</b-btn>
+        <b-btn
+          v-b-toggle.collapse1
+          variant="outline-primary"
+          size="sm"
+        >
+          Toggle Filters
+        </b-btn>
       </b-col>
     </b-row>
-    <b-collapse visible id="collapse1">
+    <b-collapse
+      id="collapse1"
+      visible
+    >
       <b-form-group
         horizontal
         :label-cols="2"
-        label="Players">
+        label="Players"
+      >
         <b-row>
           <b-col sm="auto">
-            <b-form-input v-model="filters.bestnum" type="number" placeholder="Best #" min="1" size="sm" />
+            <b-form-input
+              v-model="filters.bestnum"
+              type="number"
+              placeholder="Best #"
+              min="1"
+              size="sm"
+            />
           </b-col>
           <b-col sm="auto">
-            <b-form-input v-model="filters.recnum" type="number" placeholder="Recommended #" min="1" size="sm" />
+            <b-form-input
+              v-model="filters.recnum"
+              type="number"
+              placeholder="Recommended #"
+              min="1"
+              size="sm"
+            />
           </b-col>
           <b-col sm="auto">
-            <b-form-input v-model="filters.supplayer" type="number" placeholder="Supported #" min="1" size="sm" />
+            <b-form-input
+              v-model="filters.supplayer"
+              type="number"
+              placeholder="Supported #"
+              min="1"
+              size="sm"
+            />
           </b-col>
         </b-row>
       </b-form-group>
       <b-form-group
-          horizontal
-          :label-cols="2"
-          label="Play Time">
+        horizontal
+        :label-cols="2"
+        label="Play Time"
+      >
         <b-row>
           <b-col sm="auto">
-            <b-form-input v-model="filters.mintime" type="number" placeholder="Min Play Time" min="0" step="10" size="sm" />
+            <b-form-input
+              v-model="filters.mintime"
+              type="number"
+              placeholder="Min Play Time"
+              min="0"
+              step="10"
+              size="sm"
+            />
           </b-col>
           <b-col sm="auto">
-            <b-form-input v-model="filters.maxtime" type="number" placeholder="Max Play Time" min="0" step="10" size="sm" />
+            <b-form-input
+              v-model="filters.maxtime"
+              type="number"
+              placeholder="Max Play Time"
+              min="0"
+              step="10"
+              size="sm"
+            />
           </b-col>
         </b-row>
       </b-form-group>
       <b-form-group
-          horizontal
-          :label-cols="2"
-          label="Weight">
+        horizontal
+        :label-cols="2"
+        label="Weight"
+      >
         <b-row>
           <b-col sm="auto">
-            <b-form-input v-model="filters.minweight" type="number" placeholder="Min Weight" min="1" step="0.1" size="sm" />
+            <b-form-input
+              v-model="filters.minweight"
+              type="number"
+              placeholder="Min Weight"
+              min="1"
+              step="0.1"
+              size="sm"
+            />
           </b-col>
-            <b-col sm="auto">
-              <b-form-input v-model="filters.maxweight" type="number" placeholder="Max Weight" min="1" step="0.1" size="sm" />
-            </b-col>
+          <b-col sm="auto">
+            <b-form-input
+              v-model="filters.maxweight"
+              type="number"
+              placeholder="Max Weight"
+              min="1"
+              step="0.1"
+              size="sm"
+            />
+          </b-col>
         </b-row>
       </b-form-group>
       <b-form-group
-          horizontal
-          :label-cols="2"
-          label="Plays">
+        horizontal
+        :label-cols="2"
+        label="Plays"
+      >
         <b-row>
           <b-col sm="auto">
-            <b-form-input v-model="filters.playgreaterthan" type="number" placeholder="Greater Than" min="0" size="sm" />
+            <b-form-input
+              v-model="filters.playgreaterthan"
+              type="number"
+              placeholder="Greater Than"
+              min="0"
+              size="sm"
+            />
           </b-col>
           <b-col sm="auto">
-            <b-form-input v-model="filters.playlessthan" type="number" placeholder="Fewer Than" min="0" size="sm" />
+            <b-form-input
+              v-model="filters.playlessthan"
+              type="number"
+              placeholder="Fewer Than"
+              min="0"
+              size="sm"
+            />
           </b-col>
         </b-row>
       </b-form-group>
       <b-row>
         <b-col sm="auto">
-          <b-button size="sm" :id="'mech-filter'" variant="primary">
-            <i class="fa fa-gear" aria-hidden="true"></i>
+          <b-button
+            :id="'mech-filter'"
+            size="sm"
+            variant="primary"
+          >
+            <i
+              class="fa fa-gear"
+              aria-hidden="true"
+            />
             Filter By Mechanisms
           </b-button>
-          <b-popover :target="'mech-filter'"
-                     :placement="'bottom'"
-                     triggers="click"
-                     :show.sync="popoverShow"
-                     :content="`Placement`">
+          <b-popover
+            :target="'mech-filter'"
+            :placement="'bottom'"
+            triggers="click"
+            :show.sync="popoverShow"
+            :content="`Placement`"
+          >
             <b-tabs>
-              <b-tab title="Show" active>
+              <b-tab
+                title="Show"
+                active
+              >
                 <b-form-group>
-                  <b-form-checkbox-group v-model="filters.mechShow" name="mechanisms" :options="mechOptions">
-                  </b-form-checkbox-group>
+                  <b-form-checkbox-group
+                    v-model="filters.mechShow"
+                    name="mechanisms"
+                    :options="mechOptions"
+                  />
                 </b-form-group>
               </b-tab>
               <b-tab title="Hide">
                 <b-form-group>
-                  <b-form-checkbox-group v-model="filters.mechHide" name="mechanisms" :options="mechOptions">
-                  </b-form-checkbox-group>
+                  <b-form-checkbox-group
+                    v-model="filters.mechHide"
+                    name="mechanisms"
+                    :options="mechOptions"
+                  />
                 </b-form-group>
               </b-tab>
             </b-tabs>
-            <b-btn @click="onClose" size="sm" variant="primary">Close</b-btn>
+            <b-btn
+              size="sm"
+              variant="primary"
+              @click="onClose"
+            >
+              Close
+            </b-btn>
           </b-popover>
         </b-col>
-        <b-col sm="auto" v-if="showOwned">
-          <b-button size="sm" variant="primary" @click="ownedgames = !ownedgames">
+        <b-col
+          v-if="showOwned"
+          sm="auto"
+        >
+          <b-button
+            size="sm"
+            variant="primary"
+            @click="ownedgames = !ownedgames"
+          >
             <span v-if="ownedgames">
-              <i class="fa fa-users" aria-hidden="true"></i>
+              <i
+                class="fa fa-users"
+                aria-hidden="true"
+              />
               Show All Games
             </span>
             <span v-if="!ownedgames">
-              <i class="fa fa-user" aria-hidden="true"></i>
+              <i
+                class="fa fa-user"
+                aria-hidden="true"
+              />
               Show Only Owned Games
             </span>
           </b-button>
