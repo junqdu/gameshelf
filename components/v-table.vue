@@ -191,8 +191,7 @@ export default {
   },
   props: {
     defaultAsc: { type: Boolean },
-    defaultSort: { type: String, required: true },
-    extFilters: { type: Object, required: true },
+    defaultSort: { type: String, default: 'rank' },
     games: { type: Object, required: true },
     headers: { type: Array, required: true }
   },
@@ -200,7 +199,7 @@ export default {
     return {
       asc: _.get(this, 'defaultAsc', true),
       singleUser: true,
-      sortBy: this.defaultSort || 'rank',
+      sortBy: this.defaultSort,
       userId: undefined
     }
   },
@@ -225,7 +224,7 @@ export default {
       return games
     },
     filteredHeaders: function () {
-      return _.filter(this.headers, ['hide', false])
+      return _.omitBy(this.headers, ['hide', 'true'])
     }
   },
   created: function () {

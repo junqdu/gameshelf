@@ -225,65 +225,61 @@ import params from '~/components/params.js'
 const mechKeys = require('~/assets/mechKey.json')
 
 export default {
-    props: {
+  props: {
     bestnum: {
-      type: Number,
-      required: true
+      default: 0,
+      type: Number
     },
     maxtime: {
-      type: Number,
-      required: true
+      default: 0,
+      type: Number
     },
     maxweight: {
-      type: Number,
-      required: true
+      default: 0,
+      type: Number
     },
     minweight: {
-      type: Number,
-      required: true
+      default: 0,
+      type: Number
     },
     mintime: {
-      type: Number,
-      required: true
+      default: 0,
+      type: Number
     },
     mechShow: {
       default: () => [],
-      type: Array,
-      required: true
+      type: Array
     },
     mechHide: {
       default: () => [],
-      type: Array,
-      required: true
+      type: Array
     },
     ownedgames: {
       type: Boolean,
       required: true
     },
     playgreaterthan: {
-      type: Number,
-      required: true
+      default: 0,
+      type: Number
     },
     playlessthan: {
-      type: Number,
-      required: true
+      default: 0,
+      type: Number
     },
     recnum: {
-      type: Number,
-      required: true
+      default: 0,
+      type: Number
     },
     showexp: {
       default: !!cookie.get('showexp'),
-      type: Boolean,
-      required: true
+      type: Boolean
     },
     showOwned: {
-      type: Boolean,
-      required: true
+      type: Boolean
     },
     supplayer: {
-      type: Number,
-      required: true
+      default: 0,
+      type: Number
     }
   },
   data () {
