@@ -89,7 +89,7 @@ export default {
     this.$store.commit('filters/setOwned', false)
     const userIds = this.$route.query.userId || this.userId
     // if (!state.items.all) {
-    this.fetch({ userIds, page: 'index' })
+    this.fetch({ userIds, page: 'index', disableLS: cookie.get('disableLS') === 'true' })
     // }
   },
   methods: mapActions({

@@ -88,7 +88,7 @@ export default {
   },
   created: function () {
     const userIds = this.$route.query.userId || this.userId
-    this.fetch({ userIds, page: 'index' })
+    this.fetch({ userIds, page: 'index', disableLS: cookie.get('disableLS') === 'true' })
   },
   methods: {
     ...mapActions({

@@ -105,7 +105,7 @@ export default {
     this.$store.commit('filters/reset', this.$route.query)
     this.$store.commit('filters/setOwned', true)
     const userIds = this.$route.query.userId || this.userId
-    this.fetch({ userIds, page: 'index', disableLS: cookie.get('disableLS') })
+    this.fetch({ userIds, page: 'index', disableLS: cookie.get('disableLS') === 'true' })
   },
   methods: {
     filteredItem: filterItems,

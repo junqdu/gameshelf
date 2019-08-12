@@ -93,7 +93,8 @@ export default {
     const userIds = this.$route.query.userId || this.userId
     this.fetch({
       userIds,
-      page: 'index'
+      page: 'index',
+      disableLS: cookie.get('disableLS') === 'true'
     })
   },
   methods: {
