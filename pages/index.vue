@@ -94,12 +94,18 @@ export default {
     } else if (cookie.get('showexp') === '') {
       cookie.set('showexp', false)
     }
+
+    if (this.$route.query.disableLS) {
+      cookie.set('disableLS', true)
+    } else if (cookie.get('disableLS') === '') {
+      cookie.set('disableLS', false)
+    }
   },
   created: function () {
     this.$store.commit('filters/reset', this.$route.query)
     this.$store.commit('filters/setOwned', true)
     const userIds = this.$route.query.userId || this.userId
-    this.fetch({ userIds, page: 'index' })
+    this.fetch({ userIds, page: 'index', disableLS: cookie.get('disableLS') })
   },
   methods: {
     filteredItem: filterItems,

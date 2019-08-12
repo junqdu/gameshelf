@@ -19,8 +19,7 @@
       visible
     >
       <b-form-group
-        horizontal
-        :label-cols="2"
+        label-cols-sm="2"
         label="Players"
       >
         <b-row>
@@ -54,8 +53,7 @@
         </b-row>
       </b-form-group>
       <b-form-group
-        horizontal
-        :label-cols="2"
+        label-cols-sm="2"
         label="Play Time"
       >
         <b-row>
@@ -82,8 +80,7 @@
         </b-row>
       </b-form-group>
       <b-form-group
-        horizontal
-        :label-cols="2"
+        label-cols-sm="2"
         label="Weight"
       >
         <b-row>
@@ -110,8 +107,7 @@
         </b-row>
       </b-form-group>
       <b-form-group
-        horizontal
-        :label-cols="2"
+        label-cols-sm="2"
         label="Plays"
       >
         <b-row>

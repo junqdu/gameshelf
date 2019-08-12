@@ -86,7 +86,7 @@ const createStore = () => {
     },
     actions: {
       'items/query/fetch': async ({ commit }, params) => {
-        const { page, userIds } = params
+        const { page, userIds, disableLS } = params
         let inError = false
         commit('items/query/fetch', page)
         const ids = userIds.split(',').slice(0, 9)
@@ -99,8 +99,10 @@ const createStore = () => {
           }
           try {
             const result = await fetchCollection(id, params)
-            localStorage.set(`collection/${id}/${page}`, result)
-            localStorage.set(`collectionExpiry/${id}/${page}`, (now + EXPIRE_TIME))
+            if (!disableLS) {
+              localStorage.set(`collection/${id}/${page}`, result)
+              localStorage.set(`collectionExpiry/${id}/${page}`, (now + EXPIRE_TIME))
+            }
             return result
           } catch (e) {
             inError = true

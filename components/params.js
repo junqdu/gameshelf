@@ -11,5 +11,6 @@ export default [
   'showexp',
   'ownedgames',
   'mechShow',
-  'mechHide'
+  'mechHide',
+  'disableLS'
 ]

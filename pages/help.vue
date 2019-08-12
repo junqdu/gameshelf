@@ -62,6 +62,14 @@
       Clear cache
     </b-button>
 
+    <h4>Disable Local Storage</h4>
+    <input
+      id="disable-local-storage"
+      v-model="disableLS"
+      type="checkbox"
+    >
+    Disable Local Storage (should only be used for collection with more than 1,500 items)
+
     <h4>URL params</h4>
     <b-table
       striped
@@ -113,6 +121,7 @@ export default {
   data () {
     return {
       bestatleast: cookie.get('bestatleast') === 'true',
+      disableLS: cookie.get('disableLS') === 'true',
       expmin: +cookie.get('expmin'),
       faq: [
         {
@@ -136,7 +145,7 @@ export default {
           a: 'Up to BGG game id of 240000'
         },
         {
-          q: 'When is your data update?',
+          q: 'When is your data updated?',
           a: '7/31/2018'
         }
       ],
@@ -151,7 +160,8 @@ export default {
         { paramName: 'minweight', type: 'Number', usage: 'Prepopulate the min weight filter' },
         { paramName: 'maxtime', type: 'Number', usage: 'Prepopulate the max play time filter' },
         { paramName: 'mintime', type: 'Number', usage: 'Prepopulate the min play time filter' },
-        { paramName: 'playlessthan', type: 'Number', usage: 'Prepopulate the play less than filter' }
+        { paramName: 'playlessthan', type: 'Number', usage: 'Prepopulate the play less than filter' },
+        { paramName: 'disableLS', type: 'Boolean', usage: 'Disable usage of Local Stroage, which means your collection will be fetch everytime a page is being loaded, rather than once every 24 hours. Should be enabled for collection with more than 1,500 items.' }
       ],
       playername: cookie.get('playername'),
       showexp: cookie.get('showexp') === 'true',
@@ -161,6 +171,18 @@ export default {
   watch: {
     bestatleast: function (val) {
       cookie.set('bestatleast', val)
+    },
+    disableLS: function (val) {
+      cookie.set('disableLS', val)
+      if (val) {
+        this.$toast.success('Local Storage usage will be disabled', {
+          icon: 'fa-check'
+        })
+      } else {
+        this.$toast.success('Local Storage usage will be enabled', {
+          icon: 'fa-check'
+        })
+      }
     },
     expmin: function (val) {
       cookie.set('expmin', val)
