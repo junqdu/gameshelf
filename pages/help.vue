@@ -78,7 +78,7 @@
     />
     <a href="https://en.wikipedia.org/wiki/Query_string#Structure">How to use URL params?</a>
 
-    <h4>FAQ</h4>
+    <h4>Q&A</h4>
     <div
       v-for="item in faq"
       :key="item.q"
@@ -142,11 +142,11 @@ export default {
         },
         {
           q: 'What game do you have data for?',
-          a: 'Up to BGG game id of 240000'
+          a: 'Up to BGG game id of 286978'
         },
         {
           q: 'When is your data updated?',
-          a: '7/31/2018'
+          a: '8/20/2018'
         }
       ],
       params: [
